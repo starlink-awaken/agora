@@ -10,6 +10,7 @@ venv/
 # State
 *.db
 *.db-journal
+*.db-wal
 
 # IDE
 .vscode/
