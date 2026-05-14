@@ -6,8 +6,8 @@ from agora.router import Router
 class TestRouter:
     def setup_method(self):
         self.registry = ServiceRegistry()
-        self.registry.register(Service("minerva", mcp_endpoint="http://localhost:8765"))
-        self.registry.register(Service("sophia", mcp_endpoint="http://localhost:9001"))
+        self.registry.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765"))
+        self.registry.register(Service("sophia", mcp_endpoint="http://192.0.2.2:9001"))
         self.router = Router(self.registry)
 
     def test_exact_match(self):

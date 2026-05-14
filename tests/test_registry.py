@@ -4,7 +4,7 @@ from agora.registry import ServiceRegistry, Service
 
 class TestService:
     def test_service_creation(self):
-        s = Service("minerva", mcp_endpoint="http://localhost:8765", port=8765)
+        s = Service("minerva", mcp_endpoint="http://192.0.2.1:8765", port=8765)
         assert s.name == "minerva"
         assert s.healthy is True
         assert s.is_available is True
@@ -52,7 +52,7 @@ class TestServiceRegistry:
 
     def test_to_dict(self):
         r = ServiceRegistry()
-        r.register(Service("minerva", mcp_endpoint="http://localhost:8765"))
+        r.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765"))
         d = r.to_dict()
         assert len(d) == 1
         assert d[0]["name"] == "minerva"

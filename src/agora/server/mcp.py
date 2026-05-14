@@ -9,7 +9,10 @@ from fastmcp import FastMCP
 from agora.registry import ServiceRegistry
 from agora.router import Router
 
-mcp = FastMCP("Agora — Service Convergence Hub")
+mcp = FastMCP(
+    "Agora — Service Convergence Hub",
+    mask_error_details=True,
+)
 registry = ServiceRegistry()
 router = Router(registry)
 
@@ -30,6 +33,15 @@ def register_service(name: str, description: str = "", mcp_endpoint: str = "",
         tags: Comma-separated tags
     """
     from agora.registry import Service
+
+    # Validate URLs against SSRF
+    if health_endpoint and not _is_safe_url(health_endpoint):
+        return json.dumps({"status": "error", "error": "Health endpoint URL targets internal network"})
+    if mcp_endpoint and not _is_safe_url(mcp_endpoint):
+        return json.dumps({"status": "error", "error": "MCP endpoint URL targets internal network"})
+    if not (0 <= port <= 65535):
+        return json.dumps({"status": "error", "error": "Port must be 0-65535"})
+
     svc = Service(name=name, description=description, mcp_endpoint=mcp_endpoint,
                   health_endpoint=health_endpoint, port=port,
                   tags=[t.strip() for t in tags.split(",") if t.strip()])
@@ -63,6 +75,8 @@ def add_route(tool_name: str, service_name: str) -> str:
         tool_name: The tool name (e.g. 'minerva.research_now' or just 'minerva' for prefix)
         service_name: The registered service name
     """
+    if not tool_name.strip() or not service_name.strip():
+        return json.dumps({"status": "error", "error": "Tool name and service name required"})
     router.add_route(tool_name, service_name)
     return json.dumps({"status": "routed", "tool": tool_name, "service": service_name})
 
@@ -90,10 +104,41 @@ def route_call(tool_name: str, arguments: str = "{}") -> str:
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
+def _is_safe_url(url: str) -> bool:
+    """Validate URL does not target internal/private network resources."""
+    from urllib.parse import urlparse
+    import ipaddress
+    import socket
+
+    BLOCKED_HOSTS = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"}
+    BLOCKED_NETWORKS = [
+        ipaddress.ip_network("10.0.0.0/8"), ipaddress.ip_network("172.16.0.0/12"),
+        ipaddress.ip_network("192.168.0.0/16"), ipaddress.ip_network("169.254.0.0/16"),
+        ipaddress.ip_network("100.64.0.0/10"), ipaddress.ip_network("fc00::/7"),
+    ]
+
+    parsed = urlparse(url)
+    hostname = parsed.hostname
+    if not hostname:
+        return False
+    if hostname.lower() in BLOCKED_HOSTS:
+        return False
+    try:
+        ip = ipaddress.ip_address(hostname)
+        return not any(ip in net for net in BLOCKED_NETWORKS)
+    except ValueError:
+        pass
+    try:
+        resolved = socket.gethostbyname(hostname)
+        ip = ipaddress.ip_address(resolved)
+        return not any(ip in net for net in BLOCKED_NETWORKS)
+    except Exception:
+        return False
+    return True
+
+
 def main():
     print("Agora MCP Server starting...")
-    print("Register services via the 'register_service' tool,")
-    print("then add routes via 'add_route'.")
     mcp.run()
 
 

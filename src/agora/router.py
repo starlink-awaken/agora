@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import structlog
 
-from agora.registry import ServiceRegistry
+from agora.registry import ServiceRegistry, _is_safe_url
 
 logger = structlog.get_logger(__name__)
 
@@ -34,13 +34,20 @@ class Router:
         """Route a tool call to the target service and return the result."""
         service_name = self.resolve(tool_name)
         if not service_name:
-            return {"status": "error", "error": f"No route for tool: {tool_name}"}
+            logger.warning("route_not_found", tool=tool_name)
+            return {"status": "error", "error": "Tool not available"}
 
         service = self.registry.get(service_name)
         if not service:
-            return {"status": "error", "error": f"Service not found: {service_name}"}
+            logger.warning("service_not_found", service=service_name)
+            return {"status": "error", "error": "Service not available"}
         if not service.is_available:
-            return {"status": "error", "error": f"Service unavailable: {service_name}"}
+            return {"status": "error", "error": "Service temporarily unavailable"}
+
+        # SSRF check for HTTP endpoints
+        if service.mcp_endpoint.startswith("http") and not _is_safe_url(service.mcp_endpoint):
+            logger.warning("ssrf_blocked", service=service_name, url=service.mcp_endpoint)
+            return {"status": "error", "error": "Service unavailable"}
 
         try:
             import httpx
@@ -55,7 +62,7 @@ class Router:
         except Exception as e:
             logger.warning("route_failed", tool=tool_name, service=service_name, error=str(e))
             self.registry.mark_failure(service_name)
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "error": "Routing failed"}
 
     def list_routes(self) -> dict[str, str]:
         return dict(self._routes)

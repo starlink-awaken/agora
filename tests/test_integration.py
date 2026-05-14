@@ -22,8 +22,8 @@ class TestAgoraIntegration:
     def test_register_all_services(self):
         self.registry.register(Service(
             "minerva", "Deep Research Engine",
-            mcp_endpoint="http://localhost:8765",
-            health_endpoint="http://localhost:8765/health",
+            mcp_endpoint="http://192.0.2.1:8765",
+            health_endpoint="http://192.0.2.1:8765/health",
             port=8765, tags=["research", "search"],
         ))
         self.registry.register(Service(
@@ -69,7 +69,7 @@ class TestAgoraIntegration:
         assert self.registry.get("flaky").is_available
 
     def test_service_to_dict_serialization(self):
-        self.registry.register(Service("minerva", mcp_endpoint="http://localhost:8765", port=8765))
+        self.registry.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765", port=8765))
         self.registry.register(Service("sophia", port=9001))
         d = self.registry.to_dict()
         assert len(d) == 2
@@ -82,7 +82,7 @@ class TestAgoraIntegration:
     def test_full_route_flow(self):
         """Complete flow: register → route → resolve → check health."""
         # Register
-        self.registry.register(Service("minerva", mcp_endpoint="http://localhost:8765", health_endpoint="http://localhost:8765/health", port=8765))
+        self.registry.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765", health_endpoint="http://192.0.2.1:8765/health", port=8765))
         self.registry.register(Service("sophia", mcp_endpoint="sophia-mcp", port=9001))
 
         # Route
