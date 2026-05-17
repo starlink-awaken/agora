@@ -36,6 +36,21 @@ def build_parser() -> argparse.ArgumentParser:
     # mcp
     sub.add_parser("mcp", help="Start MCP server")
 
+    # pipeline
+    pl = sub.add_parser("pipeline", help="Run a named pipeline")
+    pl.add_argument("name", help="Pipeline name (match-derive, derive-check, full-pipeline, or custom)")
+    pl.add_argument("--goal", default="", help="Goal for matching/derivation")
+    pl.add_argument("--context", default="", help="Context keywords")
+    pl.add_argument("--project", default=".", help="Project path for derivation")
+    pl.add_argument("--json", action="store_true", help="JSON output")
+
+    # pipeline list
+    sub.add_parser("pipelines", help="List available pipelines")
+
+    # pipeline define
+    pd = sub.add_parser("pipeline-define", help="Define a custom pipeline from JSON file")
+    pd.add_argument("file", help="Pipeline definition JSON file")
+
     return p
 
 
@@ -80,6 +95,41 @@ def main():
     elif args.command == "mcp":
         from agora.server.mcp import main as mcp_main
         return mcp_main()
+
+    elif args.command == "pipeline":
+        from agora.pipeline import Pipeline
+        import asyncio
+
+        pl = Pipeline(registry, router)
+        variables = {"goal": args.goal, "context": args.context, "project": args.project}
+        result = asyncio.run(pl.run(args.name, variables))
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        else:
+            print(f"Pipeline: {result['pipeline']}")
+            for r in result["results"]:
+                status_icon = "✅" if r["status"] == "ok" else "❌"
+                print(f"  {status_icon} Step {r['step']}: {r['tool']} — {r['status']}")
+                if "error" in r:
+                    print(f"     Error: {r['error']}")
+
+    elif args.command == "pipelines":
+        from agora.pipeline import Pipeline
+
+        pl = Pipeline(registry, router)
+        for name in pl.list_pipelines():
+            print(f"  • {name}")
+            steps = pl.get_pipeline(name)
+            if steps:
+                for s in steps:
+                    print(f"    → {s['tool']}")
+
+    elif args.command == "pipeline-define":
+        from agora.pipeline import Pipeline
+
+        pl = Pipeline(registry, router)
+        name = pl.load_definition(args.file)
+        print(f"✅ Pipeline loaded: {name}")
 
     return 0
 

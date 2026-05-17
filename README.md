@@ -27,7 +27,11 @@ New service: only update Agora's registry → other services unaware
 pip install -e .
 agora register minerva --mcp http://localhost:8765/mcp --health http://localhost:8765/health --port 8765
 agora register sophia --mcp sophia-mcp --port 9001
+agora register ontoderive --mcp "python3 engine/mcp-server.py" --port 9002
+agora register toolforge --mcp "python3 engine/toolforge/mcp_server.py" --port 9003
 agora route minerva.research_now minerva
+agora route toolforge.match toolforge
+agora route ontoderive.derive ontoderive
 agora route kos.search_knowledge kos
 agora health          # probe all services
 agora mcp             # start MCP server
@@ -50,11 +54,11 @@ agora mcp             # start MCP server
                   ┌─────────┐
                   │  Agora  │  ← Hub (registry + router + health)
                   └────┬────┘
-          ┌────────────┼────────────┐
-          │            │            │
-     ┌────┴────┐  ┌────┴────┐  ┌────┴────┐
-     │ Minerva │  │ Sophia  │  │   KOS   │  ← Spokes
-     └─────────┘  └─────────┘  └─────────┘
+          ┌────────┬────┼────────┬────────┐
+          │        │    │        │        │
+     ┌────┴──┐ ┌───┴──┐ ┌───┴──┐ ┌────┴───┐ ┌────────┐
+     │Minerva│ │Sophia│ │OntoDerive│ │ToolForge│ │ KOS │ ← Spokes
+     └───────┘ └──────┘ └─────────┘ └────────┘ └────────┘
 ```
 
 ### Roadmap
@@ -101,6 +105,8 @@ result = await router.route("minerva.research_now", {"query": "test"})
 
 - [Minerva](https://github.com/minerva/minerva) — Local-first deep research system
 - [Sophia](https://github.com/minerva/sophia) — Symbolic research paradigm engine
+- [OntoDerive](https://github.com/your-org/ontoderive) — Fact-driven derivation engine
+- [ToolForge](https://github.com/your-org/ontoderive) — Thinking tools matching (in OntoDerive engine/toolforge/)
 
 ### License
 
@@ -129,11 +135,11 @@ MIT
                   ┌─────────┐
                   │  Agora  │  ← Hub（注册表 + 路由器 + 健康检查）
                   └────┬────┘
-          ┌────────────┼────────────┐
-          │            │            │
-     ┌────┴────┐  ┌────┴────┐  ┌────┴────┐
-     │ Minerva │  │ Sophia  │  │   KOS   │  ← Spokes
-     └─────────┘  └─────────┘  └─────────┘
+          ┌────────┬────┼────────┬────────┐
+          │        │    │        │        │
+     ┌────┴──┐ ┌───┴──┐ ┌───┴──┐ ┌────┴───┐ ┌────────┐
+     │Minerva│ │Sophia│ │OntoDerive│ │ToolForge│ │ KOS │ ← Spokes
+     └───────┘ └──────┘ └─────────┘ └────────┘ └────────┘
 ```
 
 ### 快速开始
