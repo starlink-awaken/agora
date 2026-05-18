@@ -60,6 +60,9 @@ def build_parser() -> argparse.ArgumentParser:
     # mcp
     sub.add_parser("mcp", help="Start MCP server")
 
+    # web
+    sub.add_parser("web", help="Start Web Dashboard (port 7430)")
+
     # pipeline
     pl = sub.add_parser("pipeline", help="Run a named pipeline")
     pl.add_argument("name", help="Pipeline name")
@@ -299,6 +302,11 @@ def main():
     elif args.command == "mcp":
         from agora.server.mcp import main as mcp_main
         return mcp_main()
+
+    elif args.command == "web":
+        from agora.web.app import main as web_main
+        print("🏛️  Agora Dashboard → http://localhost:7430")
+        return web_main()
 
     elif args.command == "pipeline":
         import asyncio

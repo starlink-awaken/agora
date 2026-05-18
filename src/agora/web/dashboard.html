@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agora — Service Hub Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+header{background:#1e293b;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #334155}
+header h1{font-size:1.5rem;color:#38bdf8}
+header .stats{display:flex;gap:2rem;font-size:.9rem}
+header .stats span{padding:.3rem .8rem;border-radius:6px;background:#1e293b}
+header .stats .ok{color:#4ade80}header .stats .warn{color:#facc15}header .stats .err{color:#f87171}
+main{padding:2rem;max-width:1400px;margin:0 auto}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
+.panel{background:#1e293b;border-radius:12px;padding:1.5rem;border:1px solid #334155}
+.panel h2{font-size:1.1rem;color:#38bdf8;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:.6rem .8rem;font-size:.8rem;color:#94a3b8;border-bottom:1px solid #334155}
+td{padding:.5rem .8rem;font-size:.9rem;border-bottom:1px solid #1e293b}
+tr:hover{background:#0f172a}
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600}
+.badge-closed{background:#064e3b;color:#4ade80}
+.badge-open{background:#7f1d1d;color:#f87171}
+.badge-half{background:#78350f;color:#facc15}
+.tag{display:inline-block;padding:.1rem .4rem;margin:0 .1rem;border-radius:3px;font-size:.7rem;background:#334155;color:#94a3b8}
+button,input[type=text]{padding:.5rem 1rem;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;cursor:pointer;font-size:.85rem}
+button:hover{background:#1e293b;border-color:#38bdf8}
+button.primary{background:#0369a1;border-color:#38bdf8;color:#fff}
+button.primary:hover{background:#0284c7}
+button.danger{background:#7f1d1d;border-color:#f87171}
+button.danger:hover{background:#991b1b}
+form{display:flex;flex-direction:column;gap:.5rem}
+form label{font-size:.8rem;color:#94a3b8}
+form input{padding:.4rem .6rem}
+.actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+#output{background:#0f172a;padding:1rem;border-radius:6px;font-family:monospace;font-size:.8rem;max-height:300px;overflow-y:auto;white-space:pre-wrap}
+.refresh{font-size:.75rem;color:#94a3b8;text-align:right}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center}
+.modal.active{display:flex}
+.modal>div{background:#1e293b;padding:2rem;border-radius:12px;width:500px;max-width:90%}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏛️ Agora Hub</h1>
+  <div class="stats">
+    <span>Services: <strong id="svc-count">-</strong></span>
+    <span class="ok">Healthy: <strong id="svc-healthy">-</strong></span>
+    <span class="warn">Open: <strong id="svc-open">-</strong></span>
+    <span class="refresh" id="update-time"></span>
+  </div>
+</header>
+
+<main>
+<div class="grid">
+  <div>
+    <div class="panel">
+      <h2>🔌 Registered Services</h2>
+      <table><thead><tr><th>Name</th><th>Circuit</th><th>Fails</th><th>Port</th><th>Tags</th></tr></thead>
+      <tbody id="service-table"></tbody></table>
+    </div>
+
+    <div class="panel" style="margin-top:1rem">
+      <h2>⚡ Pipeline Runner</h2>
+      <form id="pipeline-form">
+        <label>Pipeline</label>
+        <select id="pl-name" style="padding:.4rem;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px">
+          <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
+        </select>
+        <label>Goal</label><input type="text" id="pl-goal" value="分析新能源汽车市场">
+        <label>Context</label><input type="text" id="pl-context" value="竞争,政策">
+        <label>Project</label><input type="text" id="pl-project" value=".">
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button type="submit" class="primary">▶ Run</button>
+          <button type="button" onclick="runPipeline('parallel')">⚡ Parallel</button>
+          <button type="button" onclick="runPipeline('stream')">📡 Stream</button>
+        </div>
+      </form>
+      <div id="output" style="margin-top:1rem">Pipeline output will appear here...</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>🛠️ Actions</h2>
+      <div class="actions">
+        <button class="primary" onclick="discover()">🔍 Discover</button>
+        <button onclick="healthCheck()">🫀 Health Check</button>
+        <button class="danger" onclick="clearAll()">🗑️ Clear All</button>
+      </div>
+      <div id="action-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:2rem"></div>
+    </div>
+
+    <div class="panel" style="margin-top:1rem">
+      <h2>📋 Register Service</h2>
+      <form id="reg-form">
+        <label>Name</label><input type="text" id="reg-name" required>
+        <label>MCP Endpoint</label><input type="text" id="reg-mcp" value="stdio://">
+        <label>Tags (comma)</label><input type="text" id="reg-tags">
+        <button type="submit" class="primary">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+const API = '/api';
+
+async function refresh() {
+  const r = await fetch(API+'/services'); const svcs = await r.json();
+  document.getElementById('svc-count').textContent = svcs.length;
+  document.getElementById('svc-healthy').textContent = svcs.filter(s=>s.circuit==='CLOSED').length;
+  document.getElementById('svc-open').textContent = svcs.filter(s=>s.circuit==='OPEN').length;
+  document.getElementById('update-time').textContent = new Date().toLocaleTimeString();
+
+  const tbody = document.getElementById('service-table');
+  tbody.innerHTML = svcs.map(s=>`<tr>
+    <td><strong>${s.name}</strong></td>
+    <td><span class="badge badge-${s.circuit.toLowerCase()}">${s.circuit}</span></td>
+    <td>${s.failure_count}</td>
+    <td>${s.port||'-'}</td>
+    <td>${(s.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>
+  </tr>`).join('') || '<tr><td colspan="5" style="color:#94a3b8">No services — click Discover</td></tr>';
+}
+
+async function discover() {
+  const o = document.getElementById('action-output');
+  o.textContent = 'Discovering...';
+  const r = await fetch(API+'/discover', {method:'POST'});
+  const d = await r.json();
+  o.textContent = `✅ Discovered ${d.discovered} new services. Total: ${d.total}`;
+  refresh();
+}
+
+async function healthCheck() {
+  const o = document.getElementById('action-output');
+  o.textContent = 'Running health check...';
+  const r = await fetch(API+'/health');
+  const d = await r.json();
+  o.textContent = `🫀 ${d.healthy}/${d.services} healthy\n` + Object.entries(d.circuits||{}).map(([k,v])=>`  ${k}: ${v.state}`).join('\n');
+  refresh();
+}
+
+async function clearAll() {
+  if(!confirm('Remove all services?')) return;
+  await fetch(API+'/clear', {method:'POST'});
+  document.getElementById('action-output').textContent = 'All services cleared.';
+  refresh();
+}
+
+async function runPipeline(mode) {
+  const o = document.getElementById('output');
+  o.textContent = `Running pipeline in ${mode} mode...\n`;
+  const fd = new FormData();
+  fd.set('name', document.getElementById('pl-name').value);
+  fd.set('goal', document.getElementById('pl-goal').value);
+  fd.set('context', document.getElementById('pl-context').value);
+  fd.set('project', document.getElementById('pl-project').value);
+  fd.set('mode', mode);
+  const r = await fetch(API+'/pipeline', {method:'POST', body:fd});
+  const d = await r.json();
+  o.textContent = `Pipeline: ${d.pipeline} (${d.mode}, ${d.elapsed_s}s)\n${d.results.map(r=>`  ${r.status==='ok'?'✅':'❌'} Step ${r.step}: ${r.tool}`).join('\n')}\n\nOutputs:\n${JSON.stringify(d.outputs,null,2)}`;
+}
+
+document.getElementById('reg-form').onsubmit = async e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const r = await fetch(API+'/register', {method:'POST', body:fd});
+  const d = await r.json();
+  document.getElementById('action-output').textContent = `Registered: ${d.name}`;
+  refresh();
+};
+
+document.getElementById('pipeline-form').onsubmit = e => { e.preventDefault(); runPipeline('sequential'); };
+
+refresh(); setInterval(refresh, 5000);
+</script>
+</body>
+</html>
