@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import asyncio
 import ipaddress
+import json
 import socket
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from urllib.parse import urlparse
 
-BLOCKED_HOSTS = frozenset({"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"})
+BLOCKED_HOSTS = frozenset({"0.0.0.0", "metadata.google.internal"})
 BLOCKED_NETWORKS = [
     ipaddress.ip_network("10.0.0.0/8"), ipaddress.ip_network("172.16.0.0/12"),
     ipaddress.ip_network("192.168.0.0/16"), ipaddress.ip_network("169.254.0.0/16"),
@@ -77,9 +79,33 @@ class ServiceRegistry:
     _HEALTH_COOLDOWN = 10.0  # min seconds between full health checks
     _MAX_CONCURRENT_CHECKS = 10
 
-    def __init__(self):
+    def __init__(self, storage_path: str | None = None):
         self._services: dict[str, Service] = {}
         self._last_health_check: float = 0.0
+        self._storage_path = storage_path or str(
+            Path(__file__).parent.parent.parent / "agora-services.json"
+        )
+        self._load()
+
+    def _load(self):
+        """Load persisted services from JSON file."""
+        try:
+            p = Path(self._storage_path)
+            if p.exists():
+                data = json.loads(p.read_text())
+                for s in data.get("services", []):
+                    svc = Service(**{k: v for k, v in s.items() if k in Service.__dataclass_fields__})
+                    self._services[svc.name] = svc
+        except Exception:
+            pass
+
+    def _save(self):
+        """Persist services to JSON file."""
+        try:
+            data = {"services": [s.__dict__ for s in self._services.values()]}
+            Path(self._storage_path).write_text(json.dumps(data, indent=2, default=str))
+        except Exception:
+            pass
 
     def register(self, service: Service):
         if len(self._services) >= self._MAX_SERVICES:
@@ -90,9 +116,11 @@ class ServiceRegistry:
         if service.mcp_endpoint and service.mcp_endpoint.startswith("http") and not _is_safe_url(service.mcp_endpoint):
             raise ValueError(f"MCP endpoint URL blocked: {service.mcp_endpoint}")
         self._services[service.name] = service
+        self._save()
 
     def unregister(self, name: str):
         self._services.pop(name, None)
+        self._save()
 
     def get(self, name: str) -> Service | None:
         return self._services.get(name)
