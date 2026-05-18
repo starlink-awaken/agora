@@ -106,12 +106,12 @@ def route_call(tool_name: str, arguments: str = "{}") -> str:
 
 def _is_safe_url(url: str) -> bool:
     """Validate URL does not target internal/private network resources."""
-    from urllib.parse import urlparse
     import ipaddress
     import socket
+    from urllib.parse import urlparse
 
-    BLOCKED_HOSTS = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"}
-    BLOCKED_NETWORKS = [
+    blocked_hosts = {"localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal"}
+    blocked_networks = [
         ipaddress.ip_network("10.0.0.0/8"), ipaddress.ip_network("172.16.0.0/12"),
         ipaddress.ip_network("192.168.0.0/16"), ipaddress.ip_network("169.254.0.0/16"),
         ipaddress.ip_network("100.64.0.0/10"), ipaddress.ip_network("fc00::/7"),
@@ -121,17 +121,17 @@ def _is_safe_url(url: str) -> bool:
     hostname = parsed.hostname
     if not hostname:
         return False
-    if hostname.lower() in BLOCKED_HOSTS:
+    if hostname.lower() in blocked_hosts:
         return False
     try:
         ip = ipaddress.ip_address(hostname)
-        return not any(ip in net for net in BLOCKED_NETWORKS)
+        return not any(ip in net for net in blocked_networks)
     except ValueError:
         pass
     try:
         resolved = socket.gethostbyname(hostname)
         ip = ipaddress.ip_address(resolved)
-        return not any(ip in net for net in BLOCKED_NETWORKS)
+        return not any(ip in net for net in blocked_networks)
     except Exception:
         return False
     return True

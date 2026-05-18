@@ -1,0 +1,68 @@
+# MCP Service Registry — Workspace 统一服务发现
+# Agora 自动发现所有 workspace 内的 MCP 服务
+
+services:
+  - name: minerva-deep-research
+    description: 深度研究引擎 — 5 Super Tools (Dropbox Dash pattern)
+    mcp_url: "http://localhost:7421/sse"
+    health_url: "http://localhost:8765/health"
+    tags: [research, knowledge, llm]
+    tools:
+      - research_now: {description: "立即执行研究", args: {query: string, level: string}}
+      - research_schedule: {description: "定时研究", args: {query: string, cron: string}}
+      - research_watch: {description: "主题监控", args: {topic: string, interval_m: int}}
+      - knowledge_search: {description: "搜索知识库", args: {query: string, top_k: int}}
+      - knowledge_ingest: {description: "摄入知识", args: {content: string, source: string}}
+
+  - name: ontoderive-engine
+    description: 事实驱动知识工程引擎 — ToolForge + 推导 + 规约检查
+    mcp_url: "stdio://ontoderive"
+    health_url: "cli://ontoderive check"
+    tags: [knowledge-engineering, ontology, derivation]
+    tools:
+      - toolforge_match: {description: "思维工具匹配", args: {goal: string, context: string}}
+      - derive: {description: "事实推导", args: {project: string, goal: string, with_tools: bool}}
+      - check: {description: "规约检查", args: {project: string}}
+
+  - name: sophia-paradigm-engine
+    description: 符号化研究范式编译器 — 状态机形式化
+    mcp_url: "stdio://sophia"
+    tags: [paradigm, state-machine, compiler]
+    tools:
+      - compile_paradigm: {description: "编译研究范式", args: {spec: dict}}
+      - list_paradigms: {description: "列出可用范式", args: {}}
+
+  - name: agentmesh-gateway
+    description: 多Agent网关调度器
+    mcp_url: "http://localhost:3000"
+    health_url: "http://localhost:3000/health"
+    tags: [agent, gateway, scheduler]
+    tools:
+      - list_agents: {description: "列出Agent", args: {}}
+      - run_agent: {description: "运行Agent", args: {agent_id: string, task: string}}
+
+pipelines:
+  match-derive:
+    description: 工具匹配 → 事实推导
+    stages:
+      - {service: ontoderive-engine, tool: toolforge_match}
+      - {service: ontoderive-engine, tool: derive}
+
+  research-derive:
+    description: 深度研究 → 事实推导
+    stages:
+      - {service: minerva-deep-research, tool: research_now}
+      - {service: ontoderive-engine, tool: derive}
+
+  derive-check:
+    description: 事实推导 → 规约检查
+    stages:
+      - {service: ontoderive-engine, tool: derive}
+      - {service: ontoderive-engine, tool: check}
+
+  full-pipeline:
+    description: 全流程: 匹配 → 推导 → 检查
+    stages:
+      - {service: ontoderive-engine, tool: toolforge_match}
+      - {service: ontoderive-engine, tool: derive}
+      - {service: ontoderive-engine, tool: check}

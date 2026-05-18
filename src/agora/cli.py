@@ -62,7 +62,7 @@ def main():
         parser.print_help()
         return 0
 
-    from agora.registry import ServiceRegistry, Service
+    from agora.registry import Service, ServiceRegistry
     from agora.router import Router
 
     registry = ServiceRegistry()
@@ -97,8 +97,9 @@ def main():
         return mcp_main()
 
     elif args.command == "pipeline":
-        from agora.pipeline import Pipeline
         import asyncio
+
+        from agora.pipeline import Pipeline
 
         pl = Pipeline(registry, router)
         variables = {"goal": args.goal, "context": args.context, "project": args.project}
