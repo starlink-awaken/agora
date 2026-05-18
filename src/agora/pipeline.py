@@ -2,19 +2,21 @@
 
 Usage:
     pipeline = Pipeline(registry, router)
-    pipeline.define("research-to-derive", [
-        {"tool": "toolforge.match", "args": {"goal": "{{goal}}", "context": "{{context}}"}},
-        {"tool": "ontoderive.derive", "args": {"project": "{{project}}", "goal": "{{goal}}"}},
-        {"tool": "ontoderive.check", "args": {"project": "{{project}}"}},
-    ])
-    result = await pipeline.run("research-to-derive", {"goal": "...", "context": "...", "project": "."})
+    # Sequential
+    result = await pipeline.run("full-pipeline", {"goal": "...", "project": "."})
+    # Streaming (yield each step)
+    async for step in pipeline.run_stream("full-pipeline", {"goal": "...", "project": "."}):
+        print(step)
+    # Parallel (independent steps)
+    result = await pipeline.run_parallel("full-pipeline", {"goal": "...", "project": "."})
 """
 
 from __future__ import annotations
 
+import asyncio
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, AsyncIterator
 
 import structlog
 
@@ -22,7 +24,13 @@ logger = structlog.get_logger(__name__)
 
 
 class Pipeline:
-    """Defines and executes multi-step tool call pipelines."""
+    """Defines and executes multi-step MCP tool call pipelines.
+
+    Supports three execution modes:
+    - Sequential (run): each step waits for the previous
+    - Streaming (run_stream): yield each step as it completes
+    - Parallel (run_parallel): independent steps execute concurrently
+    """
 
     def __init__(self, registry, router):
         self.registry = registry
@@ -110,13 +118,25 @@ class Pipeline:
         return self._definitions.get(name)
 
     async def run(self, name: str, variables: dict[str, Any]) -> dict[str, Any]:
-        """Execute a named pipeline with template variables."""
+        """Execute a named pipeline sequentially."""
+        results = []
+        async for step in self.run_stream(name, variables):
+            results.append(step)
+        return {
+            "pipeline": name,
+            "variables": variables,
+            "results": results,
+            "outputs": {r["tool"]: r.get("output", "")[:200] for r in results if r["status"] == "ok"},
+        }
+
+    async def run_stream(self, name: str, variables: dict[str, Any]) -> AsyncIterator[dict]:
+        """Execute pipeline and yield each step as it completes (streaming)."""
         steps = self._definitions.get(name)
         if not steps:
-            return {"status": "error", "error": f"Pipeline not found: {name}"}
+            yield {"status": "error", "error": f"Pipeline not found: {name}"}
+            return
 
         outputs: dict[str, Any] = {}
-        results = []
 
         for i, step in enumerate(steps):
             tool_name = step["tool"]
@@ -128,13 +148,73 @@ class Pipeline:
             try:
                 result = await self.router.route(tool_name, args)
                 outputs[label] = result
-                results.append({"step": i, "tool": tool_name, "status": "ok"})
+                yield {"step": i, "tool": tool_name, "status": "ok", "output": str(result)[:200]}
             except Exception as e:
                 logger.error("pipeline_step_failed", pipeline=name, step=i, error=str(e))
-                results.append({"step": i, "tool": tool_name, "status": "error", "error": str(e)})
-                # Continue with next step unless critical
+                yield {"step": i, "tool": tool_name, "status": "error", "error": str(e)}
                 if step.get("critical", False):
                     break
+
+    async def run_parallel(self, name: str, variables: dict[str, Any]) -> dict[str, Any]:
+        """Execute independent pipeline steps in parallel.
+
+        Groups steps by dependency level — each level runs concurrently.
+        Steps within a level that have no inter-dependencies execute in parallel.
+        """
+        steps = self._definitions.get(name)
+        if not steps:
+            return {"status": "error", "error": f"Pipeline not found: {name}"}
+
+        outputs: dict[str, Any] = {}
+
+        # Group steps by whether they have unmet dependencies
+        remaining = list(enumerate(steps))
+        results = []
+
+        while remaining:
+            # Find steps with all dependencies met
+            ready = []
+            still_waiting = []
+            for i, step in remaining:
+                deps = step.get("depends_on", [])
+                if all(d in outputs for d in deps):
+                    ready.append((i, step))
+                else:
+                    still_waiting.append((i, step))
+
+            if not ready and still_waiting:
+                # Deadlock: remaining steps have unresolvable deps
+                for i, step in still_waiting:
+                    results.append({"step": i, "tool": step["tool"], "status": "error",
+                                    "error": "Unresolved dependency"})
+                break
+
+            # Execute ready steps in parallel
+            async def _exec(i, step):
+                tool_name = step["tool"]
+                args = self._render_args(step.get("args", {}), variables, outputs)
+                label = step.get("output_as", f"step_{i}")
+                try:
+                    result = await self.router.route(tool_name, args)
+                    return i, label, result, None
+                except Exception as e:
+                    return i, label, None, str(e)
+
+            tasks = [_exec(i, step) for i, step in ready]
+            batch_results = await asyncio.gather(*tasks)
+
+            for i, label, result, error in batch_results:
+                step = steps[i]
+                if error:
+                    results.append({"step": i, "tool": step["tool"], "status": "error", "error": error})
+                    if step.get("critical", False):
+                        remaining = []
+                        break
+                else:
+                    outputs[label] = result
+                    results.append({"step": i, "tool": step["tool"], "status": "ok"})
+
+            remaining = still_waiting
 
         return {
             "pipeline": name,

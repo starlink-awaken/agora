@@ -67,6 +67,8 @@ def build_parser() -> argparse.ArgumentParser:
     pl.add_argument("--context", default="", help="Context keywords")
     pl.add_argument("--project", default=".", help="Project path for derivation")
     pl.add_argument("--json", action="store_true", help="JSON output")
+    pl.add_argument("--stream", action="store_true", help="Stream each step as it completes")
+    pl.add_argument("--parallel", action="store_true", help="Execute independent steps concurrently")
 
     # pipelines
     sub.add_parser("pipelines", help="List available pipelines")
@@ -303,16 +305,37 @@ def main():
         from agora.pipeline import Pipeline
         pl = Pipeline(registry, router)
         variables = {"goal": args.goal, "context": args.context, "project": args.project}
-        result = asyncio.run(pl.run(args.name, variables))
-        if args.json:
-            print(json.dumps(result, ensure_ascii=False, indent=2))
+
+        if args.stream:
+            async def _stream():
+                async for step in pl.run_stream(args.name, variables):
+                    icon = "✅" if step["status"] == "ok" else "❌"
+                    print(f"  {icon} Step {step['step']}: {step['tool']} — {step['status']}")
+                    if "error" in step:
+                        print(f"     Error: {step['error']}")
+            asyncio.run(_stream())
+        elif args.parallel:
+            result = asyncio.run(pl.run_parallel(args.name, variables))
+            if args.json:
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+            else:
+                print(f"Pipeline: {result['pipeline']} (parallel)")
+                for r in result["results"]:
+                    status_icon = "✅" if r["status"] == "ok" else "❌"
+                    print(f"  {status_icon} Step {r['step']}: {r['tool']} — {r['status']}")
+                    if "error" in r:
+                        print(f"     Error: {r['error']}")
         else:
-            print(f"Pipeline: {result['pipeline']}")
-            for r in result["results"]:
-                status_icon = "✅" if r["status"] == "ok" else "❌"
-                print(f"  {status_icon} Step {r['step']}: {r['tool']} — {r['status']}")
-                if "error" in r:
-                    print(f"     Error: {r['error']}")
+            result = asyncio.run(pl.run(args.name, variables))
+            if args.json:
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+            else:
+                print(f"Pipeline: {result['pipeline']}")
+                for r in result["results"]:
+                    status_icon = "✅" if r["status"] == "ok" else "❌"
+                    print(f"  {status_icon} Step {r['step']}: {r['tool']} — {r['status']}")
+                    if "error" in r:
+                        print(f"     Error: {r['error']}")
 
     elif args.command == "pipelines":
         from agora.pipeline import Pipeline
