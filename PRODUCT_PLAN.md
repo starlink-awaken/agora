@@ -106,14 +106,15 @@ services:
 
 ## Phase 4 — 平台化 (v2.0)
 
-### 4.1 Web Dashboard
-```
-agora web                            # 启动管理界面 (localhost:7430)
-```
-- 服务拓扑图：实时显示 N 个服务的 Hub-Spoke 关系
-- Pipeline 可视化：DAG 拖拽编排
-- 调用链追踪：一次 pipeline 执行的完整 timeline
-- 一键注册/注销/重路由
+### 4.1 Web Dashboard ✅ (2026-05-18)
+- ✅ `agora web` 启动 FastAPI Dashboard (localhost:7430)
+- ✅ 实时服务状态 (circuit breaker states)
+- ✅ Pipeline Runner (sequential/parallel/stream)
+- ✅ 一键 Discover / Health Check / Register / Clear
+- ✅ JSON API 全覆盖 (/api/services, /api/health, /api/pipeline, etc.)
+- ✅ 自动刷新 (5s interval)
+- ⏳ Pipeline DAG 可视化
+- ⏳ 调用链追踪
 
 ### 4.2 多租户 + 访问控制
 ```yaml
