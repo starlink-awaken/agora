@@ -104,6 +104,63 @@ def route_call(tool_name: str, arguments: str = "{}") -> str:
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
+# ── Event Bus tools (Phase 1, spec §4.2) ──────────────────────────────
+
+_bus = None  # Lazy init on first call
+
+
+def _get_bus():
+    global _bus
+    if _bus is None:
+        from agora.event_bus import EventBus
+        _bus = EventBus(registry=registry)
+    return _bus
+
+
+@mcp.tool()
+def publish_event(event_type: str, payload: str, source: str = "") -> str:
+    """Publish an event to the bus. payload is a JSON string.
+
+    Args:
+        event_type: Event type (e.g. 'index:done', 'registry:tools.updated')
+        payload: JSON string with event data
+        source: Source service name (e.g. 'kos', 'claude-code')
+    """
+    bus = _get_bus()
+    try:
+        data = json.loads(payload) if isinstance(payload, str) else payload
+    except json.JSONDecodeError:
+        data = {"raw": payload}
+    event_id = bus.publish(event_type, data, source)
+    return json.dumps({"event_id": event_id, "status": "published"})
+
+
+@mcp.tool()
+def subscribe_event(pattern: str, callback_url: str = "") -> str:
+    """Subscribe to events matching pattern.
+
+    Args:
+        pattern: Event pattern ('index:*', 'index:done', '*')
+        callback_url: Optional HTTP callback URL for push delivery
+    """
+    bus = _get_bus()
+    sub_id = bus.subscribe("mcp-caller", pattern, callback_url)
+    return json.dumps({"subscription_id": sub_id, "pattern": pattern})
+
+
+@mcp.tool()
+def get_event_log(limit: int = 50, since: str = "") -> str:
+    """Query historical events.
+
+    Args:
+        limit: Max events to return (default 50)
+        since: ISO timestamp, only return events after this time
+    """
+    bus = _get_bus()
+    events = bus.get_event_log(limit, since)
+    return json.dumps(events, ensure_ascii=False, indent=2)
+
+
 def _is_safe_url(url: str) -> bool:
     """Validate URL does not target internal/private network resources."""
     import ipaddress

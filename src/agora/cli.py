@@ -80,6 +80,21 @@ def build_parser() -> argparse.ArgumentParser:
     pd = sub.add_parser("pipeline-define", help="Define a custom pipeline from JSON file")
     pd.add_argument("file", help="Pipeline definition JSON file")
 
+    # event
+    ev = sub.add_parser("event", help="Event bus operations")
+    ev_sub = ev.add_subparsers(dest="event_cmd")
+    ev_pub = ev_sub.add_parser("publish", help="Publish an event")
+    ev_pub.add_argument("type", help="Event type (e.g. index:done)")
+    ev_pub.add_argument("--payload", default="{}", help="JSON payload")
+    ev_pub.add_argument("--source", default="cli", help="Source service name")
+    ev_log = ev_sub.add_parser("log", help="View event log")
+    ev_log.add_argument("--limit", type=int, default=50, help="Max events")
+    ev_sub_scribe = ev_sub.add_parser("subscribe", help="Subscribe to events")
+    ev_sub_scribe.add_argument("pattern", help="Event pattern (e.g. index:*)")
+    ev_sub_scribe.add_argument("--callback", default="", help="Callback URL")
+    ev_unsub = ev_sub.add_parser("unsubscribe", help="Unsubscribe")
+    ev_unsub.add_argument("id", help="Subscription ID")
+
     return p
 
 
@@ -360,6 +375,33 @@ def main():
         pl = Pipeline(registry, router)
         name = pl.load_definition(args.file)
         print(f"✅ Pipeline loaded: {name}")
+
+    elif args.command == "event":
+        from agora.event_bus import EventBus
+        bus = EventBus(registry=registry)
+
+        if args.event_cmd == "publish":
+            try:
+                payload = json.loads(args.payload) if args.payload else {}
+            except json.JSONDecodeError:
+                payload = {"raw": args.payload}
+            eid = bus.publish(args.type, payload, args.source)
+            print(f"📡 Published: {eid} ({args.type})")
+
+        elif args.event_cmd == "log":
+            events = bus.get_event_log(args.limit)
+            if not events:
+                print("(no events)")
+            for e in events:
+                print(f"  [{e['time']}] {e['source']:15s} → {e['type']:30s} | {json.dumps(e.get('payload', {}), ensure_ascii=False)[:80]}")
+
+        elif args.event_cmd == "subscribe":
+            sid = bus.subscribe("cli", args.pattern, args.callback)
+            print(f"📬 Subscribed: {sid} → {args.pattern}")
+
+        elif args.event_cmd == "unsubscribe":
+            ok = bus.unsubscribe(args.id)
+            print(f"📭 {'Unsubscribed' if ok else 'Not found'}: {args.id}")
 
     return 0
 
