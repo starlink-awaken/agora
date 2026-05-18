@@ -80,30 +80,26 @@ agora stats                          # 使用统计 (调用次数/延迟/错误�
 
 ## Phase 3 — 智能路由 (v1.2)
 
-### 3.1 负载均衡
+### 3.1 熔断器 ✅ (2026-05-18)
+- ✅ CLOSED/OPEN/HALF_OPEN 三态熔断
+- ✅ 可配置阈值: `--cb-max-failures N --cb-cooldown S --cb-success-threshold N`
+- ✅ 半开探测: 冷却后自动尝试一次 → 连续成功则恢复
+- ✅ CLI 展示: `agora info <name>` 显示 Circuit 状态 + 失败计数
+
+### 3.2 负载均衡 (planned)
 ```yaml
-# registry.yaml
 services:
   - name: minerva
     instances:
-      - mcp_url: "http://localhost:7421/sse"  # primary
-      - mcp_url: "http://node2:7421/sse"      # replica
-    strategy: round-robin  # round-robin | least-conn | sticky
+      - mcp_url: "http://localhost:7421/sse"
+      - mcp_url: "http://node2:7421/sse"
+    strategy: round-robin
 ```
 
-### 3.2 熔断器
+### 3.3 流式管道 (planned)
 ```
-agora route minerva.research_now --circuit-breaker \
-    --max-failures 5 --timeout 30s --cooldown 60s
-```
-- 连续 5 次超时 → 熔断 60s
-- 半开探测：每 15s 试一次 → 成功则恢复
-- 降级策略：返回缓存结果或提示"服务暂不可用"
-
-### 3.3 流式管道
-```
-agora pipeline full --stream          # 逐阶段输出，非阻塞
-agora pipeline full --parallel        # 独立阶段并行执行
+agora pipeline full --stream
+agora pipeline full --parallel
 ```
 
 ---
@@ -146,10 +142,10 @@ agora market search "知识图谱"                           # 搜索市场
 | 指标 | 当前 | Phase 2 | Phase 3 | v2.0 |
 |------|------|---------|---------|------|
 | 注册服务数 | 4 | ∞ (auto) | ∞ | ∞ |
-| 服务发现方式 | 手动 CLI | 自动扫描 | 自动 + 端口探测 | 市场安装 |
-| Pipeline 类型 | 4 条预定义 | 自定义 | DAG 可视化 | 拖拽编排 |
-| 高可用 | 无 | 心跳监控 | 熔断+降级 | 多实例LB |
-| 管理界面 | CLI only | CLI+stats | CLI+DAG | Web Dashboard |
+| 服务发现方式 | 手动 CLI | ✅ 自动扫描 | 自动 + 端口探测 | 市场安装 |
+| Pipeline 类型 | 4 条预定义 | ✅ 自定义 | DAG 可视化 | 拖拽编排 |
+| 高可用 | 无 | ✅ 心跳监控 | ✅ 熔断器(三态) | 多实例LB |
+| 管理界面 | CLI only | ✅ CLI+stats | CLI+DAG | Web Dashboard |
 | 多租户 | 无 | 无 | 无 | ✅ |
 | 工具市场 | 无 | 无 | 无 | ✅ |
 
