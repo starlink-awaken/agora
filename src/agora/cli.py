@@ -173,19 +173,22 @@ def _cmd_info(args) -> int:
             "port": svc.port,
             "tags": svc.tags,
             "is_available": svc.is_available,
+            "circuit_state": svc.circuit_state,
+            "failure_count": svc.failure_count,
             "last_health_check": svc.last_health_check,
         }
         print(json.dumps(info, ensure_ascii=False, indent=2))
     else:
         status = "✓ healthy" if svc.is_available else "✗ offline"
-        print(f"📦 {svc.name}  [{status}]")
-        print(f"   Description:  {svc.description or 'N/A'}")
-        print(f"   MCP Endpoint: {svc.mcp_endpoint or 'N/A'}")
-        print(f"   Health:       {svc.health_endpoint or 'N/A'}")
-        print(f"   Port:         {svc.port or 'N/A'}")
-        print(f"   Tags:         {', '.join(svc.tags) if svc.tags else 'N/A'}")
-        print(f"   Last Check:   {svc.last_health_check or 'never'}")
-        print(f"   Last Status:  {svc.last_health_check or 'N/A'}")
+        circuit = svc.circuit_state
+        print(f"📦 {svc.name}  [{status}]  Circuit: {circuit}")
+        print(f"   Description:    {svc.description or 'N/A'}")
+        print(f"   MCP Endpoint:   {svc.mcp_endpoint or 'N/A'}")
+        print(f"   Health:         {svc.health_endpoint or 'N/A'}")
+        print(f"   Port:           {svc.port or 'N/A'}")
+        print(f"   Tags:           {', '.join(svc.tags) if svc.tags else 'N/A'}")
+        print(f"   Failures:       {svc.failure_count}/3")
+        print(f"   Last Check:     {svc.last_health_check or 'never'}")
     return 0
 
 

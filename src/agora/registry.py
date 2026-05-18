@@ -54,11 +54,28 @@ class Service:
     healthy: bool = True
     last_health_check: float = 0.0
     failure_count: int = 0
-    cooldown_until: float = 0.0   # Circuit breaker cooldown
+    cooldown_until: float = 0.0    # Circuit breaker cooldown timestamp
+    half_open: bool = False        # Half-open: testing if service recovered
+    consecutive_successes: int = 0  # Successes in half-open state
 
     @property
     def is_available(self) -> bool:
-        return self.healthy and time.monotonic() >= self.cooldown_until
+        """Service is available if healthy OR in half-open test mode."""
+        if self.healthy:
+            return True
+        if time.monotonic() >= self.cooldown_until:
+            self.half_open = True
+            return True  # Allow one probe in half-open
+        return False
+
+    @property
+    def circuit_state(self) -> str:
+        """CLOSED (normal), OPEN (failed, cooling down), HALF_OPEN (testing)."""
+        if self.healthy:
+            return "CLOSED"
+        if self.half_open:
+            return "HALF_OPEN"
+        return "OPEN"
 
     def to_dict(self) -> dict:
         return {
@@ -79,9 +96,14 @@ class ServiceRegistry:
     _HEALTH_COOLDOWN = 10.0  # min seconds between full health checks
     _MAX_CONCURRENT_CHECKS = 10
 
-    def __init__(self, storage_path: str | None = None):
+    def __init__(self, storage_path: str | None = None,
+                 cb_max_failures: int = 3, cb_cooldown: float = 60.0,
+                 cb_success_threshold: int = 2):
         self._services: dict[str, Service] = {}
         self._last_health_check: float = 0.0
+        self._cb_max_failures = cb_max_failures
+        self._cb_cooldown = cb_cooldown
+        self._cb_success_threshold = cb_success_threshold
         self._storage_path = storage_path or str(
             Path(__file__).parent.parent.parent / "agora-services.json"
         )
@@ -135,16 +157,44 @@ class ServiceRegistry:
         svc = self._services.get(name)
         if svc:
             svc.failure_count += 1
-            if svc.failure_count >= 3:
-                svc.cooldown_until = time.monotonic() + 60
+            if svc.half_open:
+                # Failed during half-open test → re-open circuit
+                svc.healthy = False
+                svc.half_open = False
+                svc.consecutive_successes = 0
+                svc.cooldown_until = time.monotonic() + (self._cb_cooldown * 2)
+            elif svc.failure_count >= self._cb_max_failures:
+                svc.cooldown_until = time.monotonic() + self._cb_cooldown
                 svc.healthy = False
 
     def mark_success(self, name: str):
         svc = self._services.get(name)
         if svc:
-            svc.failure_count = 0
-            svc.healthy = True
-            svc.cooldown_until = 0.0
+            if svc.half_open:
+                svc.consecutive_successes += 1
+                if svc.consecutive_successes >= self._cb_success_threshold:
+                    svc.failure_count = 0
+                    svc.healthy = True
+                    svc.half_open = False
+                    svc.consecutive_successes = 0
+                    svc.cooldown_until = 0.0
+            else:
+                svc.failure_count = 0
+                svc.healthy = True
+                svc.cooldown_until = 0.0
+
+    def get_circuit_status(self, name: str) -> dict:
+        """Get detailed circuit breaker status for a service."""
+        svc = self._services.get(name)
+        if not svc:
+            return {}
+        return {
+            "name": name,
+            "state": svc.circuit_state,
+            "healthy": svc.healthy,
+            "failure_count": svc.failure_count,
+            "cooldown_remaining": max(0, svc.cooldown_until - time.monotonic()) if not svc.healthy else 0,
+        }
 
     def to_dict(self) -> list[dict]:
         return [s.to_dict() for s in self._services.values()]
