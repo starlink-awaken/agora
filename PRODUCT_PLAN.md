@@ -86,7 +86,13 @@ agora stats                          # 使用统计 (调用次数/延迟/错误�
 - ✅ 半开探测: 冷却后自动尝试一次 → 连续成功则恢复
 - ✅ CLI 展示: `agora info <name>` 显示 Circuit 状态 + 失败计数
 
-### 3.2 负载均衡 (planned)
+### 3.2 流式管道 ✅ (2026-05-18)
+- ✅ `run_stream()`: async generator 逐步骤输出
+- ✅ `run_parallel()`: asyncio.gather 并发执行独立步骤
+- ✅ CLI: `--stream` / `--parallel` 标志
+- ✅ 自动依赖分组: 同层级无依赖步骤并行
+
+### 3.3 负载均衡 (planned)
 ```yaml
 services:
   - name: minerva
@@ -94,12 +100,6 @@ services:
       - mcp_url: "http://localhost:7421/sse"
       - mcp_url: "http://node2:7421/sse"
     strategy: round-robin
-```
-
-### 3.3 流式管道 (planned)
-```
-agora pipeline full --stream
-agora pipeline full --parallel
 ```
 
 ---
