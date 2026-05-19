@@ -38,7 +38,6 @@ def _is_safe_url(url: str) -> bool:
         return not any(ip in net for net in BLOCKED_NETWORKS)
     except Exception:
         return False
-    return True
 
 
 @dataclass
@@ -244,6 +243,10 @@ class ServiceRegistry:
         if now - self._last_health_check < self._HEALTH_COOLDOWN:
             return  # rate limit
         self._last_health_check = now
+
+        # Activate half-open probes for services whose cooldown has expired
+        for svc in self._services.values():
+            self._try_half_open(svc.name)
 
         import httpx
         semaphore = asyncio.Semaphore(self._MAX_CONCURRENT_CHECKS)
