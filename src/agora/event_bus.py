@@ -28,12 +28,14 @@ class Subscription:
     pattern: str
     callback_url: str = ""
     created: str = ""
+    last_seen: float = 0.0  # UTC timestamp for TTL cleanup
 
 
 class EventBus:
     """Publish-subscribe event engine with JSON persistence."""
 
-    def __init__(self, storage_path: str | None = None, registry: "ServiceRegistry | None" = None):
+    def __init__(self, storage_path: str | None = None, registry: "ServiceRegistry | None" = None,
+                 subscription_ttl_hours: float = 24.0):
         self._storage_path = Path(storage_path or str(
             Path(__file__).parent.parent.parent / "agora-events.json"
         ))
@@ -41,6 +43,7 @@ class EventBus:
         self._events: list[dict] = []
         self._subscriptions: dict[str, Subscription] = {}
         self._max_events = 1000
+        self._subscription_ttl = subscription_ttl_hours * 3600
         self._load()
 
     def _load(self):
@@ -129,15 +132,27 @@ class EventBus:
 
     def subscribe(self, service: str, pattern: str, callback_url: str = "") -> str:
         """Subscribe to events. Returns subscription_id."""
+        self._cleanup_expired()
         sub_id = f"sub_{uuid.uuid4().hex[:8]}"
         sub = Subscription(
             id=sub_id, service=service, pattern=pattern,
             callback_url=callback_url,
             created=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            last_seen=time.time(),
         )
         self._subscriptions[sub_id] = sub
         self._save()
         return sub_id
+
+    def _cleanup_expired(self):
+        """Remove subscriptions older than TTL (dead subscriber cleanup)."""
+        now = time.time()
+        expired = [sid for sid, sub in self._subscriptions.items()
+                   if now - sub.last_seen > self._subscription_ttl]
+        for sid in expired:
+            del self._subscriptions[sid]
+        if expired:
+            self._save()
 
     def unsubscribe(self, sub_id: str) -> bool:
         """Remove subscription. Returns True if removed."""
