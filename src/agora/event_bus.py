@@ -89,7 +89,11 @@ class EventBus:
         self._events.append(event)
         if len(self._events) > self._max_events:
             self._events = self._events[-500:]  # Keep last 500
-        self._save()
+        self._dirty = True
+        # Batch writes: save every 10 events or on explicit flush
+        if len(self._events) % 10 == 0:
+            self._save()
+            self._dirty = False
 
         # Deliver to matching subscribers (async if loop available, sync otherwise)
         try:

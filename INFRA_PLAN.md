@@ -11,11 +11,11 @@
 
 | 项 | 描述 | 状态 |
 |---|------|------|
-| 1.1 | 断路器状态持久化 (JSON) | ✅ `_load/_save` 已持久化 |
-| 1.2 | Event subscription TTL + 心跳 | ⏳ 添加 24h TTL |
-| 1.3 | Trace buffer 优雅关闭 | ⏳ atexit flush |
-| 1.4 | 进程重启后断路器状态恢复 | ✅ 已从 JSON 加载 |
-| 1.5 | Dead subscriber 清理 | ⏳ subscription.last_seen |
+| 1.1 | 断路器状态持久化 (JSON) | ✅ 仅存静态配置 (运行时状态不持久化) |
+| 1.2 | Event subscription TTL + 心跳 | ✅ 24h TTL + _cleanup_expired() |
+| 1.3 | Trace buffer 优雅关闭 | ✅ atexit flush |
+| 1.4 | 进程重启后断路器状态恢复 | ✅ 从 JSON 加载 (静态字段) |
+| 1.5 | Dead subscriber 清理 | ✅ subscription.last_seen + TTL |
 
 ### Cluster 2: Silent Failure Propagation 🟡
 

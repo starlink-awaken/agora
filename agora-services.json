@@ -7,13 +7,7 @@
       "health_endpoint": "",
       "port": 0,
       "tags": [],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "sophia",
@@ -22,13 +16,7 @@
       "health_endpoint": "",
       "port": 0,
       "tags": [],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "ontoderive",
@@ -40,13 +28,7 @@
         "//ontoderive:knowledge-engineering",
         "derivation"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "agora",
@@ -58,13 +40,7 @@
         "//agora:gateway",
         "registry"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "bos-skill-cli",
@@ -77,13 +53,7 @@
         "discovery",
         "cli"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "kos",
@@ -95,13 +65,7 @@
         "//kos-mcp:knowledge",
         "search"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "bos-daemon",
@@ -113,13 +77,7 @@
         "docker",
         "mcp"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     },
     {
       "name": "bos",
@@ -131,13 +89,7 @@
         "docker",
         "mcp"
       ],
-      "instances": [],
-      "healthy": true,
-      "last_health_check": 0.0,
-      "failure_count": 0,
-      "cooldown_until": 0.0,
-      "half_open": false,
-      "consecutive_successes": 0
+      "instances": []
     }
   ]
 }
