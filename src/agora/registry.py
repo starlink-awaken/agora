@@ -119,14 +119,18 @@ class ServiceRegistry:
         if not self._alert_webhook:
             return
         import httpx
-        import asyncio
+
+        async def _send():
+            async with httpx.AsyncClient(timeout=5) as c:
+                await c.post(self._alert_webhook, json={
+                    "service": name, "prev_state": prev,
+                    "new_state": new, "failures": failures,
+                })
+
         try:
-            async def _send():
-                async with httpx.AsyncClient(timeout=5) as c:
-                    await c.post(self._alert_webhook, json={
-                        "service": name, "prev_state": prev,
-                        "new_state": new, "failures": failures,
-                    })
+            loop = asyncio.get_running_loop()
+            loop.create_task(_send())
+        except RuntimeError:
             asyncio.run(_send())
         except Exception:
             pass

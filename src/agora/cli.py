@@ -366,6 +366,12 @@ def main():
             print(f"   Type:  {result['type']}")
             if result.get("port"):
                 print(f"   Port:  {result['port']}")
+        elif args.market_cmd == "publish":
+            result = mkt.publish(
+                args.name, repo=args.repo, description=args.description,
+                entry=args.entry, svc_type=args.type,
+            )
+            print(f"📤 Published: {result['name']} (repo: {result.get('repo', 'N/A')})")
         return 0
 
     from agora.registry import Service, ServiceRegistry
