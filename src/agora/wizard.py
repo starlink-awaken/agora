@@ -3,7 +3,15 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
+
+
+def _confirm(step: str, prompt: str) -> bool:
+    """Ask Y/n confirmation. Returns True unless user says n/no."""
+    if not sys.stdin.isatty():
+        return True  # Non-interactive: default yes
+    print(f"\n━ {step}: {prompt} [Y/n] ", end="")
+    choice = input().strip().lower()
+    return choice not in ("n", "no")
 
 
 def run_wizard() -> int:
@@ -11,32 +19,29 @@ def run_wizard() -> int:
     print("🏛️  Welcome to Agora — MCP Service Hub\n")
     print("This wizard will help you discover and register services.\n")
 
+    from agora.discovery import DiscoveryEngine
+    from agora.registry import ServiceRegistry
+
+    registry = ServiceRegistry()  # Single instance for both register + health
+    engine = DiscoveryEngine()
+
     # Step 1: Discover
     print("━ Step 1/4: Discovering MCP services in your workspace...")
-    from agora.discovery import DiscoveryEngine
-    engine = DiscoveryEngine()
     services = engine.discover_all()
     print(f"   Found {len(services)} MCP-capable services:\n")
     for i, s in enumerate(services, 1):
-        conf_bar = "█" * int(s.confidence * 10)
+        conf = max(0, min(1, s.confidence or 0))
+        conf_bar = "█" * int(conf * 10)
         print(f"   {i}. {s.name:20s} [{conf_bar}] {s.description[:50]}")
 
     # Step 2: Register
-    print(f"\n━ Step 2/4: Register services? [Y/n] ", end="")
-    choice = input().strip().lower()
-    if choice not in ("n", "no"):
-        from agora.registry import ServiceRegistry
-        registry = ServiceRegistry()
+    if _confirm("Step 2/4", "Register services?"):
         count = engine.auto_register(registry)
         print(f"   ✅ Registered {count} new services ({len(registry.list_all())} total)")
 
     # Step 3: Health check
-    print(f"\n━ Step 3/4: Run health check? [Y/n] ", end="")
-    choice = input().strip().lower()
-    if choice not in ("n", "no"):
+    if _confirm("Step 3/4", "Run health check?"):
         import asyncio
-        from agora.registry import ServiceRegistry
-        registry = ServiceRegistry()
         asyncio.run(registry.health_check_all())
         healthy = len(registry.list_healthy())
         total = len(registry.list_all())

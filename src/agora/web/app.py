@@ -35,7 +35,7 @@ API_KEY = os.environ.get("AGORA_API_KEY", "")
 
 async def _auth_middleware(request: Request, call_next):
     """Simple API Key auth for write endpoints."""
-    if request.method == "GET" or not API_KEY:
+    if request.method in ("GET", "OPTIONS") or not API_KEY:
         return await call_next(request)
     key = request.headers.get("X-API-Key", "")
     if key != API_KEY:
@@ -54,7 +54,12 @@ router = Router(registry)
 discovery = DiscoveryEngine()
 pipeline = Pipeline(registry, router)
 
-_DASHBOARD_HTML = (Path(__file__).parent / "dashboard.html").read_text()
+def _get_dashboard_html() -> str:
+    """Lazy-load dashboard HTML to avoid import-time crash if file missing."""
+    html_path = Path(__file__).parent / "dashboard.html"
+    if html_path.exists():
+        return html_path.read_text()
+    return "<html><body><h1>Dashboard not found</h1><p>Run: agora web</p></body></html>"
 
 # Prometheus gauges — created once at module level (not per scrape)
 from prometheus_client import Gauge, generate_latest, REGISTRY
@@ -67,7 +72,7 @@ _METRIC_SVC_DEGRADED = Gauge("agora_services_degraded", "Degraded/offline servic
 
 @app.get("/", response_class=HTMLResponse)
 def dashboard():
-    return _DASHBOARD_HTML
+    return _get_dashboard_html()
 
 
 # ── API ────────────────────────────────────────────────────────

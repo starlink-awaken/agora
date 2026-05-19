@@ -14,6 +14,7 @@ from pathlib import Path as _Path
 
 import structlog
 
+from agora.event_bus import EventBus
 from agora.registry import ServiceRegistry, _is_safe_url
 
 logger = structlog.get_logger(__name__)
@@ -30,7 +31,7 @@ class Router:
     """
 
     def __init__(self, registry: ServiceRegistry, strategy: str = "round-robin",
-                 event_bus: object = None):
+                 event_bus: EventBus | None = None):
         self.registry = registry
         self._event_bus = event_bus
         self._routes: dict[str, str] = {}  # tool_name → service_name
@@ -135,22 +136,25 @@ class Router:
                 resp.raise_for_status()
                 self.registry.mark_success(service_name)
                 self._trace(tool_name, service_name, _start, "ok")
-                if self._event_bus:
-                    self._event_bus.publish("route:call.succeeded", {
-                        "tool": tool_name, "service": service_name,
-                        "duration_s": round(_time.monotonic() - _start, 4),
-                    }, "agora-router")
+                self._maybe_publish("route:call.succeeded", {
+                    "tool": tool_name, "service": service_name,
+                    "duration_s": round(_time.monotonic() - _start, 4),
+                })
                 return resp.json()
         except Exception as e:
             self._trace(tool_name, service_name, _start, "error", str(e)[:100])
             logger.warning("route_failed", tool=tool_name, service=service_name, error=str(e))
             self.registry.mark_failure(service_name)
-            if self._event_bus:
-                self._event_bus.publish("route:call.failed", {
-                    "tool": tool_name, "service": service_name,
-                    "error": str(e)[:100],
-                }, "agora-router")
+            self._maybe_publish("route:call.failed", {
+                "tool": tool_name, "service": service_name,
+                "error": str(e)[:100],
+            })
             return {"status": "error", "error": "Routing failed"}
+
+    def _maybe_publish(self, event_type: str, payload: dict):
+        """Publish route event if event_bus is configured."""
+        if self._event_bus:
+            self._event_bus.publish(event_type, payload, "agora-router")
 
     def _trace(self, tool: str, service: str, start: float, status: str, detail: str = ""):
         """Buffer trace entry; flush to disk every 50 calls."""
