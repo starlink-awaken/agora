@@ -3,304 +3,532 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agora — Service Hub Dashboard</title>
+<title>Agora — MCP Hub</title>
 <style>
+:root {
+  --bg: #0a0a0f;
+  --surface: rgba(255,255,255,0.03);
+  --glass: rgba(255,255,255,0.05);
+  --glass-hover: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.06);
+  --border-active: rgba(56,189,248,0.3);
+  --text: #e2e8f0;
+  --text-dim: #64748b;
+  --text-bright: #f8fafc;
+  --accent: #38bdf8;
+  --accent-glow: rgba(56,189,248,0.15);
+  --success: #4ade80;
+  --success-glow: rgba(74,222,128,0.15);
+  --warning: #fbbf24;
+  --warning-glow: rgba(251,191,36,0.15);
+  --danger: #f87171;
+  --danger-glow: rgba(248,113,113,0.15);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
-header{background:#1e293b;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #334155}
-header h1{font-size:1.5rem;color:#38bdf8}
-header .stats{display:flex;gap:2rem;font-size:.9rem}
-header .stats span{padding:.3rem .8rem;border-radius:6px;background:#1e293b}
-header .stats .ok{color:#4ade80}header .stats .warn{color:#facc15}header .stats .err{color:#f87171}
-main{padding:2rem;max-width:1400px;margin:0 auto}
-.grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
-.panel{background:#1e293b;border-radius:12px;padding:1.5rem;border:1px solid #334155}
-.panel h2{font-size:1.1rem;color:#38bdf8;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(56,189,248,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 100%, rgba(74,222,128,0.04) 0%, transparent 60%);
+}
+header{
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.8);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header .brand{
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+header .logo{
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #818cf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+header h1{
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -0.02em;
+}
+header .version{
+  font-size: 0.7rem;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.stats-bar{
+  display: flex;
+  gap: 1.5rem;
+}
+.stat-item{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+.stat-dot{
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.stat-dot.ok{background:var(--success);box-shadow:0 0 8px var(--success)}
+.stat-dot.warn{background:var(--warning);box-shadow:0 0 8px var(--warning)}
+.stat-dot.err{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.stat-value{font-weight:600;color:var(--text-bright)}
+.stat-label{color:var(--text-dim)}
+main{
+  padding: 1.5rem 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.card{
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  transition: border-color 0.2s, background 0.2s;
+}
+.card:hover{border-color: var(--border-active);background: var(--glass-hover)}
+.card-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.card-header h2{
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-header h2 .icon{font-size:1.1rem}
+.card-badge{
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+.card-badge.live{background:var(--success-glow);color:var(--success)}
+.card-badge.count{background:var(--accent-glow);color:var(--accent)}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:.6rem .8rem;font-size:.8rem;color:#94a3b8;border-bottom:1px solid #334155}
-td{padding:.5rem .8rem;font-size:.9rem;border-bottom:1px solid #1e293b}
-tr:hover{background:#0f172a}
-.badge{display:inline-block;padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600}
-.badge-closed{background:#064e3b;color:#4ade80}
-.badge-open{background:#7f1d1d;color:#f87171}
-.badge-half{background:#78350f;color:#facc15}
-.tag{display:inline-block;padding:.1rem .4rem;margin:0 .1rem;border-radius:3px;font-size:.7rem;background:#334155;color:#94a3b8}
-button,input[type=text],select{padding:.5rem 1rem;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;cursor:pointer;font-size:.85rem}
-button:hover{background:#1e293b;border-color:#38bdf8}
-button.primary{background:#0369a1;border-color:#38bdf8;color:#fff}
-button.primary:hover{background:#0284c7}
-button.danger{background:#7f1d1d;border-color:#f87171}
-button.danger:hover{background:#991b1b}
-form{display:flex;flex-direction:column;gap:.5rem}
-form label{font-size:.8rem;color:#94a3b8}
-form input{padding:.4rem .6rem}
-.actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
-#output{background:#0f172a;padding:1rem;border-radius:6px;font-family:monospace;font-size:.8rem;max-height:300px;overflow-y:auto;white-space:pre-wrap}
-.refresh{font-size:.75rem;color:#94a3b8;text-align:right}
-.dag-container{background:#0f172a;border-radius:8px;min-height:250px;overflow:auto;position:relative}
-.dag-container svg{width:100%;min-height:250px}
-.dag-node{fill:#1e293b;stroke:#334155;stroke-width:1.5;rx:8;ry:8}
-.dag-node:hover{stroke:#38bdf8;cursor:pointer}
-.dag-node.completed{fill:#064e3b;stroke:#4ade80}
-.dag-node.running{fill:#78350f;stroke:#facc15}
-.dag-label{fill:#e2e8f0;font-size:11px;text-anchor:middle;pointer-events:none}
-.dag-tool{fill:#94a3b8;font-size:9px;text-anchor:middle;pointer-events:none}
-.dag-edge{stroke:#475569;stroke-width:2;fill:none;marker-end:url(#arrowhead)}
-.dag-edge-label{fill:#94a3b8;font-size:9px;text-anchor:middle}
-.dag-selector{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
-.dag-selector select{flex:1}
-.dag-step-detail{background:#0f172a;border-radius:6px;padding:.5rem;margin-top:.5rem;font-size:.8rem;display:none}
-.dag-step-detail .key{color:#94a3b8}
-.dag-step-detail .val{color:#38bdf8}
+th{
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+td{
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+tr:hover td{background: rgba(255,255,255,0.02)}
+.svc-name{font-weight:500;color:var(--text-bright)}
+.svc-name small{display:block;font-size:0.7rem;color:var(--text-dim);font-weight:400}
+.circuit-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.circuit-badge .circuit-dot{width:6px;height:6px;border-radius:50%}
+.circuit-CLOSED{background:var(--success-glow);color:var(--success)}
+.circuit-CLOSED .circuit-dot{background:var(--success);box-shadow:0 0 6px var(--success)}
+.circuit-OPEN{background:var(--danger-glow);color:var(--danger)}
+.circuit-OPEN .circuit-dot{background:var(--danger);box-shadow:0 0 6px var(--danger)}
+.circuit-HALF_OPEN{background:var(--warning-glow);color:var(--warning)}
+.circuit-HALF_OPEN .circuit-dot{background:var(--warning);box-shadow:0 0 6px var(--warning)}
+.tag{
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  margin: 0.1rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+}
+.empty-state{
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.empty-state .empty-icon{font-size:2rem;margin-bottom:0.5rem;opacity:0.5}
+button,input,select,textarea{
+  font-family: inherit;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  outline: none;
+}
+button:hover,input:hover,select:hover{border-color: var(--border-active)}
+button:focus-visible,input:focus-visible,select:focus-visible{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.btn-primary{
+  background: linear-gradient(135deg, var(--accent), #818cf8);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 500;
+}
+.btn-primary:hover{
+  opacity: 0.9;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.btn-danger{
+  background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.2);
+  color: var(--danger);
+}
+.btn-danger:hover{background:rgba(248,113,113,0.2);border-color:rgba(248,113,113,0.4)}
+.btn-ghost{
+  background: transparent;
+  border-color: var(--border);
+}
+.btn-ghost:hover{background:var(--glass-hover)}
+.form-group{display:flex;flex-direction:column;gap:0.35rem}
+.form-group label{font-size:0.72rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em}
+.form-row{display:flex;gap:0.5rem}
+.form-inline{display:flex;gap:0.5rem;align-items:flex-end;margin-top:0.5rem}
+.action-bar{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.output-panel{
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  color: var(--text-dim);
+  margin-top: 0.75rem;
+}
+.output-panel .ok{color:var(--success)}
+.output-panel .err{color:var(--danger)}
+.output-panel .info{color:var(--accent)}
+.flex-1{flex:1}
+.mt-1{margin-top:0.5rem}
+.mt-2{margin-top:1rem}
+.mb-1{margin-bottom:0.5rem}
+.text-dim{color:var(--text-dim);font-size:0.75rem}
+.refresh-indicator{font-size:0.7rem;color:var(--text-dim)}
+.refresh-indicator::before{
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  margin-right: 0.4rem;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.3}
+}
+.spinner{
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🏛️ Agora Hub</h1>
-  <div class="stats">
-    <span>Services: <strong id="svc-count">-</strong></span>
-    <span class="ok">Healthy: <strong id="svc-healthy">-</strong></span>
-    <span class="warn">Open: <strong id="svc-open">-</strong></span>
-    <span class="refresh" id="update-time"></span>
+  <div class="brand">
+    <div class="logo">🏛</div>
+    <div>
+      <h1>Agora Hub</h1>
+    </div>
+    <span class="version">v1.2</span>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-dot ok"></span>
+      <span>Services <span class="stat-value" id="svc-total">-</span></span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-dot ok"></span>
+      <span>Healthy <span class="stat-value" id="svc-healthy">-</span></span>
+    </div>
+    <div class="stat-item refresh-indicator" id="refresh-time"></div>
   </div>
 </header>
 
 <main>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
-  <div class="panel">
-    <h2>🔌 Registered Services</h2>
-    <table><thead><tr><th>Name</th><th>Circuit</th><th>Fails</th><th>Port</th><th>Tags</th><th>Inst</th></tr></thead>
-      <tbody id="service-table"></tbody></table>
+<div class="grid">
+  <!-- SERVICES -->
+  <div class="card" style="grid-row:span 2">
+    <div class="card-header">
+      <h2><span class="icon">🔌</span> Services</h2>
+      <span class="card-badge live" id="svc-live-badge">LIVE</span>
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Circuit</th><th>Failures</th><th>Tags</th></tr></thead>
+      <tbody id="svc-table">
+        <tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📡</div>No services — click Discover</div></td></tr>
+      </tbody>
+    </table>
   </div>
 
-  <div class="panel">
-    <h2>🛠️ Actions</h2>
-    <div class="actions">
-      <button class="primary" onclick="discover()">🔍 Discover</button>
-      <button onclick="healthCheck()">🫀 Health Check</button>
-      <button class="danger" onclick="clearAll()">🗑️ Clear All</button>
+  <!-- ACTIONS -->
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">⚡</span> Actions</h2>
     </div>
-    <div id="action-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:2rem"></div>
+    <div class="action-bar">
+      <button class="btn-primary" onclick="discover()">🔍 Discover</button>
+      <button class="btn-ghost" onclick="healthCheck()">🫀 Health</button>
+      <button class="btn-danger" onclick="clearAll()">Clear</button>
+    </div>
+    <div class="output-panel" id="action-output">Ready.</div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">📋</span> Register</h2>
+    </div>
+    <div class="form-group mb-1">
+      <label>Name</label>
+      <input type="text" id="reg-name" placeholder="my-service" required>
+    </div>
+    <div class="form-group mb-1">
+      <label>MCP Endpoint</label>
+      <input type="text" id="reg-mcp" placeholder="stdio://my-service">
+    </div>
+    <div class="form-group mb-1">
+      <label>Tags (comma)</label>
+      <input type="text" id="reg-tags" placeholder="custom, tool">
+    </div>
+    <button class="btn-primary" onclick="registerSvc()" style="width:100%;margin-top:0.25rem">Register</button>
   </div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 350px;gap:1.5rem;margin-bottom:1.5rem">
-  <div class="panel">
-    <h2>⚡ Pipeline Runner</h2>
-    <form id="pipeline-form">
-      <label>Pipeline</label>
-      <select id="pl-name" style="padding:.4rem">
+<!-- PIPELINE + EVENT LOG -->
+<div class="grid">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">🚀</span> Pipeline Runner</h2>
+    </div>
+    <div class="form-row mb-1">
+      <select id="pl-name" class="flex-1">
         <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
       </select>
-      <label>Goal</label><input type="text" id="pl-goal" value="分析新能源汽车市场">
-      <label>Context</label><input type="text" id="pl-context" value="竞争,政策">
-      <label>Project</label><input type="text" id="pl-project" value=".">
-      <div style="display:flex;gap:.5rem;margin-top:.5rem">
-        <button type="submit" class="primary">▶ Run</button>
-        <button type="button" onclick="runPipeline('parallel')">⚡ Parallel</button>
-        <button type="button" onclick="runPipeline('stream')">📡 Stream</button>
+    </div>
+    <div class="form-group mb-1">
+      <label>Goal</label>
+      <input type="text" id="pl-goal" value="分析新能源汽车市场">
+    </div>
+    <div class="form-row mb-1">
+      <div class="form-group flex-1">
+        <label>Context</label>
+        <input type="text" id="pl-context" value="竞争,政策">
       </div>
-    </form>
-    <div id="output" style="margin-top:1rem">Pipeline output will appear here...</div>
+      <div class="form-group flex-1">
+        <label>Project</label>
+        <input type="text" id="pl-project" value=".">
+      </div>
+    </div>
+    <div class="form-inline">
+      <button class="btn-primary" onclick="runPipeline('sequential')">▶ Run</button>
+      <button class="btn-ghost" onclick="runPipeline('parallel')">⚡ Parallel</button>
+      <button class="btn-ghost" onclick="runPipeline('stream')">📡 Stream</button>
+    </div>
+    <div class="output-panel" id="pipeline-output">Pipeline output →</div>
   </div>
 
-  <div>
-    <div class="panel">
-      <h2>📋 Register Service</h2>
-      <form id="reg-form">
-        <label>Name</label><input type="text" id="reg-name" required>
-        <label>MCP Endpoint</label><input type="text" id="reg-mcp" value="stdio://">
-        <label>Tags (comma)</label><input type="text" id="reg-tags">
-        <button type="submit" class="primary">Register</button>
-      </form>
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">📡</span> Event Log</h2>
+      <button class="btn-ghost" style="padding:0.3rem 0.6rem;font-size:0.7rem" onclick="loadEvents()">↻ Refresh</button>
     </div>
-    <div class="panel" style="margin-top:1rem">
-      <h2>📋 Instances</h2>
-      <form id="inst-form">
-        <label>Service</label><input type="text" id="inst-service" placeholder="minerva">
-        <label>MCP URL</label><input type="text" id="inst-mcp" placeholder="http://localhost:8766">
-        <button type="submit" class="primary">+ Add Instance</button>
-      </form>
-      <div id="inst-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:1rem;margin-top:.5rem"></div>
+    <div class="output-panel" id="event-output" style="max-height:240px">Loading events...</div>
+    <div class="form-inline mt-1">
+      <input type="text" id="evt-type" placeholder="event:type" class="flex-1" style="font-size:0.75rem;padding:0.4rem 0.6rem">
+      <input type="text" id="evt-payload" placeholder='{"key":"val"}' style="font-size:0.75rem;padding:0.4rem 0.6rem;width:140px">
+      <button class="btn-primary" onclick="publishEvent()" style="font-size:0.75rem;padding:0.4rem 0.8rem">Publish</button>
     </div>
   </div>
-</div>
-
-<div class="panel">
-  <h2>🔀 Pipeline DAG</h2>
-  <div class="dag-selector">
-    <select id="dag-pl" onchange="renderDAG()">
-      <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
-    </select>
-    <button onclick="renderDAG()" class="primary">🔄 Render</button>
-  </div>
-  <div class="dag-container" id="dag-container">
-    <div style="text-align:center;padding:3rem;color:#94a3b8">Loading DAG...</div>
-  </div>
-  <div class="dag-step-detail" id="dag-detail"></div>
 </div>
 </main>
 
 <script>
 const API = '/api';
+let svcCount = 0;
 
-async function refresh() {
-  const r = await fetch(API+'/services'); const svcs = await r.json();
-  document.getElementById('svc-count').textContent = svcs.length;
-  document.getElementById('svc-healthy').textContent = svcs.filter(s=>s.circuit==='CLOSED').length;
-  document.getElementById('svc-open').textContent = svcs.filter(s=>s.circuit==='OPEN').length;
-  document.getElementById('update-time').textContent = new Date().toLocaleTimeString();
+async function refresh(){
+  try{
+    const r = await fetch(API+'/services');
+    const svcs = await r.json();
+    svcCount = svcs.length;
+    const healthy = svcs.filter(s=>s.circuit==='CLOSED').length;
+    const open = svcs.filter(s=>s.circuit==='OPEN').length;
 
-  const tbody = document.getElementById('service-table');
-  tbody.innerHTML = svcs.map(s=>`<tr>
-    <td><strong>${s.name}</strong></td>
-    <td><span class="badge badge-${s.circuit.toLowerCase()}">${s.circuit}</span></td>
-    <td>${s.failure_count}</td>
-    <td>${s.port||'-'}</td>
-    <td>${(s.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>
-    <td>${s.instances||1}</td>
-  </tr>`).join('') || '<tr><td colspan="6" style="color:#94a3b8">No services — click Discover</td></tr>';
+    document.getElementById('svc-total').textContent = svcs.length;
+    document.getElementById('svc-healthy').textContent = healthy;
+    document.getElementById('refresh-time').textContent = new Date().toLocaleTimeString();
+    const badge = document.getElementById('svc-live-badge');
+    badge.textContent = open > 0 ? `${open} DOWN` : 'LIVE';
+    badge.className = 'card-badge ' + (open > 0 ? 'circuit-OPEN' : 'live');
+
+    const tbody = document.getElementById('svc-table');
+    if(svcs.length===0){
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📡</div>No services — click Discover</div></td></tr>';
+    }else{
+      tbody.innerHTML = svcs.map(s=>{
+        const tags = (s.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('') || '<span class="text-dim">—</span>';
+        const failures = s.failure_count || 0;
+        const desc = s.description ? `<small>${s.description.slice(0,50)}</small>` : '';
+        return `<tr>
+          <td><span class="svc-name">${s.name}${desc}</span></td>
+          <td><span class="circuit-badge circuit-${s.circuit}"><span class="circuit-dot"></span>${s.circuit}</span></td>
+          <td><span style="color:${failures>0?'var(--warning)':'var(--text-dim)'}">${failures}</span></td>
+          <td>${tags}</td>
+        </tr>`;
+      }).join('');
+    }
+  }catch(e){console.error(e)}
 }
 
-async function renderDAG() {
-  const name = document.getElementById('dag-pl').value;
-  const container = document.getElementById('dag-container');
-  const detail = document.getElementById('dag-detail');
-  detail.style.display = 'none';
-  container.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8">Loading...</div>';
-
-  try {
-    const r = await fetch(API+'/pipeline/'+encodeURIComponent(name)+'/dag');
-    const data = await r.json();
-    if (data.error) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:#f87171">${data.error}</div>`; return; }
-
-    const W = 800, H = 100 + data.nodes.length * 120;
-    const nodeW = 180, nodeH = 50, colW = 220, rowH = 100;
-    const offsetX = 40, offsetY = 30;
-
-    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/></marker></defs>`;
-
-    // Draw edges
-    data.edges.forEach(e => {
-      const si = data.nodes.findIndex(n => n.id === e.source);
-      const ti = data.nodes.findIndex(n => n.id === e.target);
-      if (si === -1 || ti === -1) return;
-      const x1 = offsetX + (si + 1) * colW - colW/2;
-      const y1 = offsetY + si * rowH + nodeH;
-      const x2 = offsetX + (ti + 1) * colW - colW/2;
-      const y2 = offsetY + ti * rowH;
-      svg += `<path d="M${x1},${y1} C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}" class="dag-edge"/>`;
-      const my = (y1+y2)/2;
-      svg += `<text x="${(x1+x2)/2}" y="${my-5}" class="dag-edge-label">${e.label}</text>`;
-    });
-
-    // Draw nodes
-    data.nodes.forEach((n, i) => {
-      const x = offsetX + (i + 1) * colW - nodeW/2;
-      const y = offsetY + i * rowH;
-      svg += `<rect x="${x}" y="${y}" width="${nodeW}" height="${nodeH}" class="dag-node" data-index="${n.index}" onclick="showStepDetail(${n.index})"/>`;
-      const label = n.label.length > 15 ? n.label.slice(0, 14)+'…' : n.label;
-      svg += `<text x="${x+nodeW/2}" y="${y+20}" class="dag-label">${label}</text>`;
-      const tool = n.tool.length > 18 ? n.tool.slice(0, 17)+'…' : n.tool;
-      svg += `<text x="${x+nodeW/2}" y="${y+38}" class="dag-tool">${tool}</text>`;
-    });
-
-    svg += '</svg>';
-    container.innerHTML = svg;
-  } catch(e) {
-    container.innerHTML = `<div style="text-align:center;padding:2rem;color:#f87171">Error: ${e.message}</div>`;
-  }
-}
-
-let dagData = null;
-
-async function showStepDetail(index) {
-  const name = document.getElementById('dag-pl').value;
-  const detail = document.getElementById('dag-detail');
-  const r = await fetch(API+'/pipeline/'+encodeURIComponent(name)+'/dag');
-  const data = await r.json();
-  dagData = data;
-  const step = data.nodes.find(n => n.index === index);
-  if (!step) return;
-  const deps = data.edges.filter(e => e.target === step.id).map(e => e.label).join(', ');
-  detail.style.display = 'block';
-  detail.innerHTML = `
-    <div><span class="key">Step:</span> <span class="val">#${step.index+1}</span></div>
-    <div><span class="key">Tool:</span> <span class="val">${step.tool}</span></div>
-    <div><span class="key">Output:</span> <span class="val">${step.label}</span></div>
-    <div><span class="key">Depends on:</span> <span class="val">${deps || '(none)'}</span></div>`;
-}
-
-async function discover() {
+async function discover(){
   const o = document.getElementById('action-output');
-  o.textContent = 'Discovering...';
-  const r = await fetch(API+'/discover', {method:'POST'});
-  const d = await r.json();
-  o.textContent = `✅ Discovered ${d.discovered} new services. Total: ${d.total}`;
-  refresh();
+  o.innerHTML = '<span class="info">Discovering services...</span>';
+  try{
+    const r = await fetch(API+'/discover',{method:'POST'});
+    const d = await r.json();
+    o.innerHTML = `<span class="ok">✓ Discovered ${d.discovered} new</span> | Total: ${d.total}`;
+    refresh();
+  }catch(e){o.innerHTML = `<span class="err">✗ ${e.message}</span>`}
 }
 
-async function healthCheck() {
+async function healthCheck(){
   const o = document.getElementById('action-output');
-  o.textContent = 'Running health check...';
-  const r = await fetch(API+'/health');
-  const d = await r.json();
-  o.textContent = `🫀 ${d.healthy}/${d.services} healthy\n` + Object.entries(d.circuits||{}).map(([k,v])=>`  ${k}: ${v.state}`).join('\n');
+  o.innerHTML = '<span class="info">Running health check...</span>';
+  try{
+    const r = await fetch(API+'/health');
+    const d = await r.json();
+    const status = d.healthy===d.services ? 'ok' : 'err';
+    o.innerHTML = `<span class="${status}">${d.healthy}/${d.services} healthy</span>`;
+    refresh();
+  }catch(e){o.innerHTML = `<span class="err">✗ ${e.message}</span>`}
+}
+
+async function clearAll(){
+  if(!confirm('Remove all registered services?')) return;
+  await fetch(API+'/clear',{method:'POST'});
+  document.getElementById('action-output').innerHTML = '<span class="info">All cleared.</span>';
   refresh();
 }
 
-async function clearAll() {
-  if(!confirm('Remove all services?')) return;
-  await fetch(API+'/clear', {method:'POST'});
-  document.getElementById('action-output').textContent = 'All services cleared.';
-  refresh();
+async function registerSvc(){
+  const fd = new FormData();
+  fd.set('name', document.getElementById('reg-name').value);
+  fd.set('mcp_endpoint', document.getElementById('reg-mcp').value);
+  fd.set('tags', document.getElementById('reg-tags').value);
+  const o = document.getElementById('action-output');
+  try{
+    const r = await fetch(API+'/register',{method:'POST',body:fd});
+    const d = await r.json();
+    o.innerHTML = `<span class="ok">✓ Registered: ${d.name}</span>`;
+    document.getElementById('reg-name').value = '';
+    refresh();
+  }catch(e){o.innerHTML = `<span class="err">✗ ${e.message}</span>`}
 }
 
-async function runPipeline(mode) {
-  const o = document.getElementById('output');
-  o.textContent = `Running pipeline in ${mode} mode...\n`;
+async function runPipeline(mode){
+  const o = document.getElementById('pipeline-output');
+  o.innerHTML = '<span class="info">Running pipeline in ' + mode + ' mode...</span>\n';
   const fd = new FormData();
   fd.set('name', document.getElementById('pl-name').value);
   fd.set('goal', document.getElementById('pl-goal').value);
   fd.set('context', document.getElementById('pl-context').value);
   fd.set('project', document.getElementById('pl-project').value);
   fd.set('mode', mode);
-  const r = await fetch(API+'/pipeline', {method:'POST', body:fd});
-  const d = await r.json();
-  o.textContent = `Pipeline: ${d.pipeline} (${d.mode}, ${d.elapsed_s}s)\n${d.results.map(r=>`  ${r.status==='ok'?'✅':'❌'} Step ${r.step}: ${r.tool}`).join('\n')}\n\nOutputs:\n${JSON.stringify(d.outputs,null,2)}`;
+  try{
+    const r = await fetch(API+'/pipeline',{method:'POST',body:fd});
+    const d = await r.json();
+    let out = `<span class="info">Pipeline: ${d.pipeline}</span> (${d.mode}, ${d.elapsed_s}s)\n`;
+    for(const step of (d.results||[])){
+      const icon = step.status==='ok' ? '✓' : '✗';
+      const cls = step.status==='ok' ? 'ok' : 'err';
+      out += `  <span class="${cls}">${icon} Step ${step.step}: ${step.tool}</span>\n`;
+    }
+    if(d.outputs) out += `\nOutputs:\n${JSON.stringify(d.outputs,null,2)}`;
+    o.innerHTML = out;
+  }catch(e){o.innerHTML = `<span class="err">✗ ${e.message}</span>`}
 }
 
-document.getElementById('reg-form').onsubmit = async e => {
-  e.preventDefault();
-  const fd = new FormData(e.target);
-  const r = await fetch(API+'/register', {method:'POST', body:fd});
-  const d = await r.json();
-  document.getElementById('action-output').textContent = `Registered: ${d.name}`;
-  refresh();
-};
+async function loadEvents(){
+  const o = document.getElementById('event-output');
+  try{
+    const r = await fetch(API+'/event-log');
+    if(!r.ok){o.innerHTML='<span class="text-dim">Event log endpoint not available</span>';return}
+    const events = await r.json();
+    if(!events.length){o.innerHTML='<span class="text-dim">No events yet.</span>';return}
+    o.innerHTML = events.slice(-10).map(e=>
+      `<span class="info">${(e.time||'').slice(11,19)}</span> ${(e.source||'?').padEnd(15)} → <span class="ok">${e.type}</span>`
+    ).join('\n');
+  }catch(e){o.innerHTML='<span class="text-dim">—</span>'}
+}
 
-document.getElementById('pipeline-form').onsubmit = e => { e.preventDefault(); runPipeline('sequential'); };
+async function publishEvent(){
+  const type = document.getElementById('evt-type').value || 'custom:event';
+  const payload = document.getElementById('evt-payload').value || '{}';
+  const o = document.getElementById('event-output');
+  try{
+    await fetch(API+'/event-publish',{method:'POST',body:new URLSearchParams({event_type:type,payload,source:'dashboard'})});
+  }catch(e){}
+  setTimeout(loadEvents, 500);
+}
 
-document.getElementById('inst-form').onsubmit = async e => {
-  e.preventDefault();
-  const o = document.getElementById('inst-output');
-  const svc = document.getElementById('inst-service').value;
-  const mcp = document.getElementById('inst-mcp').value;
-  o.textContent = 'Adding instance...';
-  const r = await fetch(API+'/instance', {method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({service: svc, mcp_endpoint: mcp})
-  });
-  const d = await r.json();
-  o.textContent = d.status === 'ok' ? `✅ Instance added: ${svc} → ${mcp}` : `❌ ${d.error}`;
-  refresh();
-};
-
-refresh(); setInterval(refresh, 5000);
-setTimeout(renderDAG, 1000);
+refresh();
+loadEvents();
+setInterval(refresh, 5000);
+setInterval(loadEvents, 10000);
 </script>
 </body>
 </html>

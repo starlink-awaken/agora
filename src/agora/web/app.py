@@ -208,6 +208,32 @@ async def api_metrics_history():
     }
 
 
+@app.get("/api/event-log")
+async def api_event_log(limit: int = 20):
+    """Return recent events from the event bus."""
+    from agora.event_bus import EventBus
+    bus = EventBus(registry=registry)
+    return bus.get_event_log(limit)
+
+
+@app.post("/api/event-publish")
+async def api_event_publish(
+    event_type: str = Form(...),
+    payload: str = Form("{}"),
+    source: str = Form("dashboard"),
+):
+    """Publish an event via the web dashboard."""
+    from agora.event_bus import EventBus
+    import json as _json
+    bus = EventBus(registry=registry)
+    try:
+        data = _json.loads(payload)
+    except _json.JSONDecodeError:
+        data = {"raw": payload}
+    eid = bus.publish(event_type, data, source)
+    return {"event_id": eid, "status": "published"}
+
+
 @app.get("/metrics")
 async def api_metrics():
     """Prometheus-compatible metrics endpoint."""
