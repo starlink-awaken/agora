@@ -1,6 +1,6 @@
 # Agora — MCP 服务注册中心 · 产品规划
 
-> v1.0 定位：Workspace 的 API 网关 + MCP 服务市场
+> v1.2 定位：API Gateway for AI Agents · MCP 服务市场
 > 核心理念：Hub-Spoke 收敛 N²→N，零代码级耦合
 
 ---
@@ -40,7 +40,7 @@ Agora 是 Workspace 智能体生态的中央枢纽。任何 MCP 服务注册后�
 - ✅ 4 服务注册 (minerva/ontoderive/sophia/agentmesh)
 - ✅ 4 条预设 pipeline
 - ✅ CLI 管理工具 (register/list/health/route)
-- ✅ MCP Server (FastMCP, 7 tools)
+- ✅ MCP Server (FastMCP, 9 tools)
 - ✅ SSRF 防护, URL 校验
 - ✅ 零代码级耦合 (纯协议通信)
 - ✅ 智能发现: 4 策略 (已知项目 / pyproject / docker-compose / 端口探测)
@@ -49,7 +49,7 @@ Agora 是 Workspace 智能体生态的中央枢纽。任何 MCP 服务注册后�
 - ✅ Pipeline DAG 可视化 (Dashboard SVG)
 - ✅ Hermes MCP 集成 (9 tools, 已注册到 Hermes)
 - ✅ 多租户: tenant.yaml + API Token + 速率限制
-- ✅ MCP 工具市场: 10 个内置服务 + GitHub 安装
+- ✅ MCP 工具市场: 18 个内置服务 + GitHub 安装
 
 ---
 

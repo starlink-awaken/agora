@@ -20,10 +20,10 @@ Agora is a Hub-Spoke MCP service convergence hub. All services register with Ago
 
 - **20 CLI commands** — register, discover, health, pipeline, event, market
 - **9 MCP tools** — AI agents can call services directly  
-- **15 REST endpoints** — Web Dashboard + Prometheus metrics
+- **14 REST endpoints** — Web Dashboard + Prometheus metrics
 - **Circuit breaker** — CLOSED/OPEN/HALF_OPEN with gradual recovery
 - **Auto-discovery** — 4 strategies to find MCP services
-- **MCP Tool Market** — 10+ built-in services
+- **MCP Tool Market** — 18 built-in services
 - **Multi-tenant** — API token auth + rate limiting
 
 ## Demo

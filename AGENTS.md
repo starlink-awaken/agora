@@ -37,7 +37,7 @@
 | `market.py` | 241 | `Market` |
 | `cli.py` | 556 | `main`, 20 子命令 |
 | `server/mcp.py` | 162 | 9 MCP 工具 |
-| `web/app.py` | 221 | 13 REST 端点 |
+| `web/app.py` | 221 | 14 REST 端点 |
 | `wizard.py` | 67 | `run_wizard` |
 
 ---

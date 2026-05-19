@@ -18,7 +18,7 @@
 
 | Version | Status |
 |---------|--------|
-| 0.1.x | Active support |
+| 1.2.x | Active support |
 
 ## Reporting Issues
 

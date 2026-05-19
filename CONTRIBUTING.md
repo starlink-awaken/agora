@@ -30,8 +30,8 @@ pre-commit install
 
 - `registry.py` — service registration with health check + circuit breaker
 - `router.py` — tool→service routing with prefix + exact matching
-- `cli.py` — 6 CLI commands via Rich
-- `server/mcp.py` — 7 MCP tools
+- `cli.py` — 21 CLI commands
+- `server/mcp.py` — 9 MCP tools
 
 ## Testing
 
