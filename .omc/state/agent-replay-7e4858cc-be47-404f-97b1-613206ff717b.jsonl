@@ -22,3 +22,7 @@
 {"t":0,"agent":"a05d00f","agent_type":"code-reviewer","event":"agent_stop","success":true,"duration_ms":291181}
 {"t":0,"agent":"ac8b322","agent_type":"code-reviewer","event":"agent_stop","success":true,"duration_ms":345399}
 {"t":0,"agent":"a199d74","agent_type":"code-reviewer","event":"agent_stop","success":true,"duration_ms":350157}
+{"t":0,"agent":"ab3b54e","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"af2164e","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"af2164e","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":770082}
+{"t":0,"agent":"ab3b54e","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":1480995}
