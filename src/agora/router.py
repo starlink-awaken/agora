@@ -90,19 +90,25 @@ class Router:
 
     async def route(self, tool_name: str, arguments: dict) -> dict:
         """Route a tool call to the target service and return the result."""
+        import time as _time
+        _start = _time.monotonic()
+
         service_name = self.resolve(tool_name)
         if not service_name:
+            self._trace(tool_name, service_name or "unknown", _start, "error", "not_found")
             logger.warning("route_not_found", tool=tool_name)
             return {"status": "error", "error": "Tool not available"}
 
         instance = self._next_instance(service_name)
         if not instance:
+            self._trace(tool_name, service_name, _start, "error", "no_instance")
             return {"status": "error", "error": "Service temporarily unavailable"}
 
         mcp_endpoint = instance["mcp_endpoint"]
 
         # SSRF check for HTTP endpoints
         if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
+            self._trace(tool_name, service_name, _start, "error", "ssrf_blocked")
             logger.warning("ssrf_blocked", service=service_name, url=mcp_endpoint)
             return {"status": "error", "error": "Service unavailable"}
 
@@ -115,11 +121,31 @@ class Router:
                 )
                 resp.raise_for_status()
                 self.registry.mark_success(service_name)
+                self._trace(tool_name, service_name, _start, "ok")
                 return resp.json()
         except Exception as e:
+            self._trace(tool_name, service_name, _start, "error", str(e)[:100])
             logger.warning("route_failed", tool=tool_name, service=service_name, error=str(e))
             self.registry.mark_failure(service_name)
             return {"status": "error", "error": "Routing failed"}
+
+    def _trace(self, tool: str, service: str, start: float, status: str, detail: str = ""):
+        """Write call trace to trace_log.jsonl for observability."""
+        import json as _json
+        import time as _time
+        from pathlib import Path as _Path
+        elapsed = round(_time.monotonic() - start, 4)
+        entry = _json.dumps({
+            "time": _time.strftime("%Y-%m-%dT%H:%M:%SZ", _time.gmtime()),
+            "tool": tool, "service": service, "status": status,
+            "elapsed_s": elapsed, "detail": detail,
+        })
+        try:
+            _path = _Path(__file__).parent.parent.parent / "trace_log.jsonl"
+            with open(_path, "a") as f:
+                f.write(entry + "\n")
+        except Exception:
+            pass
 
     def list_routes(self) -> dict[str, str]:
         return dict(self._routes)

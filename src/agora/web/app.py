@@ -164,6 +164,29 @@ async def api_add_instance(data: dict):
     return {"status": "ok", "service": svc_name, "instance": mcp_endpoint}
 
 
+@app.get("/metrics")
+async def api_metrics():
+    """Prometheus-compatible metrics endpoint."""
+    total = len(registry.list_all())
+    healthy = len(registry.list_healthy())
+    lines = [
+        "# HELP agora_services_total Total registered services",
+        "# TYPE agora_services_total gauge",
+        f"agora_services_total {total}",
+        "# HELP agora_services_healthy Healthy services",
+        "# TYPE agora_services_healthy gauge",
+        f"agora_services_healthy {healthy}",
+        "# HELP agora_services_degraded Degraded/offline services",
+        "# TYPE agora_services_degraded gauge",
+        f"agora_services_degraded {total - healthy}",
+    ]
+    import time as _time
+    lines.append(f"# HELP agora_last_health_check Last health check timestamp")
+    lines.append("# TYPE agora_last_health_check gauge")
+    lines.append(f"agora_last_health_check {_time.time()}")
+    return "\n".join(lines) + "\n", 200, {"Content-Type": "text/plain; version=0.0.4"}
+
+
 # ── CLI entry ──────────────────────────────────────────────────
 
 def main():

@@ -120,8 +120,9 @@ services:
 - ✅ 一键 Discover / Health Check / Register / Clear
 - ✅ JSON API 全覆盖 (/api/services, /api/health, /api/pipeline, etc.)
 - ✅ 自动刷新 (5s interval)
-- ⏳ Pipeline DAG 可视化
-- ⏳ 调用链追踪
+- ✅ Pipeline DAG 可视化 (Dashboard SVG)
+- ✅ 调用追踪 (trace_log.jsonl + router._trace)
+- ✅ Prometheus /metrics 端点
 
 ### 4.2 多租户 + 访问控制
 ```yaml
