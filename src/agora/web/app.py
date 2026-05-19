@@ -40,7 +40,12 @@ async def _auth_middleware(request: Request, call_next):
 
 
 app = FastAPI(title="Agora Dashboard", version="1.2.0")
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"], allow_methods=["GET", "POST"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 app.middleware("http")(_auth_middleware)
 
 registry = ServiceRegistry()
