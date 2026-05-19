@@ -90,27 +90,46 @@ class ServiceRegistry:
 
     Services register themselves (or are configured statically).
     The registry is the only place that knows the full topology.
-    Supports health alert firing via optional EventBus callback.
+    Supports health alert firing via optional EventBus callback or webhook URL.
     """
 
     _MAX_SERVICES = 50
-    _HEALTH_COOLDOWN = 10.0  # min seconds between full health checks
+    _HEALTH_COOLDOWN = 10.0
     _MAX_CONCURRENT_CHECKS = 10
 
     def __init__(self, storage_path: str | None = None,
                  cb_max_failures: int = 3, cb_cooldown: float = 60.0,
                  cb_success_threshold: int = 2,
-                 alert_callback: Callable | None = None):
+                 alert_callback: Callable | None = None,
+                 alert_webhook: str = ""):
         self._services: dict[str, Service] = {}
         self._last_health_check: float = 0.0
         self._cb_max_failures = cb_max_failures
         self._cb_cooldown = cb_cooldown
         self._cb_success_threshold = cb_success_threshold
         self._alert_callback = alert_callback
+        self._alert_webhook = alert_webhook
         self._storage_path = storage_path or str(
             Path(__file__).parent.parent.parent / "agora-services.json"
         )
         self._load()
+
+    def _send_webhook_alert(self, name: str, prev: str, new: str, failures: int):
+        """Send circuit state change alert via webhook."""
+        if not self._alert_webhook:
+            return
+        import httpx
+        import asyncio
+        try:
+            async def _send():
+                async with httpx.AsyncClient(timeout=5) as c:
+                    await c.post(self._alert_webhook, json={
+                        "service": name, "prev_state": prev,
+                        "new_state": new, "failures": failures,
+                    })
+            asyncio.run(_send())
+        except Exception:
+            pass
 
     def _load(self):
         """Load persisted services from JSON file."""
@@ -176,11 +195,13 @@ class ServiceRegistry:
                 svc.cooldown_until = time.monotonic() + (self._cb_cooldown * 2)
                 if self._alert_callback:
                     self._alert_callback(name, prev_state, "OPEN (HALF_OPEN→OPEN)", svc.failure_count)
+                self._send_webhook_alert(name, prev_state, "OPEN", svc.failure_count)
             elif svc.failure_count >= self._cb_max_failures:
                 svc.cooldown_until = time.monotonic() + self._cb_cooldown
                 svc.healthy = False
                 if self._alert_callback and prev_state != "OPEN":
                     self._alert_callback(name, prev_state, "OPEN", svc.failure_count)
+                self._send_webhook_alert(name, prev_state, "OPEN", svc.failure_count)
 
     def mark_success(self, name: str):
         svc = self._services.get(name)
