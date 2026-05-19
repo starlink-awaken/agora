@@ -38,8 +38,15 @@
 - Test isolation: temp storage paths to prevent persistence cross-contamination
 - ontoderive test: absolute path for build_from_project
 
+### Docs
+- AGENTS.md: AI agent entry point
+- USER_GUIDE.md: 10 user scenarios with code examples
+- QUICKSTART.md: 5-minute getting started guide
+- INSTALL.md: installation + Claude Code integration
+- 6 demo scripts: fault-injection, mcp-integration, tenant, observability, alert, benchmark
+
 ### Tests
-- 17 → 58 passed (registry 7, router 4, integration 6, event_bus 14, pipeline 9, discovery 4, market 5, E2E 9)
+- 17 → 61 passed (registry 7, router 4, integration 6, event_bus 14, pipeline 9, discovery 4, market 5, E2E 9, circuit_breaker 3)
 
 ## [0.1.1] — 2026-05-15
 
