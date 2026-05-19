@@ -98,6 +98,9 @@ def build_parser() -> argparse.ArgumentParser:
     # mcp
     sub.add_parser("mcp", help="Start MCP server")
 
+    # config
+    sub.add_parser("config", help="Show config paths and status")
+
     # web
     sub.add_parser("web", help="Start Web Dashboard (port 7430)")
 
@@ -435,6 +438,17 @@ def main():
     elif args.command == "mcp":
         from agora.server.mcp import main as mcp_main
         return mcp_main()
+
+    elif args.command == "config":
+        from agora.registry import ServiceRegistry
+        r = ServiceRegistry()
+        print(f"Services file:   {r._storage_path}")
+        print(f"Registered:      {len(r.list_all())} services")
+        print(f"Healthy:         {len(r.list_healthy())}")
+        print(f"Events file:     agora-events.json")
+        print(f"Trace file:      trace_log.jsonl")
+        print(f"Dashboard:       http://localhost:7430")
+        print(f"Metrics:         http://localhost:7430/metrics")
 
     elif args.command == "web":
         from agora.web.app import main as web_main

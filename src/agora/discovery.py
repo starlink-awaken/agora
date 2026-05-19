@@ -12,10 +12,13 @@ from __future__ import annotations
 import asyncio
 import json
 import socket
+import structlog
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+logger = structlog.get_logger(__name__)
 
 if TYPE_CHECKING:
     from agora.registry import ServiceRegistry

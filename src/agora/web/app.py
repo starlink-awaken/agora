@@ -56,6 +56,12 @@ pipeline = Pipeline(registry, router)
 
 _DASHBOARD_HTML = (Path(__file__).parent / "dashboard.html").read_text()
 
+# Prometheus gauges — created once at module level (not per scrape)
+from prometheus_client import Gauge, generate_latest, REGISTRY
+_METRIC_SVC_TOTAL = Gauge("agora_services_total", "Total registered services", registry=REGISTRY)
+_METRIC_SVC_HEALTHY = Gauge("agora_services_healthy", "Healthy services", registry=REGISTRY)
+_METRIC_SVC_DEGRADED = Gauge("agora_services_degraded", "Degraded/offline services", registry=REGISTRY)
+
 
 # ── Pages ──────────────────────────────────────────────────────
 
@@ -190,18 +196,12 @@ async def api_add_instance(data: dict):
 @app.get("/metrics")
 async def api_metrics():
     """Prometheus-compatible metrics endpoint."""
-    from prometheus_client import Gauge, Summary, generate_latest, REGISTRY
-
     total = len(registry.list_all())
     healthy = len(registry.list_healthy())
-    pct = router.get_percentiles()
 
-    svc_total = Gauge("agora_services_total", "Total registered services", registry=REGISTRY)
-    svc_healthy = Gauge("agora_services_healthy", "Healthy services", registry=REGISTRY)
-    svc_degraded = Gauge("agora_services_degraded", "Degraded/offline services", registry=REGISTRY)
-    svc_total.set(total)
-    svc_healthy.set(healthy)
-    svc_degraded.set(total - healthy)
+    _METRIC_SVC_TOTAL.set(total)
+    _METRIC_SVC_HEALTHY.set(healthy)
+    _METRIC_SVC_DEGRADED.set(total - healthy)
 
     from fastapi.responses import PlainTextResponse
     return PlainTextResponse(content=generate_latest(REGISTRY), media_type="text/plain; version=0.0.4")
