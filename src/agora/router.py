@@ -6,6 +6,7 @@ with round-robin routing strategy.
 
 from __future__ import annotations
 
+import atexit
 import json as _json
 import time as _time
 from collections import deque
@@ -35,6 +36,7 @@ class Router:
         self._latencies: deque[float] = deque(maxlen=1000)  # auto-FIFO truncation
         self._trace_buffer: list[str] = []  # batched disk writes
         self._trace_path = _Path(__file__).parent.parent.parent / "trace_log.jsonl"
+        atexit.register(self._flush_traces)  # Sprint 1: drain on shutdown
 
     def add_route(self, tool_name: str, service_name: str):
         """Register a tool → service mapping."""

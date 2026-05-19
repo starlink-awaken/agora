@@ -23,11 +23,31 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agora.discovery import DiscoveryEngine
 from agora.pipeline import Pipeline
+import os
+
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
 from agora.registry import Service, ServiceRegistry, _is_safe_url
+
+API_KEY = os.environ.get("AGORA_API_KEY", "")
+
+
+async def _auth_middleware(request: Request, call_next):
+    """Simple API Key auth for write endpoints."""
+    if request.method == "GET" or not API_KEY:
+        return await call_next(request)
+    key = request.headers.get("X-API-Key", "")
+    if key != API_KEY:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    return await call_next(request)
+
+
 from agora.router import Router
 
 app = FastAPI(title="Agora Dashboard", version="1.2.0")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"], allow_methods=["GET", "POST"], allow_headers=["*"])
+app.middleware("http")(_auth_middleware)
 
 registry = ServiceRegistry()
 router = Router(registry)
