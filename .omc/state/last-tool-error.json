@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"echo \\\"=== Honeycomb test file breakdown ===\\\" && find /Users/xiamingxing/Workspace/honeycomb/engine/tests -type f \\\\( -name \\\"*.test.ts\\\" -o -name \\\"*.spec.ts\\\" \\\\) 2>/dev/null | wc -l &&...",
-  "error": "Exit code 1\n=== Honeycomb test file breakdown ===\n      91\n       3\n\n=== agent-toolkit test file count ===\n      41\n\n=== bos-skill-cli test file count ===\n       4\n\n=== pallas test file count ===\n       1\n\n=== eCOS Python file count ===\n      41\n\n=== metacog project ===",
-  "timestamp": "2026-05-19T06:53:06.324Z",
+  "tool_input_preview": "{\"command\":\"AGORA_BIN=/Users/xiamingxing/Workspace/agora/.venv/bin/agora bash /Users/xiamingxing/Workspace/agora/demos/fault-injection.sh 2>&1\",\"timeout\":30000,\"description\":\"Run fault injection demo\"...",
+  "error": "Exit code 1\n╔══════════════════════════════════════════════════════════╗\n║   🛡️  断路器生命周期演示                                    ║\n╚══════════════════════════════════════════════════════════╝\n\n━ Step 1: 注册测试服务 (端口 19999, 不存在的服务)\nRegistered: demo-fault\n📦 demo-fault  [✓ healthy]  Circuit: CLOSED\n   Description:    N/A\n   MCP Endpoint:   N/A\n   Health:         http://localhost:19999/health\n   Port:           19999\n   Tags:           N/A\n   Failures:       0/3\n   Last Check:     never\n\n━ Step 2: 触发 3...",
+  "timestamp": "2026-05-19T08:31:30.335Z",
   "retry_count": 1
 }

@@ -90,6 +90,15 @@
         "mcp"
       ],
       "instances": []
+    },
+    {
+      "name": "demo-fault",
+      "description": "",
+      "mcp_endpoint": "",
+      "health_endpoint": "http://localhost:19999/health",
+      "port": 19999,
+      "tags": [],
+      "instances": []
     }
   ]
 }

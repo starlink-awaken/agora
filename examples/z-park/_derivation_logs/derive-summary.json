@@ -1,5 +1,5 @@
 {
-  "derived_at": "2026-05-19T15:10:02.225944",
+  "derived_at": "2026-05-19T16:08:43.799670",
   "facts": 0,
   "entities": 0,
   "inferences": 0,
@@ -10,5 +10,6 @@
     "max_depth": 0,
     "cycles": 0
   },
-  "analysis_mode": "structural"
+  "analysis_mode": "structural",
+  "derived_conclusions": []
 }

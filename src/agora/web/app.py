@@ -196,6 +196,18 @@ async def api_add_instance(data: dict):
     return {"status": "ok", "service": svc_name, "instance": mcp_endpoint}
 
 
+@app.get("/api/metrics/history")
+async def api_metrics_history():
+    """Return P50/P90/P99 latency history for dashboards."""
+    pct = router.get_percentiles()
+    return {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "latency": pct,
+        "services": len(registry.list_all()),
+        "healthy": len(registry.list_healthy()),
+    }
+
+
 @app.get("/metrics")
 async def api_metrics():
     """Prometheus-compatible metrics endpoint."""
