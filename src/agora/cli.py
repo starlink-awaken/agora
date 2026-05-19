@@ -449,15 +449,13 @@ def main():
         return run_wizard()
 
     elif args.command == "completion":
-        parser = build_parser()
-        cmds = sorted(a.dest for a in parser._actions if hasattr(a, 'dest') and a.dest != 'help' and a.dest)
-        cmd_list = " ".join(cmds)
+        cmds = "register list discover instance tenant market search info stats health route routes mcp init config web pipeline pipelines pipeline-define event completion"
         print('# Add to ~/.bashrc or ~/.zshrc:')
         print('#   eval "$(agora completion)"')
         print()
         print('_agora_completion() {')
         print('  local cur=${COMP_WORDS[COMP_CWORD]}')
-        print(f'  local cmds="{cmd_list}"')
+        print(f'  local cmds="{cmds}"')
         print('  COMPREPLY=($(compgen -W "$cmds" -- "$cur"))')
         print('}')
         print('complete -F _agora_completion agora')
