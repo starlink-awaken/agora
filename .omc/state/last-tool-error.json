@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\".venv/bin/pip install -e \\\".\\\" -q 2>&1 | tail -1 && echo \\\"=== event publish ===\\\" && .venv/bin/agora event publish \\\"index:done\\\" --payload '{\\\"docs\\\":8941}' --source \\\"kos\\\" 2>&1 && echo...",
-  "error": "Exit code 1\n=== event publish ===\nTraceback (most recent call last):\n  File \"/Users/xiamingxing/Workspace/agora/.venv/bin/agora\", line 6, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/Users/xiamingxing/Workspace/agora/src/agora/cli.py\", line 388, in main\n    eid = bus.publish(args.type, payload, args.source)\n  File \"/Users/xiamingxing/Workspace/agora/src/agora/event_bus.py\", line 99, in publish\n    asyncio.create_task(self._deliver(event))\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^...",
-  "timestamp": "2026-05-18T10:02:56.229Z",
+  "tool_input_preview": "{\"command\":\".venv/bin/pip install -e \\\".\\\" -q 2>&1 | tail -1 && echo \\\"=== agora market list ===\\\" && .venv/bin/agora market list 2>&1 | head -10 && echo \\\"=== agora market search filesystem ===\\\" && ...",
+  "error": "Exit code 1\n=== agora market list ===\nTraceback (most recent call last):\n  File \"/Users/xiamingxing/Workspace/agora/.venv/bin/agora\", line 6, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/Users/xiamingxing/Workspace/agora/src/agora/cli.py\", line 286, in main\n    parser = build_parser()\n  File \"/Users/xiamingxing/Workspace/agora/src/agora/cli.py\", line 129, in build_parser\n    mk = sub.add_parser(\"market\", help=\"MCP Tool Marketplace\")\n  File \"/opt/homebrew/Cellar/python@3.14/3.14....",
+  "timestamp": "2026-05-19T01:13:02.015Z",
   "retry_count": 1
 }

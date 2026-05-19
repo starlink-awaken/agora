@@ -494,6 +494,36 @@ def main():
             ok = bus.unsubscribe(args.id)
             print(f"📭 {'Unsubscribed' if ok else 'Not found'}: {args.id}")
 
+    elif args.command == "market":
+        from agora.market import Market
+        mkt = Market()
+
+        if args.market_cmd == "list":
+            svcs = mkt.list_all()
+            print(f"🛒 MCP Tool Market — {len(svcs)} services:\n")
+            for s in svcs:
+                print(f"  📦 {s['name']}")
+                print(f"     {s['description']}")
+                print(f"     tags: {', '.join(s.get('tags', []))}")
+                print(f"     install: agora market install {s['name']}")
+                print()
+
+        elif args.market_cmd == "search":
+            results = mkt.search(args.keyword)
+            print(f"🔍 '{args.keyword}' → {len(results)} results:\n")
+            for s in results:
+                print(f"  📦 {s['name']} — {s['description'][:60]}")
+
+        elif args.market_cmd == "install":
+            print(f"📥 Installing {args.name_or_url}...")
+            try:
+                meta = mkt.install(args.name_or_url)
+                print(f"✅ Installed: {meta['name']}")
+                print(f"   Entry: {meta['entry']}")
+                print(f"   To register: agora register {args.name or meta['name']} --mcp {meta['entry']}")
+            except Exception as e:
+                print(f"❌ Install failed: {e}")
+
     return 0
 
 
