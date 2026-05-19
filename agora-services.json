@@ -10,6 +10,19 @@
       "instances": []
     },
     {
+      "name": "ontoderive",
+      "description": "Fact-driven knowledge engineering — ToolForge + derive + check",
+      "mcp_endpoint": "stdio://ontoderive",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "knowledge-engineering",
+        "derivation",
+        "ontology"
+      ],
+      "instances": []
+    },
+    {
       "name": "sophia",
       "description": "",
       "mcp_endpoint": "http://192.0.2.2:9001",
@@ -19,26 +32,15 @@
       "instances": []
     },
     {
-      "name": "ontoderive",
-      "description": "",
-      "mcp_endpoint": "stdio",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [
-        "//ontoderive:knowledge-engineering",
-        "derivation"
-      ],
-      "instances": []
-    },
-    {
       "name": "agora",
-      "description": "",
-      "mcp_endpoint": "stdio",
+      "description": "MCP service convergence hub — registry, routing, pipeline",
+      "mcp_endpoint": "stdio://agora",
       "health_endpoint": "",
       "port": 0,
       "tags": [
-        "//agora:gateway",
-        "registry"
+        "gateway",
+        "registry",
+        "pipeline"
       ],
       "instances": []
     },
@@ -52,18 +54,6 @@
         "skill",
         "discovery",
         "cli"
-      ],
-      "instances": []
-    },
-    {
-      "name": "kos",
-      "description": "",
-      "mcp_endpoint": "stdio",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [
-        "//kos-mcp:knowledge",
-        "search"
       ],
       "instances": []
     },
@@ -89,15 +79,6 @@
         "docker",
         "mcp"
       ],
-      "instances": []
-    },
-    {
-      "name": "demo-fault",
-      "description": "",
-      "mcp_endpoint": "",
-      "health_endpoint": "http://localhost:19999/health",
-      "port": 19999,
-      "tags": [],
       "instances": []
     }
   ]
