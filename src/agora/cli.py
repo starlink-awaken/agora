@@ -101,6 +101,9 @@ def build_parser() -> argparse.ArgumentParser:
     # init
     sub.add_parser("init", help="Guided setup wizard for first-time users")
 
+    # completion
+    sub.add_parser("completion", help="Generate shell completion (bash/zsh)")
+
     # config
     sub.add_parser("config", help="Show config paths and status")
 
@@ -444,6 +447,19 @@ def main():
     elif args.command == "init":
         from agora.wizard import run_wizard
         return run_wizard()
+
+    elif args.command == "completion":
+        print('# Add to ~/.bashrc or ~/.zshrc:')
+        print('#   eval "$(agora completion)"')
+        print()
+        print('_agora_completion() {')
+        print('  local cur=${COMP_WORDS[COMP_CWORD]}')
+        cmd_names = [a.dest for a in build_parser()._actions if hasattr(a, 'dest') and a.dest != 'help']
+        print(f'  local cmds="{" ".join(cmd_names)}"')
+        print('  COMPREPLY=($(compgen -W "$cmds" -- "$cur"))')
+        print('}')
+        print('complete -F _agora_completion agora')
+        return 0
 
     elif args.command == "config":
         from agora.registry import ServiceRegistry
