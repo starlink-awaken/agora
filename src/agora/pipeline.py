@@ -203,18 +203,19 @@ class Pipeline:
             tasks = [_exec(i, step) for i, step in ready]
             batch_results = await asyncio.gather(*tasks)
 
+            critical_failed = False
             for i, label, result, error in batch_results:
                 step = steps[i]
                 if error:
                     results.append({"step": i, "tool": step["tool"], "status": "error", "error": error})
                     if step.get("critical", False):
-                        remaining = []
+                        critical_failed = True
                         break
                 else:
                     outputs[label] = result
                     results.append({"step": i, "tool": step["tool"], "status": "ok"})
 
-            remaining = still_waiting
+            remaining = [] if critical_failed else still_waiting
 
         return {
             "pipeline": name,
@@ -247,7 +248,9 @@ class Pipeline:
         steps = self._definitions.get(name)
         if not steps:
             raise ValueError(f"Pipeline not found: {name}")
-        Path(path).write_text(json.dumps({"name": name, "steps": steps}, indent=2, ensure_ascii=False))
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"name": name, "steps": steps}, indent=2, ensure_ascii=False))
 
     def load_definition(self, path: str | Path):
         """Load a pipeline definition from a JSON file."""

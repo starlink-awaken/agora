@@ -58,10 +58,9 @@ def list_services() -> str:
 
 
 @mcp.tool()
-def check_health() -> str:
+async def check_health() -> str:
     """Probe all registered services' health endpoints."""
-    import asyncio
-    asyncio.run(registry.health_check_all())
+    await registry.health_check_all()
     return json.dumps({
         "total": len(registry.list_all()),
         "healthy": len(registry.list_healthy()),
@@ -90,19 +89,18 @@ def list_routes() -> str:
 
 
 @mcp.tool()
-def route_call(tool_name: str, arguments: str = "{}") -> str:
+async def route_call(tool_name: str, arguments: str = "{}") -> str:
     """Route a tool call to the appropriate service.
 
     Args:
         tool_name: The tool to call (e.g. 'minerva.research_now')
         arguments: JSON string of arguments
     """
-    import asyncio
     try:
         args = json.loads(arguments) if isinstance(arguments, str) else arguments
     except json.JSONDecodeError:
         args = {}
-    result = asyncio.run(router.route(tool_name, args))
+    result = await router.route(tool_name, args)
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
