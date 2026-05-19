@@ -98,6 +98,9 @@ def build_parser() -> argparse.ArgumentParser:
     # mcp
     sub.add_parser("mcp", help="Start MCP server")
 
+    # init
+    sub.add_parser("init", help="Guided setup wizard for first-time users")
+
     # config
     sub.add_parser("config", help="Show config paths and status")
 
@@ -439,6 +442,10 @@ def main():
         from agora.server.mcp import main as mcp_main
         return mcp_main()
 
+    elif args.command == "init":
+        from agora.wizard import run_wizard
+        return run_wizard()
+
     elif args.command == "config":
         from agora.registry import ServiceRegistry
         r = ServiceRegistry()
@@ -539,4 +546,12 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        print("\n👋 Interrupted.")
+        sys.exit(130)
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        print(f"   Run 'agora config' to check setup, or 'agora init' to re-run setup.")
+        sys.exit(1)
