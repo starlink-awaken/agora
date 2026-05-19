@@ -1,6 +1,6 @@
 [project]
 name = "agora"
-version = "0.1.1"
+version = "1.2.0"
 description = "Agora — MCP Service Convergence Hub. Route, monitor, and govern inter-service communication."
 readme = "README.md"
 license = {text = "MIT"}
@@ -8,7 +8,7 @@ requires-python = ">=3.11"
 authors = [{name = "Minerva Contributors"}]
 keywords = ["mcp", "service-mesh", "hub", "routing", "governance"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: MIT License",

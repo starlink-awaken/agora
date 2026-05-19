@@ -37,7 +37,7 @@ agora health          # probe all services
 agora mcp             # start MCP server
 ```
 
-### MCP Tools (7)
+### MCP Tools (9)
 
 | Tool | Function |
 |------|----------|
