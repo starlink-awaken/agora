@@ -263,6 +263,42 @@
       "payload": {
         "ok": true
       }
+    },
+    {
+      "id": "evt_1779174930_b23036",
+      "time": "2026-05-19T07:15:30Z",
+      "source": "audit",
+      "type": "test:validation",
+      "payload": {
+        "action": "verify"
+      }
+    },
+    {
+      "id": "evt_1779175066_bb625b",
+      "time": "2026-05-19T07:17:46Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "id": "evt_1779175657_15807b",
+      "time": "2026-05-19T07:27:37Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "id": "evt_1779175997_031f3a",
+      "time": "2026-05-19T07:33:17Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
     }
   ],
   "subscriptions": [
