@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import ipaddress
 import socket
 import time
@@ -135,10 +136,8 @@ class ServiceRegistry:
             loop = asyncio.get_running_loop()
             loop.create_task(_send())
         except RuntimeError:
-            try:
+            with contextlib.suppress(Exception):
                 asyncio.run(_send())
-            except Exception:
-                pass
 
     def _load(self):
         """Load persisted services from JSON file."""

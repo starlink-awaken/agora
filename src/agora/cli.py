@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import sys
 import time
@@ -44,7 +45,7 @@ def build_parser() -> argparse.ArgumentParser:
     # tenant
     ten = sub.add_parser("tenant", help="Multi-tenant management")
     ten_sub = ten.add_subparsers(dest="tenant_cmd")
-    ten_list = ten_sub.add_parser("list", help="List all tenants")
+    ten_sub.add_parser("list", help="List all tenants")
     ten_add = ten_sub.add_parser("add", help="Add a tenant")
     ten_add.add_argument("name", help="Tenant name")
     ten_add.add_argument("--services", default="", help="Comma-separated allowed services")
@@ -55,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     # market
     mkt = sub.add_parser("market", help="MCP tool marketplace")
     mkt_sub = mkt.add_subparsers(dest="market_cmd")
-    mkt_list = mkt_sub.add_parser("list", help="List available MCP services")
+    mkt_sub.add_parser("list", help="List available MCP services")
     mkt_search = mkt_sub.add_parser("search", help="Search MCP services")
     mkt_search.add_argument("keyword", help="Search keyword")
     mkt_install = mkt_sub.add_parser("install", help="Install an MCP service")
@@ -150,15 +151,14 @@ def _cmd_discover(args) -> int:
 
     if args.watch:
         import asyncio
+
         from agora.registry import ServiceRegistry
         registry = ServiceRegistry()
         async def _watch():
-            async for svc in engine.watch(registry, args.interval):
+            async for _svc in engine.watch(registry, args.interval):
                 pass
-        try:
+        with contextlib.suppress(KeyboardInterrupt):
             asyncio.run(_watch())
-        except KeyboardInterrupt:
-            pass
         return 0
 
     if args.probe:
@@ -451,10 +451,10 @@ def main():
         print(f"Services file:   {r._storage_path}")
         print(f"Registered:      {len(r.list_all())} services")
         print(f"Healthy:         {len(r.list_healthy())}")
-        print(f"Events file:     agora-events.json")
-        print(f"Trace file:      trace_log.jsonl")
-        print(f"Dashboard:       http://localhost:7430")
-        print(f"Metrics:         http://localhost:7430/metrics")
+        print("Events file:     agora-events.json")
+        print("Trace file:      trace_log.jsonl")
+        print("Dashboard:       http://localhost:7430")
+        print("Metrics:         http://localhost:7430/metrics")
 
     elif args.command == "web":
         from agora.web.app import main as web_main
@@ -463,6 +463,7 @@ def main():
 
     elif args.command == "pipeline":
         import asyncio
+
         from agora.pipeline import Pipeline
         pl = Pipeline(registry, router)
         variables = {"goal": args.goal, "context": args.context, "project": args.project}

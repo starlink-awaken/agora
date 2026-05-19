@@ -9,10 +9,11 @@ Usage:
 
 from __future__ import annotations
 
-import structlog
 import subprocess
 import sys
 from pathlib import Path
+
+import structlog
 
 logger = structlog.get_logger(__name__)
 

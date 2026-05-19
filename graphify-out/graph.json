@@ -1,0 +1,5689 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "persistence.py",
+      "file_type": "code",
+      "source_file": "persistence.py",
+      "source_location": "L1",
+      "id": "persistence_py",
+      "community": 6,
+      "norm_label": "persistence.py"
+    },
+    {
+      "label": "json_load()",
+      "file_type": "code",
+      "source_file": "persistence.py",
+      "source_location": "L12",
+      "id": "agora_persistence_json_load",
+      "community": 6,
+      "norm_label": "json_load()"
+    },
+    {
+      "label": "json_save()",
+      "file_type": "code",
+      "source_file": "persistence.py",
+      "source_location": "L22",
+      "id": "agora_persistence_json_save",
+      "community": 6,
+      "norm_label": "json_save()"
+    },
+    {
+      "label": "Shared JSON persistence \u2014 used by registry, event_bus, and market.",
+      "file_type": "rationale",
+      "source_file": "persistence.py",
+      "source_location": "L1",
+      "id": "agora_persistence_rationale_1",
+      "community": 6,
+      "norm_label": "shared json persistence \u2014 used by registry, event_bus, and market."
+    },
+    {
+      "label": "Load JSON from path, returning default on failure.",
+      "file_type": "rationale",
+      "source_file": "persistence.py",
+      "source_location": "L13",
+      "id": "agora_persistence_rationale_13",
+      "community": 6,
+      "norm_label": "load json from path, returning default on failure."
+    },
+    {
+      "label": "Save data as JSON to path. Returns True on success.",
+      "file_type": "rationale",
+      "source_file": "persistence.py",
+      "source_location": "L23",
+      "id": "agora_persistence_rationale_23",
+      "community": 6,
+      "norm_label": "save data as json to path. returns true on success."
+    },
+    {
+      "label": "tenant.py",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L1",
+      "id": "tenant_py",
+      "community": 7,
+      "norm_label": "tenant.py"
+    },
+    {
+      "label": "Tenant",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L35",
+      "id": "agora_tenant_tenant",
+      "community": 7,
+      "norm_label": "tenant"
+    },
+    {
+      "label": "TenantManager",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L43",
+      "id": "agora_tenant_tenantmanager",
+      "community": 7,
+      "norm_label": "tenantmanager"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L52",
+      "id": "agora_tenant_tenantmanager_init",
+      "community": 7,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._load()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L59",
+      "id": "agora_tenant_tenantmanager_load",
+      "community": 7,
+      "norm_label": "._load()"
+    },
+    {
+      "label": ".authenticate()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L102",
+      "id": "agora_tenant_tenantmanager_authenticate",
+      "community": 7,
+      "norm_label": ".authenticate()"
+    },
+    {
+      "label": ".check_rate_limit()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L109",
+      "id": "agora_tenant_tenantmanager_check_rate_limit",
+      "community": 7,
+      "norm_label": ".check_rate_limit()"
+    },
+    {
+      "label": ".has_service_access()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L138",
+      "id": "agora_tenant_tenantmanager_has_service_access",
+      "community": 7,
+      "norm_label": ".has_service_access()"
+    },
+    {
+      "label": ".list_tenants()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L149",
+      "id": "agora_tenant_tenantmanager_list_tenants",
+      "community": 7,
+      "norm_label": ".list_tenants()"
+    },
+    {
+      "label": ".add_tenant()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L161",
+      "id": "agora_tenant_tenantmanager_add_tenant",
+      "community": 7,
+      "norm_label": ".add_tenant()"
+    },
+    {
+      "label": ".remove_tenant()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L177",
+      "id": "agora_tenant_tenantmanager_remove_tenant",
+      "community": 7,
+      "norm_label": ".remove_tenant()"
+    },
+    {
+      "label": "._save()",
+      "file_type": "code",
+      "source_file": "tenant.py",
+      "source_location": "L187",
+      "id": "agora_tenant_tenantmanager_save",
+      "community": 7,
+      "norm_label": "._save()"
+    },
+    {
+      "label": "Multi-tenant access control \u2014 tenant.yaml + API Token + rate limiting.  Structur",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L1",
+      "id": "agora_tenant_rationale_1",
+      "community": 7,
+      "norm_label": "multi-tenant access control \u2014 tenant.yaml + api token + rate limiting.  structur"
+    },
+    {
+      "label": "Multi-tenant access control with token auth + rate limiting.      Tenants are co",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L44",
+      "id": "agora_tenant_rationale_44",
+      "community": 7,
+      "norm_label": "multi-tenant access control with token auth + rate limiting.      tenants are co"
+    },
+    {
+      "label": "Load tenants from YAML config.",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L60",
+      "id": "agora_tenant_rationale_60",
+      "community": 7,
+      "norm_label": "load tenants from yaml config."
+    },
+    {
+      "label": "Authenticate a token and return the tenant, or None if invalid.",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L103",
+      "id": "agora_tenant_rationale_103",
+      "community": 7,
+      "norm_label": "authenticate a token and return the tenant, or none if invalid."
+    },
+    {
+      "label": "Check if tenant has exceeded rate limit.          Returns True if request is all",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L110",
+      "id": "agora_tenant_rationale_110",
+      "community": 7,
+      "norm_label": "check if tenant has exceeded rate limit.          returns true if request is all"
+    },
+    {
+      "label": "Check if tenant has access to a specific service.         Empty services list =",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L139",
+      "id": "agora_tenant_rationale_139",
+      "community": 7,
+      "norm_label": "check if tenant has access to a specific service.         empty services list ="
+    },
+    {
+      "label": "List all tenants (without exposing tokens).",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L150",
+      "id": "agora_tenant_rationale_150",
+      "community": 7,
+      "norm_label": "list all tenants (without exposing tokens)."
+    },
+    {
+      "label": "Add a new tenant. Returns the generated token.",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L163",
+      "id": "agora_tenant_rationale_163",
+      "community": 7,
+      "norm_label": "add a new tenant. returns the generated token."
+    },
+    {
+      "label": "Persist tenants to YAML config.",
+      "file_type": "rationale",
+      "source_file": "tenant.py",
+      "source_location": "L188",
+      "id": "agora_tenant_rationale_188",
+      "community": 7,
+      "norm_label": "persist tenants to yaml config."
+    },
+    {
+      "label": "discovery.py",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L1",
+      "id": "discovery_py",
+      "community": 1,
+      "norm_label": "discovery.py"
+    },
+    {
+      "label": "DiscoveredService",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L27",
+      "id": "agora_discovery_discoveredservice",
+      "community": 1,
+      "norm_label": "discoveredservice"
+    },
+    {
+      "label": "DiscoveryEngine",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L38",
+      "id": "agora_discovery_discoveryengine",
+      "community": 1,
+      "norm_label": "discoveryengine"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L102",
+      "id": "agora_discovery_discoveryengine_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "_find_workspace()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L106",
+      "id": "agora_discovery_find_workspace",
+      "community": 1,
+      "norm_label": "_find_workspace()"
+    },
+    {
+      "label": ".scan_known_projects()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L113",
+      "id": "agora_discovery_discoveryengine_scan_known_projects",
+      "community": 1,
+      "norm_label": ".scan_known_projects()"
+    },
+    {
+      "label": ".scan_pyproject_scripts()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L137",
+      "id": "agora_discovery_discoveryengine_scan_pyproject_scripts",
+      "community": 1,
+      "norm_label": ".scan_pyproject_scripts()"
+    },
+    {
+      "label": ".scan_docker_compose()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L187",
+      "id": "agora_discovery_discoveryengine_scan_docker_compose",
+      "community": 1,
+      "norm_label": ".scan_docker_compose()"
+    },
+    {
+      "label": "._probe_port()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L233",
+      "id": "agora_discovery_discoveryengine_probe_port",
+      "community": 1,
+      "norm_label": "._probe_port()"
+    },
+    {
+      "label": "._probe_mcp_endpoint()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L244",
+      "id": "agora_discovery_discoveryengine_probe_mcp_endpoint",
+      "community": 1,
+      "norm_label": "._probe_mcp_endpoint()"
+    },
+    {
+      "label": ".scan_port_range()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L264",
+      "id": "agora_discovery_discoveryengine_scan_port_range",
+      "community": 1,
+      "norm_label": ".scan_port_range()"
+    },
+    {
+      "label": ".discover_all()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L296",
+      "id": "agora_discovery_discoveryengine_discover_all",
+      "community": 1,
+      "norm_label": ".discover_all()"
+    },
+    {
+      "label": ".discover_all_async()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L318",
+      "id": "agora_discovery_discoveryengine_discover_all_async",
+      "community": 1,
+      "norm_label": ".discover_all_async()"
+    },
+    {
+      "label": ".watch()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L331",
+      "id": "agora_discovery_discoveryengine_watch",
+      "community": 1,
+      "norm_label": ".watch()"
+    },
+    {
+      "label": ".auto_register()",
+      "file_type": "code",
+      "source_file": "discovery.py",
+      "source_location": "L349",
+      "id": "agora_discovery_discoveryengine_auto_register",
+      "community": 1,
+      "norm_label": ".auto_register()"
+    },
+    {
+      "label": "Auto-discovery engine \u2014 scan workspace for MCP-capable services.  Phase 2 strate",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L1",
+      "id": "agora_discovery_rationale_1",
+      "community": 1,
+      "norm_label": "auto-discovery engine \u2014 scan workspace for mcp-capable services.  phase 2 strate"
+    },
+    {
+      "label": "Auto-discover MCP services in the workspace.      Uses four strategies:     1. K",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L39",
+      "id": "agora_discovery_rationale_39",
+      "community": 1,
+      "norm_label": "auto-discover mcp services in the workspace.      uses four strategies:     1. k"
+    },
+    {
+      "label": "Scan for known projects with .venv confirmation.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L114",
+      "id": "agora_discovery_rationale_114",
+      "community": 1,
+      "norm_label": "scan for known projects with .venv confirmation."
+    },
+    {
+      "label": "Scan pyproject.toml for MCP-related project.scripts entries.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L138",
+      "id": "agora_discovery_rationale_138",
+      "community": 1,
+      "norm_label": "scan pyproject.toml for mcp-related project.scripts entries."
+    },
+    {
+      "label": "Scan docker-compose.yml files for MCP-capable services.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L188",
+      "id": "agora_discovery_rationale_188",
+      "community": 1,
+      "norm_label": "scan docker-compose.yml files for mcp-capable services."
+    },
+    {
+      "label": "Check if a port is open.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L234",
+      "id": "agora_discovery_rationale_234",
+      "community": 1,
+      "norm_label": "check if a port is open."
+    },
+    {
+      "label": "Probe a port for MCP .well-known endpoint. Returns endpoint URL or empty string.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L245",
+      "id": "agora_discovery_rationale_245",
+      "community": 1,
+      "norm_label": "probe a port for mcp .well-known endpoint. returns endpoint url or empty string."
+    },
+    {
+      "label": "Scan port ranges for MCP-capable services listening on given hosts.          Pro",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L265",
+      "id": "agora_discovery_rationale_265",
+      "community": 1,
+      "norm_label": "scan port ranges for mcp-capable services listening on given hosts.          pro"
+    },
+    {
+      "label": "Run all synchronous discovery strategies and deduplicate by confidence.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L297",
+      "id": "agora_discovery_rationale_297",
+      "community": 1,
+      "norm_label": "run all synchronous discovery strategies and deduplicate by confidence."
+    },
+    {
+      "label": "Run all discovery strategies including async port probing.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L319",
+      "id": "agora_discovery_rationale_319",
+      "community": 1,
+      "norm_label": "run all discovery strategies including async port probing."
+    },
+    {
+      "label": "Watch for new services continuously. Yields discovery events.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L332",
+      "id": "agora_discovery_rationale_332",
+      "community": 1,
+      "norm_label": "watch for new services continuously. yields discovery events."
+    },
+    {
+      "label": "Discover and auto-register new services. Returns count registered.",
+      "file_type": "rationale",
+      "source_file": "discovery.py",
+      "source_location": "L350",
+      "id": "agora_discovery_rationale_350",
+      "community": 1,
+      "norm_label": "discover and auto-register new services. returns count registered."
+    },
+    {
+      "label": "registry.py",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L1",
+      "id": "registry_py",
+      "community": 9,
+      "norm_label": "registry.py"
+    },
+    {
+      "label": "_is_safe_url()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L22",
+      "id": "agora_registry_is_safe_url",
+      "community": 9,
+      "norm_label": "_is_safe_url()"
+    },
+    {
+      "label": "Service",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L44",
+      "id": "agora_registry_service",
+      "community": 9,
+      "norm_label": "service"
+    },
+    {
+      "label": "is_available()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L63",
+      "id": "agora_registry_is_available",
+      "community": 9,
+      "norm_label": "is_available()"
+    },
+    {
+      "label": "circuit_state()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L70",
+      "id": "agora_registry_circuit_state",
+      "community": 9,
+      "norm_label": "circuit_state()"
+    },
+    {
+      "label": ".to_dict()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L78",
+      "id": "agora_registry_service_to_dict",
+      "community": 9,
+      "norm_label": ".to_dict()"
+    },
+    {
+      "label": "ServiceRegistry",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L86",
+      "id": "agora_registry_serviceregistry",
+      "community": 0,
+      "norm_label": "serviceregistry"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L98",
+      "id": "agora_registry_serviceregistry_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._send_webhook_alert()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L115",
+      "id": "agora_registry_serviceregistry_send_webhook_alert",
+      "community": 0,
+      "norm_label": "._send_webhook_alert()"
+    },
+    {
+      "label": "._load()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L143",
+      "id": "agora_registry_serviceregistry_load",
+      "community": 0,
+      "norm_label": "._load()"
+    },
+    {
+      "label": "._save()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L151",
+      "id": "agora_registry_serviceregistry_save",
+      "community": 9,
+      "norm_label": "._save()"
+    },
+    {
+      "label": ".register()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L161",
+      "id": "agora_registry_serviceregistry_register",
+      "community": 9,
+      "norm_label": ".register()"
+    },
+    {
+      "label": ".unregister()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L172",
+      "id": "agora_registry_serviceregistry_unregister",
+      "community": 9,
+      "norm_label": ".unregister()"
+    },
+    {
+      "label": ".get()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L176",
+      "id": "agora_registry_serviceregistry_get",
+      "community": 0,
+      "norm_label": ".get()"
+    },
+    {
+      "label": ".list_all()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L179",
+      "id": "agora_registry_serviceregistry_list_all",
+      "community": 0,
+      "norm_label": ".list_all()"
+    },
+    {
+      "label": ".list_healthy()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L182",
+      "id": "agora_registry_serviceregistry_list_healthy",
+      "community": 0,
+      "norm_label": ".list_healthy()"
+    },
+    {
+      "label": "._try_half_open()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L185",
+      "id": "agora_registry_serviceregistry_try_half_open",
+      "community": 0,
+      "norm_label": "._try_half_open()"
+    },
+    {
+      "label": ".mark_failure()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L193",
+      "id": "agora_registry_serviceregistry_mark_failure",
+      "community": 0,
+      "norm_label": ".mark_failure()"
+    },
+    {
+      "label": ".mark_success()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L213",
+      "id": "agora_registry_serviceregistry_mark_success",
+      "community": 0,
+      "norm_label": ".mark_success()"
+    },
+    {
+      "label": ".get_circuit_status()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L230",
+      "id": "agora_registry_serviceregistry_get_circuit_status",
+      "community": 0,
+      "norm_label": ".get_circuit_status()"
+    },
+    {
+      "label": ".to_dict()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L243",
+      "id": "agora_registry_serviceregistry_to_dict",
+      "community": 0,
+      "norm_label": ".to_dict()"
+    },
+    {
+      "label": ".health_check_all()",
+      "file_type": "code",
+      "source_file": "registry.py",
+      "source_location": "L246",
+      "id": "agora_registry_serviceregistry_health_check_all",
+      "community": 0,
+      "norm_label": ".health_check_all()"
+    },
+    {
+      "label": "Service Registry \u2014 the single source of truth for all connected services.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L1",
+      "id": "agora_registry_rationale_1",
+      "community": 9,
+      "norm_label": "service registry \u2014 the single source of truth for all connected services."
+    },
+    {
+      "label": "Validate URL does not target internal/private network resources.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L23",
+      "id": "agora_registry_rationale_23",
+      "community": 9,
+      "norm_label": "validate url does not target internal/private network resources."
+    },
+    {
+      "label": "A registered MCP-capable service.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L45",
+      "id": "agora_registry_rationale_45",
+      "community": 9,
+      "norm_label": "a registered mcp-capable service."
+    },
+    {
+      "label": "Service is available if healthy OR cooldown expired (half-open candidate).",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L64",
+      "id": "agora_registry_rationale_64",
+      "community": 14,
+      "norm_label": "service is available if healthy or cooldown expired (half-open candidate)."
+    },
+    {
+      "label": "CLOSED (normal), OPEN (failed, cooling down), HALF_OPEN (testing).",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L71",
+      "id": "agora_registry_rationale_71",
+      "community": 15,
+      "norm_label": "closed (normal), open (failed, cooling down), half_open (testing)."
+    },
+    {
+      "label": "Central registry for all Agora-connected services.      Services register themse",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L87",
+      "id": "agora_registry_rationale_87",
+      "community": 0,
+      "norm_label": "central registry for all agora-connected services.      services register themse"
+    },
+    {
+      "label": "Send circuit state change alert via webhook.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L116",
+      "id": "agora_registry_rationale_116",
+      "community": 0,
+      "norm_label": "send circuit state change alert via webhook."
+    },
+    {
+      "label": "Load persisted services from JSON file.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L144",
+      "id": "agora_registry_rationale_144",
+      "community": 0,
+      "norm_label": "load persisted services from json file."
+    },
+    {
+      "label": "Persist services to JSON file. Only stores static config, not runtime state.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L152",
+      "id": "agora_registry_rationale_152",
+      "community": 9,
+      "norm_label": "persist services to json file. only stores static config, not runtime state."
+    },
+    {
+      "label": "Attempt a half-open probe. Returns True if probe should proceed.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L186",
+      "id": "agora_registry_rationale_186",
+      "community": 0,
+      "norm_label": "attempt a half-open probe. returns true if probe should proceed."
+    },
+    {
+      "label": "Get detailed circuit breaker status for a service.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L231",
+      "id": "agora_registry_rationale_231",
+      "community": 0,
+      "norm_label": "get detailed circuit breaker status for a service."
+    },
+    {
+      "label": "Probe all registered services' health endpoints with rate limiting.",
+      "file_type": "rationale",
+      "source_file": "registry.py",
+      "source_location": "L247",
+      "id": "agora_registry_rationale_247",
+      "community": 0,
+      "norm_label": "probe all registered services' health endpoints with rate limiting."
+    },
+    {
+      "label": "market.py",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L1",
+      "id": "market_py",
+      "community": 6,
+      "norm_label": "market.py"
+    },
+    {
+      "label": "Market",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L121",
+      "id": "agora_market_market",
+      "community": 6,
+      "norm_label": "market"
+    },
+    {
+      "label": ".search()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L126",
+      "id": "agora_market_market_search",
+      "community": 6,
+      "norm_label": ".search()"
+    },
+    {
+      "label": ".list_all()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L137",
+      "id": "agora_market_market_list_all",
+      "community": 6,
+      "norm_label": ".list_all()"
+    },
+    {
+      "label": ".install()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L141",
+      "id": "agora_market_market_install",
+      "community": 6,
+      "norm_label": ".install()"
+    },
+    {
+      "label": "._fetch_repo_metadata()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L187",
+      "id": "agora_market_market_fetch_repo_metadata",
+      "community": 6,
+      "norm_label": "._fetch_repo_metadata()"
+    },
+    {
+      "label": ".publish()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L205",
+      "id": "agora_market_market_publish",
+      "community": 6,
+      "norm_label": ".publish()"
+    },
+    {
+      "label": "._load_published()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L231",
+      "id": "agora_market_market_load_published",
+      "community": 6,
+      "norm_label": "._load_published()"
+    },
+    {
+      "label": "_run_cmd()",
+      "file_type": "code",
+      "source_file": "market.py",
+      "source_location": "L237",
+      "id": "agora_market_run_cmd",
+      "community": 6,
+      "norm_label": "_run_cmd()"
+    },
+    {
+      "label": "MCP Tool Market \u2014 discover, install, and register third-party MCP services.  Usa",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L1",
+      "id": "agora_market_rationale_1",
+      "community": 6,
+      "norm_label": "mcp tool market \u2014 discover, install, and register third-party mcp services.  usa"
+    },
+    {
+      "label": "MCP tool marketplace \u2014 discover, install, and register services.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L122",
+      "id": "agora_market_rationale_122",
+      "community": 6,
+      "norm_label": "mcp tool marketplace \u2014 discover, install, and register services."
+    },
+    {
+      "label": "Search the built-in market by keyword.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L127",
+      "id": "agora_market_rationale_127",
+      "community": 6,
+      "norm_label": "search the built-in market by keyword."
+    },
+    {
+      "label": "List all available MCP services in the market.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L138",
+      "id": "agora_market_rationale_138",
+      "community": 6,
+      "norm_label": "list all available mcp services in the market."
+    },
+    {
+      "label": "Install an MCP service from the built-in market or GitHub URL.          Returns",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L142",
+      "id": "agora_market_rationale_142",
+      "community": 6,
+      "norm_label": "install an mcp service from the built-in market or github url.          returns"
+    },
+    {
+      "label": "Fetch repo metadata from GitHub API.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L188",
+      "id": "agora_market_rationale_188",
+      "community": 6,
+      "norm_label": "fetch repo metadata from github api."
+    },
+    {
+      "label": "Publish an MCP service to the market.          Returns metadata for registration",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L208",
+      "id": "agora_market_rationale_208",
+      "community": 6,
+      "norm_label": "publish an mcp service to the market.          returns metadata for registration"
+    },
+    {
+      "label": "Load all published services from local registry.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L232",
+      "id": "agora_market_rationale_232",
+      "community": 6,
+      "norm_label": "load all published services from local registry."
+    },
+    {
+      "label": "Run a shell command, raise on failure.",
+      "file_type": "rationale",
+      "source_file": "market.py",
+      "source_location": "L238",
+      "id": "agora_market_rationale_238",
+      "community": 16,
+      "norm_label": "run a shell command, raise on failure."
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "__init__.py",
+      "source_location": "L1",
+      "id": "init_py",
+      "community": 11,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "Agora \u2014 MCP Service Convergence Hub.  Routes, monitors, and governs communicatio",
+      "file_type": "rationale",
+      "source_file": "__init__.py",
+      "source_location": "L1",
+      "id": "agora_init_rationale_1",
+      "community": 11,
+      "norm_label": "agora \u2014 mcp service convergence hub.  routes, monitors, and governs communicatio"
+    },
+    {
+      "label": "event_bus.py",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L1",
+      "id": "event_bus_py",
+      "community": 4,
+      "norm_label": "event_bus.py"
+    },
+    {
+      "label": "Subscription",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L25",
+      "id": "agora_event_bus_subscription",
+      "community": 4,
+      "norm_label": "subscription"
+    },
+    {
+      "label": "EventBus",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L34",
+      "id": "agora_event_bus_eventbus",
+      "community": 4,
+      "norm_label": "eventbus"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L37",
+      "id": "agora_event_bus_eventbus_init",
+      "community": 4,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._load()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L49",
+      "id": "agora_event_bus_eventbus_load",
+      "community": 4,
+      "norm_label": "._load()"
+    },
+    {
+      "label": "._save()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L58",
+      "id": "agora_event_bus_eventbus_save",
+      "community": 4,
+      "norm_label": "._save()"
+    },
+    {
+      "label": "._match()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L70",
+      "id": "agora_event_bus_eventbus_match",
+      "community": 4,
+      "norm_label": "._match()"
+    },
+    {
+      "label": ".publish()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L78",
+      "id": "agora_event_bus_eventbus_publish",
+      "community": 4,
+      "norm_label": ".publish()"
+    },
+    {
+      "label": "._deliver()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L107",
+      "id": "agora_event_bus_eventbus_deliver",
+      "community": 4,
+      "norm_label": "._deliver()"
+    },
+    {
+      "label": ".subscribe()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L139",
+      "id": "agora_event_bus_eventbus_subscribe",
+      "community": 4,
+      "norm_label": ".subscribe()"
+    },
+    {
+      "label": "._cleanup_expired()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L153",
+      "id": "agora_event_bus_eventbus_cleanup_expired",
+      "community": 4,
+      "norm_label": "._cleanup_expired()"
+    },
+    {
+      "label": ".unsubscribe()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L163",
+      "id": "agora_event_bus_eventbus_unsubscribe",
+      "community": 4,
+      "norm_label": ".unsubscribe()"
+    },
+    {
+      "label": ".get_event_log()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L171",
+      "id": "agora_event_bus_eventbus_get_event_log",
+      "community": 4,
+      "norm_label": ".get_event_log()"
+    },
+    {
+      "label": ".list_subscriptions()",
+      "file_type": "code",
+      "source_file": "event_bus.py",
+      "source_location": "L178",
+      "id": "agora_event_bus_eventbus_list_subscriptions",
+      "community": 4,
+      "norm_label": ".list_subscriptions()"
+    },
+    {
+      "label": "Event Bus \u2014 lightweight publish-subscribe engine.  Design decisions (per spec 10",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L1",
+      "id": "agora_event_bus_rationale_1",
+      "community": 4,
+      "norm_label": "event bus \u2014 lightweight publish-subscribe engine.  design decisions (per spec 10"
+    },
+    {
+      "label": "Publish-subscribe event engine with JSON persistence.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L35",
+      "id": "agora_event_bus_rationale_35",
+      "community": 4,
+      "norm_label": "publish-subscribe event engine with json persistence."
+    },
+    {
+      "label": "Check if event_type matches subscription pattern.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L71",
+      "id": "agora_event_bus_rationale_71",
+      "community": 4,
+      "norm_label": "check if event_type matches subscription pattern."
+    },
+    {
+      "label": "Publish event. Returns event_id.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L79",
+      "id": "agora_event_bus_rationale_79",
+      "community": 4,
+      "norm_label": "publish event. returns event_id."
+    },
+    {
+      "label": "Deliver event to all matching subscribers with retry.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L108",
+      "id": "agora_event_bus_rationale_108",
+      "community": 4,
+      "norm_label": "deliver event to all matching subscribers with retry."
+    },
+    {
+      "label": "Subscribe to events. Returns subscription_id.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L140",
+      "id": "agora_event_bus_rationale_140",
+      "community": 4,
+      "norm_label": "subscribe to events. returns subscription_id."
+    },
+    {
+      "label": "Remove subscriptions older than TTL (dead subscriber cleanup).",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L154",
+      "id": "agora_event_bus_rationale_154",
+      "community": 4,
+      "norm_label": "remove subscriptions older than ttl (dead subscriber cleanup)."
+    },
+    {
+      "label": "Remove subscription. Returns True if removed.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L164",
+      "id": "agora_event_bus_rationale_164",
+      "community": 4,
+      "norm_label": "remove subscription. returns true if removed."
+    },
+    {
+      "label": "Query historical events.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L172",
+      "id": "agora_event_bus_rationale_172",
+      "community": 4,
+      "norm_label": "query historical events."
+    },
+    {
+      "label": "List all subscriptions.",
+      "file_type": "rationale",
+      "source_file": "event_bus.py",
+      "source_location": "L179",
+      "id": "agora_event_bus_rationale_179",
+      "community": 4,
+      "norm_label": "list all subscriptions."
+    },
+    {
+      "label": "wizard.py",
+      "file_type": "code",
+      "source_file": "wizard.py",
+      "source_location": "L1",
+      "id": "wizard_py",
+      "community": 10,
+      "norm_label": "wizard.py"
+    },
+    {
+      "label": "_confirm()",
+      "file_type": "code",
+      "source_file": "wizard.py",
+      "source_location": "L8",
+      "id": "agora_wizard_confirm",
+      "community": 10,
+      "norm_label": "_confirm()"
+    },
+    {
+      "label": "run_wizard()",
+      "file_type": "code",
+      "source_file": "wizard.py",
+      "source_location": "L17",
+      "id": "agora_wizard_run_wizard",
+      "community": 10,
+      "norm_label": "run_wizard()"
+    },
+    {
+      "label": "Guided setup wizard \u2014 `agora init` for first-time users.",
+      "file_type": "rationale",
+      "source_file": "wizard.py",
+      "source_location": "L1",
+      "id": "agora_wizard_rationale_1",
+      "community": 10,
+      "norm_label": "guided setup wizard \u2014 `agora init` for first-time users."
+    },
+    {
+      "label": "Ask Y/n confirmation. Returns True unless user says n/no.",
+      "file_type": "rationale",
+      "source_file": "wizard.py",
+      "source_location": "L9",
+      "id": "agora_wizard_rationale_9",
+      "community": 10,
+      "norm_label": "ask y/n confirmation. returns true unless user says n/no."
+    },
+    {
+      "label": "Interactive setup wizard for first-time Agora users.",
+      "file_type": "rationale",
+      "source_file": "wizard.py",
+      "source_location": "L18",
+      "id": "agora_wizard_rationale_18",
+      "community": 10,
+      "norm_label": "interactive setup wizard for first-time agora users."
+    },
+    {
+      "label": "cli.py",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L1",
+      "id": "cli_py",
+      "community": 0,
+      "norm_label": "cli.py"
+    },
+    {
+      "label": "build_parser()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L11",
+      "id": "agora_cli_build_parser",
+      "community": 0,
+      "norm_label": "build_parser()"
+    },
+    {
+      "label": "_cmd_discover()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L144",
+      "id": "agora_cli_cmd_discover",
+      "community": 0,
+      "norm_label": "_cmd_discover()"
+    },
+    {
+      "label": "_cmd_search()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L212",
+      "id": "agora_cli_cmd_search",
+      "community": 0,
+      "norm_label": "_cmd_search()"
+    },
+    {
+      "label": "_cmd_info()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L240",
+      "id": "agora_cli_cmd_info",
+      "community": 0,
+      "norm_label": "_cmd_info()"
+    },
+    {
+      "label": "_cmd_stats()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L278",
+      "id": "agora_cli_cmd_stats",
+      "community": 0,
+      "norm_label": "_cmd_stats()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "cli.py",
+      "source_location": "L301",
+      "id": "agora_cli_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Agora CLI \u2014 command-line interface for the service convergence hub.",
+      "file_type": "rationale",
+      "source_file": "cli.py",
+      "source_location": "L1",
+      "id": "agora_cli_rationale_1",
+      "community": 0,
+      "norm_label": "agora cli \u2014 command-line interface for the service convergence hub."
+    },
+    {
+      "label": "Auto-discover MCP services.",
+      "file_type": "rationale",
+      "source_file": "cli.py",
+      "source_location": "L145",
+      "id": "agora_cli_rationale_145",
+      "community": 0,
+      "norm_label": "auto-discover mcp services."
+    },
+    {
+      "label": "Search services by keyword.",
+      "file_type": "rationale",
+      "source_file": "cli.py",
+      "source_location": "L213",
+      "id": "agora_cli_rationale_213",
+      "community": 0,
+      "norm_label": "search services by keyword."
+    },
+    {
+      "label": "Show detailed service info.",
+      "file_type": "rationale",
+      "source_file": "cli.py",
+      "source_location": "L241",
+      "id": "agora_cli_rationale_241",
+      "community": 0,
+      "norm_label": "show detailed service info."
+    },
+    {
+      "label": "Show service statistics.",
+      "file_type": "rationale",
+      "source_file": "cli.py",
+      "source_location": "L279",
+      "id": "agora_cli_rationale_279",
+      "community": 0,
+      "norm_label": "show service statistics."
+    },
+    {
+      "label": "pipeline.py",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L1",
+      "id": "pipeline_py",
+      "community": 2,
+      "norm_label": "pipeline.py"
+    },
+    {
+      "label": "Pipeline",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L26",
+      "id": "agora_pipeline_pipeline",
+      "community": 2,
+      "norm_label": "pipeline"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L35",
+      "id": "agora_pipeline_pipeline_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._load_builtins()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L41",
+      "id": "agora_pipeline_pipeline_load_builtins",
+      "community": 2,
+      "norm_label": "._load_builtins()"
+    },
+    {
+      "label": ".define()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L108",
+      "id": "agora_pipeline_pipeline_define",
+      "community": 2,
+      "norm_label": ".define()"
+    },
+    {
+      "label": ".list_pipelines()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L112",
+      "id": "agora_pipeline_pipeline_list_pipelines",
+      "community": 2,
+      "norm_label": ".list_pipelines()"
+    },
+    {
+      "label": ".get_pipeline()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L116",
+      "id": "agora_pipeline_pipeline_get_pipeline",
+      "community": 2,
+      "norm_label": ".get_pipeline()"
+    },
+    {
+      "label": ".run()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L120",
+      "id": "agora_pipeline_pipeline_run",
+      "community": 2,
+      "norm_label": ".run()"
+    },
+    {
+      "label": ".run_stream()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L132",
+      "id": "agora_pipeline_pipeline_run_stream",
+      "community": 2,
+      "norm_label": ".run_stream()"
+    },
+    {
+      "label": ".run_parallel()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L158",
+      "id": "agora_pipeline_pipeline_run_parallel",
+      "community": 2,
+      "norm_label": ".run_parallel()"
+    },
+    {
+      "label": "._render_args()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L227",
+      "id": "agora_pipeline_pipeline_render_args",
+      "community": 2,
+      "norm_label": "._render_args()"
+    },
+    {
+      "label": ".save_definition()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L246",
+      "id": "agora_pipeline_pipeline_save_definition",
+      "community": 2,
+      "norm_label": ".save_definition()"
+    },
+    {
+      "label": ".load_definition()",
+      "file_type": "code",
+      "source_file": "pipeline.py",
+      "source_location": "L255",
+      "id": "agora_pipeline_pipeline_load_definition",
+      "community": 2,
+      "norm_label": ".load_definition()"
+    },
+    {
+      "label": "Pipeline Orchestrator \u2014 chain multiple MCP tool calls into a workflow.  Usage:",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L1",
+      "id": "agora_pipeline_rationale_1",
+      "community": 2,
+      "norm_label": "pipeline orchestrator \u2014 chain multiple mcp tool calls into a workflow.  usage:"
+    },
+    {
+      "label": "Defines and executes multi-step MCP tool call pipelines.      Supports three exe",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L27",
+      "id": "agora_pipeline_rationale_27",
+      "community": 2,
+      "norm_label": "defines and executes multi-step mcp tool call pipelines.      supports three exe"
+    },
+    {
+      "label": "Load built-in pipeline definitions.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L42",
+      "id": "agora_pipeline_rationale_42",
+      "community": 2,
+      "norm_label": "load built-in pipeline definitions."
+    },
+    {
+      "label": "Register a custom pipeline definition.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L109",
+      "id": "agora_pipeline_rationale_109",
+      "community": 2,
+      "norm_label": "register a custom pipeline definition."
+    },
+    {
+      "label": "List available pipeline names.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L113",
+      "id": "agora_pipeline_rationale_113",
+      "community": 2,
+      "norm_label": "list available pipeline names."
+    },
+    {
+      "label": "Get pipeline definition by name.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L117",
+      "id": "agora_pipeline_rationale_117",
+      "community": 2,
+      "norm_label": "get pipeline definition by name."
+    },
+    {
+      "label": "Execute a named pipeline sequentially.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L121",
+      "id": "agora_pipeline_rationale_121",
+      "community": 2,
+      "norm_label": "execute a named pipeline sequentially."
+    },
+    {
+      "label": "Execute pipeline and yield each step as it completes (streaming).",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L133",
+      "id": "agora_pipeline_rationale_133",
+      "community": 2,
+      "norm_label": "execute pipeline and yield each step as it completes (streaming)."
+    },
+    {
+      "label": "Execute independent pipeline steps in parallel.          Groups steps by depende",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L159",
+      "id": "agora_pipeline_rationale_159",
+      "community": 2,
+      "norm_label": "execute independent pipeline steps in parallel.          groups steps by depende"
+    },
+    {
+      "label": "Render template variables in args: {{goal}} \u2192 variables['goal']",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L233",
+      "id": "agora_pipeline_rationale_233",
+      "community": 2,
+      "norm_label": "render template variables in args: {{goal}} \u2192 variables['goal']"
+    },
+    {
+      "label": "Save a pipeline definition to a JSON file.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L247",
+      "id": "agora_pipeline_rationale_247",
+      "community": 2,
+      "norm_label": "save a pipeline definition to a json file."
+    },
+    {
+      "label": "Load a pipeline definition from a JSON file.",
+      "file_type": "rationale",
+      "source_file": "pipeline.py",
+      "source_location": "L256",
+      "id": "agora_pipeline_rationale_256",
+      "community": 2,
+      "norm_label": "load a pipeline definition from a json file."
+    },
+    {
+      "label": "router.py",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L1",
+      "id": "router_py",
+      "community": 5,
+      "norm_label": "router.py"
+    },
+    {
+      "label": "Router",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L23",
+      "id": "agora_router_router",
+      "community": 5,
+      "norm_label": "router"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L33",
+      "id": "agora_router_router_init",
+      "community": 5,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".add_route()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L45",
+      "id": "agora_router_router_add_route",
+      "community": 5,
+      "norm_label": ".add_route()"
+    },
+    {
+      "label": ".resolve()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L49",
+      "id": "agora_router_router_resolve",
+      "community": 5,
+      "norm_label": ".resolve()"
+    },
+    {
+      "label": "._next_instance()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L59",
+      "id": "agora_router_router_next_instance",
+      "community": 5,
+      "norm_label": "._next_instance()"
+    },
+    {
+      "label": "._add_instance()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L86",
+      "id": "agora_router_router_add_instance",
+      "community": 5,
+      "norm_label": "._add_instance()"
+    },
+    {
+      "label": ".route()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L105",
+      "id": "agora_router_router_route",
+      "community": 5,
+      "norm_label": ".route()"
+    },
+    {
+      "label": "._maybe_publish()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L154",
+      "id": "agora_router_router_maybe_publish",
+      "community": 5,
+      "norm_label": "._maybe_publish()"
+    },
+    {
+      "label": "._trace()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L159",
+      "id": "agora_router_router_trace",
+      "community": 5,
+      "norm_label": "._trace()"
+    },
+    {
+      "label": "._flush_traces()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L175",
+      "id": "agora_router_router_flush_traces",
+      "community": 5,
+      "norm_label": "._flush_traces()"
+    },
+    {
+      "label": ".get_percentiles()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L186",
+      "id": "agora_router_router_get_percentiles",
+      "community": 5,
+      "norm_label": ".get_percentiles()"
+    },
+    {
+      "label": ".list_routes()",
+      "file_type": "code",
+      "source_file": "router.py",
+      "source_location": "L200",
+      "id": "agora_router_router_list_routes",
+      "community": 5,
+      "norm_label": ".list_routes()"
+    },
+    {
+      "label": "Request Router \u2014 routes incoming calls to the correct service.  Phase 3: Load ba",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L1",
+      "id": "agora_router_rationale_1",
+      "community": 5,
+      "norm_label": "request router \u2014 routes incoming calls to the correct service.  phase 3: load ba"
+    },
+    {
+      "label": "Routes MCP tool calls to the appropriate registered service.      Supports:",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L24",
+      "id": "agora_router_rationale_24",
+      "community": 5,
+      "norm_label": "routes mcp tool calls to the appropriate registered service.      supports:"
+    },
+    {
+      "label": "Register a tool \u2192 service mapping.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L46",
+      "id": "agora_router_rationale_46",
+      "community": 5,
+      "norm_label": "register a tool \u2192 service mapping."
+    },
+    {
+      "label": "Find which service handles a tool. Supports prefix matching.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L50",
+      "id": "agora_router_rationale_50",
+      "community": 5,
+      "norm_label": "find which service handles a tool. supports prefix matching."
+    },
+    {
+      "label": "Get the next available instance using current strategy (round-robin).          S",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L60",
+      "id": "agora_router_rationale_60",
+      "community": 5,
+      "norm_label": "get the next available instance using current strategy (round-robin).          s"
+    },
+    {
+      "label": "Add a load-balanced instance to an existing service.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L88",
+      "id": "agora_router_rationale_88",
+      "community": 5,
+      "norm_label": "add a load-balanced instance to an existing service."
+    },
+    {
+      "label": "Route a tool call to the target service and return the result.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L106",
+      "id": "agora_router_rationale_106",
+      "community": 5,
+      "norm_label": "route a tool call to the target service and return the result."
+    },
+    {
+      "label": "Publish route event if event_bus is configured.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L155",
+      "id": "agora_router_rationale_155",
+      "community": 5,
+      "norm_label": "publish route event if event_bus is configured."
+    },
+    {
+      "label": "Buffer trace entry; flush to disk every 50 calls.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L160",
+      "id": "agora_router_rationale_160",
+      "community": 5,
+      "norm_label": "buffer trace entry; flush to disk every 50 calls."
+    },
+    {
+      "label": "Write buffered traces to disk.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L176",
+      "id": "agora_router_rationale_176",
+      "community": 5,
+      "norm_label": "write buffered traces to disk."
+    },
+    {
+      "label": "Calculate P50/P90/P99 from rolling latency window.",
+      "file_type": "rationale",
+      "source_file": "router.py",
+      "source_location": "L187",
+      "id": "agora_router_rationale_187",
+      "community": 5,
+      "norm_label": "calculate p50/p90/p99 from rolling latency window."
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "web/__init__.py",
+      "source_location": "L1",
+      "id": "web_init_py",
+      "community": 13,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "Agora Web Dashboard \u2014 service hub management UI.",
+      "file_type": "rationale",
+      "source_file": "web/__init__.py",
+      "source_location": "L1",
+      "id": "web_init_rationale_1",
+      "community": 13,
+      "norm_label": "agora web dashboard \u2014 service hub management ui."
+    },
+    {
+      "label": "app.py",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L1",
+      "id": "web_app_py",
+      "community": 3,
+      "norm_label": "app.py"
+    },
+    {
+      "label": "_auth_middleware()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L34",
+      "id": "web_app_auth_middleware",
+      "community": 3,
+      "norm_label": "_auth_middleware()"
+    },
+    {
+      "label": "_get_dashboard_html()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L55",
+      "id": "web_app_get_dashboard_html",
+      "community": 3,
+      "norm_label": "_get_dashboard_html()"
+    },
+    {
+      "label": "dashboard()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L72",
+      "id": "web_app_dashboard",
+      "community": 3,
+      "norm_label": "dashboard()"
+    },
+    {
+      "label": "api_services()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L79",
+      "id": "web_app_api_services",
+      "community": 3,
+      "norm_label": "api_services()"
+    },
+    {
+      "label": "api_health()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L92",
+      "id": "web_app_api_health",
+      "community": 3,
+      "norm_label": "api_health()"
+    },
+    {
+      "label": "api_pipeline_dag()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L107",
+      "id": "web_app_api_pipeline_dag",
+      "community": 3,
+      "norm_label": "api_pipeline_dag()"
+    },
+    {
+      "label": "api_pipelines()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L130",
+      "id": "web_app_api_pipelines",
+      "community": 3,
+      "norm_label": "api_pipelines()"
+    },
+    {
+      "label": "api_discover()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L136",
+      "id": "web_app_api_discover",
+      "community": 3,
+      "norm_label": "api_discover()"
+    },
+    {
+      "label": "api_register()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L142",
+      "id": "web_app_api_register",
+      "community": 9,
+      "norm_label": "api_register()"
+    },
+    {
+      "label": "api_run_pipeline()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L159",
+      "id": "web_app_api_run_pipeline",
+      "community": 3,
+      "norm_label": "api_run_pipeline()"
+    },
+    {
+      "label": "api_clear()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L179",
+      "id": "web_app_api_clear",
+      "community": 3,
+      "norm_label": "api_clear()"
+    },
+    {
+      "label": "api_add_instance()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L186",
+      "id": "web_app_api_add_instance",
+      "community": 9,
+      "norm_label": "api_add_instance()"
+    },
+    {
+      "label": "api_metrics_history()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L200",
+      "id": "web_app_api_metrics_history",
+      "community": 3,
+      "norm_label": "api_metrics_history()"
+    },
+    {
+      "label": "api_event_log()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L212",
+      "id": "web_app_api_event_log",
+      "community": 3,
+      "norm_label": "api_event_log()"
+    },
+    {
+      "label": "api_event_publish()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L220",
+      "id": "web_app_api_event_publish",
+      "community": 3,
+      "norm_label": "api_event_publish()"
+    },
+    {
+      "label": "api_metrics()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L238",
+      "id": "web_app_api_metrics",
+      "community": 3,
+      "norm_label": "api_metrics()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "web/app.py",
+      "source_location": "L253",
+      "id": "web_app_main",
+      "community": 3,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Agora Web Dashboard \u2014 FastAPI server with embedded UI.  Start: agora web Access:",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L1",
+      "id": "web_app_rationale_1",
+      "community": 3,
+      "norm_label": "agora web dashboard \u2014 fastapi server with embedded ui.  start: agora web access:"
+    },
+    {
+      "label": "Simple API Key auth for write endpoints.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L35",
+      "id": "web_app_rationale_35",
+      "community": 3,
+      "norm_label": "simple api key auth for write endpoints."
+    },
+    {
+      "label": "Lazy-load dashboard HTML to avoid import-time crash if file missing.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L56",
+      "id": "web_app_rationale_56",
+      "community": 3,
+      "norm_label": "lazy-load dashboard html to avoid import-time crash if file missing."
+    },
+    {
+      "label": "Return pipeline dependency graph as node/edge data.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L108",
+      "id": "web_app_rationale_108",
+      "community": 3,
+      "norm_label": "return pipeline dependency graph as node/edge data."
+    },
+    {
+      "label": "List all available pipeline names.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L131",
+      "id": "web_app_rationale_131",
+      "community": 3,
+      "norm_label": "list all available pipeline names."
+    },
+    {
+      "label": "Add a load-balanced instance to a service.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L187",
+      "id": "web_app_rationale_187",
+      "community": 9,
+      "norm_label": "add a load-balanced instance to a service."
+    },
+    {
+      "label": "Return P50/P90/P99 latency history for dashboards.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L201",
+      "id": "web_app_rationale_201",
+      "community": 3,
+      "norm_label": "return p50/p90/p99 latency history for dashboards."
+    },
+    {
+      "label": "Return recent events from the event bus.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L213",
+      "id": "web_app_rationale_213",
+      "community": 3,
+      "norm_label": "return recent events from the event bus."
+    },
+    {
+      "label": "Publish an event via the web dashboard.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L225",
+      "id": "web_app_rationale_225",
+      "community": 3,
+      "norm_label": "publish an event via the web dashboard."
+    },
+    {
+      "label": "Prometheus-compatible metrics endpoint.",
+      "file_type": "rationale",
+      "source_file": "web/app.py",
+      "source_location": "L239",
+      "id": "web_app_rationale_239",
+      "community": 3,
+      "norm_label": "prometheus-compatible metrics endpoint."
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "server/__init__.py",
+      "source_location": "L1",
+      "id": "server_init_py",
+      "community": 12,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "Agora MCP Server \u2014 exposes the hub as MCP tools.",
+      "file_type": "rationale",
+      "source_file": "server/__init__.py",
+      "source_location": "L1",
+      "id": "server_init_rationale_1",
+      "community": 12,
+      "norm_label": "agora mcp server \u2014 exposes the hub as mcp tools."
+    },
+    {
+      "label": "mcp.py",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L1",
+      "id": "server_mcp_py",
+      "community": 8,
+      "norm_label": "mcp.py"
+    },
+    {
+      "label": "register_service()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L25",
+      "id": "server_mcp_register_service",
+      "community": 9,
+      "norm_label": "register_service()"
+    },
+    {
+      "label": "list_services()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L55",
+      "id": "server_mcp_list_services",
+      "community": 8,
+      "norm_label": "list_services()"
+    },
+    {
+      "label": "check_health()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L61",
+      "id": "server_mcp_check_health",
+      "community": 8,
+      "norm_label": "check_health()"
+    },
+    {
+      "label": "add_route()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L72",
+      "id": "server_mcp_add_route",
+      "community": 8,
+      "norm_label": "add_route()"
+    },
+    {
+      "label": "list_routes()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L86",
+      "id": "server_mcp_list_routes",
+      "community": 8,
+      "norm_label": "list_routes()"
+    },
+    {
+      "label": "route_call()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L92",
+      "id": "server_mcp_route_call",
+      "community": 8,
+      "norm_label": "route_call()"
+    },
+    {
+      "label": "publish_event()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L111",
+      "id": "server_mcp_publish_event",
+      "community": 8,
+      "norm_label": "publish_event()"
+    },
+    {
+      "label": "subscribe_event()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L129",
+      "id": "server_mcp_subscribe_event",
+      "community": 8,
+      "norm_label": "subscribe_event()"
+    },
+    {
+      "label": "get_event_log()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L142",
+      "id": "server_mcp_get_event_log",
+      "community": 8,
+      "norm_label": "get_event_log()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "server/mcp.py",
+      "source_location": "L154",
+      "id": "server_mcp_main",
+      "community": 8,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Agora MCP Server \u2014 unified entry point for all services.",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L1",
+      "id": "server_mcp_rationale_1",
+      "community": 8,
+      "norm_label": "agora mcp server \u2014 unified entry point for all services."
+    },
+    {
+      "label": "Register a service with the Agora hub.      Args:         name: Unique service n",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L27",
+      "id": "server_mcp_rationale_27",
+      "community": 9,
+      "norm_label": "register a service with the agora hub.      args:         name: unique service n"
+    },
+    {
+      "label": "List all registered services and their health status.",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L56",
+      "id": "server_mcp_rationale_56",
+      "community": 8,
+      "norm_label": "list all registered services and their health status."
+    },
+    {
+      "label": "Probe all registered services' health endpoints.",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L62",
+      "id": "server_mcp_rationale_62",
+      "community": 8,
+      "norm_label": "probe all registered services' health endpoints."
+    },
+    {
+      "label": "Map a tool name to a service for routing.      Args:         tool_name: The tool",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L73",
+      "id": "server_mcp_rationale_73",
+      "community": 8,
+      "norm_label": "map a tool name to a service for routing.      args:         tool_name: the tool"
+    },
+    {
+      "label": "List all tool \u2192 service route mappings.",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L87",
+      "id": "server_mcp_rationale_87",
+      "community": 8,
+      "norm_label": "list all tool \u2192 service route mappings."
+    },
+    {
+      "label": "Route a tool call to the appropriate service.      Args:         tool_name: The",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L93",
+      "id": "server_mcp_rationale_93",
+      "community": 8,
+      "norm_label": "route a tool call to the appropriate service.      args:         tool_name: the"
+    },
+    {
+      "label": "Publish an event to the bus. payload is a JSON string.      Args:         event_",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L112",
+      "id": "server_mcp_rationale_112",
+      "community": 8,
+      "norm_label": "publish an event to the bus. payload is a json string.      args:         event_"
+    },
+    {
+      "label": "Subscribe to events matching pattern.      Args:         pattern: Event pattern",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L130",
+      "id": "server_mcp_rationale_130",
+      "community": 8,
+      "norm_label": "subscribe to events matching pattern.      args:         pattern: event pattern"
+    },
+    {
+      "label": "Query historical events.      Args:         limit: Max events to return (default",
+      "file_type": "rationale",
+      "source_file": "server/mcp.py",
+      "source_location": "L143",
+      "id": "server_mcp_rationale_143",
+      "community": 8,
+      "norm_label": "query historical events.      args:         limit: max events to return (default"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "persistence.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "persistence_py",
+      "target": "agora_persistence_json_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "persistence.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "persistence_py",
+      "target": "agora_persistence_json_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "persistence.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_persistence_rationale_1",
+      "target": "persistence_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "persistence.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "agora_persistence_rationale_13",
+      "target": "agora_persistence_json_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "registry.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_load",
+      "target": "agora_persistence_json_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "market.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "agora_market_market_publish",
+      "target": "agora_persistence_json_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "market.py",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "agora_market_market_load_published",
+      "target": "agora_persistence_json_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "event_bus.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_load",
+      "target": "agora_persistence_json_load"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "persistence.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "agora_persistence_rationale_23",
+      "target": "agora_persistence_json_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "registry.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_save",
+      "target": "agora_persistence_json_save"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "market.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "agora_market_market_publish",
+      "target": "agora_persistence_json_save"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "event_bus.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_save",
+      "target": "agora_persistence_json_save"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "tenant_py",
+      "target": "agora_tenant_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tenant_py",
+      "target": "agora_tenant_tenantmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_1",
+      "target": "tenant_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager_load",
+      "target": "agora_tenant_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager_add_tenant",
+      "target": "agora_tenant_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_authenticate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_check_rate_limit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_has_service_access",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_list_tenants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_add_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_remove_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager",
+      "target": "agora_tenant_tenantmanager_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_44",
+      "target": "agora_tenant_tenantmanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L334",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_tenant_tenantmanager"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager_init",
+      "target": "agora_tenant_tenantmanager_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_60",
+      "target": "agora_tenant_tenantmanager_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_103",
+      "target": "agora_tenant_tenantmanager_authenticate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_110",
+      "target": "agora_tenant_tenantmanager_check_rate_limit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_139",
+      "target": "agora_tenant_tenantmanager_has_service_access",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_150",
+      "target": "agora_tenant_tenantmanager_list_tenants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager_add_tenant",
+      "target": "agora_tenant_tenantmanager_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_163",
+      "target": "agora_tenant_tenantmanager_add_tenant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "agora_tenant_tenantmanager_remove_tenant",
+      "target": "agora_tenant_tenantmanager_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tenant.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "agora_tenant_rationale_188",
+      "target": "agora_tenant_tenantmanager_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "discovery_py",
+      "target": "agora_discovery_discoveredservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "discovery_py",
+      "target": "agora_discovery_discoveryengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "discovery_py",
+      "target": "agora_discovery_find_workspace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_1",
+      "target": "discovery_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_known_projects",
+      "target": "agora_discovery_discoveredservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_pyproject_scripts",
+      "target": "agora_discovery_discoveredservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_docker_compose",
+      "target": "agora_discovery_discoveredservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_port_range",
+      "target": "agora_discovery_discoveredservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "discovery.py",
+      "source_location": "L23",
+      "weight": 0.8,
+      "source": "agora_discovery_discoveredservice",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "discovery.py",
+      "source_location": "L351",
+      "weight": 0.8,
+      "source": "agora_discovery_discoveredservice",
+      "target": "agora_registry_service",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_scan_known_projects",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_scan_pyproject_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_scan_docker_compose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_probe_port",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_probe_mcp_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_scan_port_range",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_discover_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L318",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_discover_all_async",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_watch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L349",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_discovery_discoveryengine_auto_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_39",
+      "target": "agora_discovery_discoveryengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "discovery.py",
+      "source_location": "L23",
+      "weight": 0.8,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "discovery.py",
+      "source_location": "L351",
+      "weight": 0.8,
+      "source": "agora_discovery_discoveryengine",
+      "target": "agora_registry_service",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "wizard.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "agora_wizard_run_wizard",
+      "target": "agora_discovery_discoveryengine"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "agora_cli_cmd_discover",
+      "target": "agora_discovery_discoveryengine"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_init",
+      "target": "agora_discovery_find_workspace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L305",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_discover_all",
+      "target": "agora_discovery_discoveryengine_scan_known_projects",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_114",
+      "target": "agora_discovery_discoveryengine_scan_known_projects",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_discover_all",
+      "target": "agora_discovery_discoveryengine_scan_pyproject_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_138",
+      "target": "agora_discovery_discoveryengine_scan_pyproject_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_discover_all",
+      "target": "agora_discovery_discoveryengine_scan_docker_compose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_188",
+      "target": "agora_discovery_discoveryengine_scan_docker_compose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_port_range",
+      "target": "agora_discovery_discoveryengine_probe_port",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_234",
+      "target": "agora_discovery_discoveryengine_probe_port",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L281",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_scan_port_range",
+      "target": "agora_discovery_discoveryengine_probe_mcp_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_245",
+      "target": "agora_discovery_discoveryengine_probe_mcp_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L324",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_discover_all_async",
+      "target": "agora_discovery_discoveryengine_scan_port_range",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_265",
+      "target": "agora_discovery_discoveryengine_scan_port_range",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L320",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_discover_all_async",
+      "target": "agora_discovery_discoveryengine_discover_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L354",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_auto_register",
+      "target": "agora_discovery_discoveryengine_discover_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_297",
+      "target": "agora_discovery_discoveryengine_discover_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_319",
+      "target": "agora_discovery_discoveryengine_discover_all_async",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L339",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_watch",
+      "target": "agora_discovery_discoveryengine_auto_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L332",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_332",
+      "target": "agora_discovery_discoveryengine_watch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "discovery.py",
+      "source_location": "L350",
+      "weight": 1.0,
+      "source": "agora_discovery_rationale_350",
+      "target": "agora_discovery_discoveryengine_auto_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "discovery.py",
+      "source_location": "L358",
+      "weight": 1.0,
+      "source": "agora_discovery_discoveryengine_auto_register",
+      "target": "agora_registry_service"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "registry_py",
+      "target": "agora_registry_is_safe_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "registry_py",
+      "target": "agora_registry_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "registry_py",
+      "target": "agora_registry_is_available",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "registry_py",
+      "target": "agora_registry_circuit_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "registry_py",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_1",
+      "target": "registry_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_send_webhook_alert",
+      "target": "agora_registry_is_safe_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_register",
+      "target": "agora_registry_is_safe_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_23",
+      "target": "agora_registry_is_safe_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "router.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "agora_router_router_route",
+      "target": "agora_registry_is_safe_url"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "web/app.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "web_app_api_add_instance",
+      "target": "agora_registry_is_safe_url"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "server/mcp.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "server_mcp_register_service",
+      "target": "agora_registry_is_safe_url"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "agora_registry_service",
+      "target": "agora_registry_service_to_dict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_load",
+      "target": "agora_registry_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_45",
+      "target": "agora_registry_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L389",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_registry_service"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "web/app.py",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "web_app_api_register",
+      "target": "agora_registry_service"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "server/mcp.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "server_mcp_register_service",
+      "target": "agora_registry_service"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_send_webhook_alert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_unregister",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_list_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_list_healthy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_try_half_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_mark_failure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_mark_success",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_get_circuit_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L243",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_to_dict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry",
+      "target": "agora_registry_serviceregistry_health_check_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_87",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "event_bus.py",
+      "source_location": "L21",
+      "weight": 0.8,
+      "source": "agora_event_bus_subscription",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "event_bus.py",
+      "source_location": "L21",
+      "weight": 0.8,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "router.py",
+      "source_location": "L18",
+      "weight": 0.8,
+      "source": "agora_router_router",
+      "target": "agora_registry_serviceregistry",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "wizard.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "agora_wizard_run_wizard",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "agora_cli_cmd_discover",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L216",
+      "weight": 1.0,
+      "source": "agora_cli_cmd_search",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "agora_cli_cmd_info",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L282",
+      "weight": 1.0,
+      "source": "agora_cli_cmd_stats",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L325",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_registry_serviceregistry"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_init",
+      "target": "agora_registry_serviceregistry_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_mark_failure",
+      "target": "agora_registry_serviceregistry_send_webhook_alert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_116",
+      "target": "agora_registry_serviceregistry_send_webhook_alert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_load",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_144",
+      "target": "agora_registry_serviceregistry_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_register",
+      "target": "agora_registry_serviceregistry_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_unregister",
+      "target": "agora_registry_serviceregistry_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_152",
+      "target": "agora_registry_serviceregistry_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_try_half_open",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_mark_failure",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_mark_success",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_get_circuit_status",
+      "target": "agora_registry_serviceregistry_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "agora_registry_serviceregistry_health_check_all",
+      "target": "agora_registry_serviceregistry_try_half_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_186",
+      "target": "agora_registry_serviceregistry_try_half_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_231",
+      "target": "agora_registry_serviceregistry_get_circuit_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "registry.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "agora_registry_rationale_247",
+      "target": "agora_registry_serviceregistry_health_check_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "market_py",
+      "target": "agora_market_market",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L237",
+      "weight": 1.0,
+      "source": "market_py",
+      "target": "agora_market_run_cmd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_market_rationale_1",
+      "target": "market_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_list_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_install",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_fetch_repo_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "agora_market_market",
+      "target": "agora_market_market_load_published",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "agora_market_rationale_122",
+      "target": "agora_market_market",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L352",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_market_market"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "agora_market_rationale_127",
+      "target": "agora_market_market_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "agora_market_rationale_138",
+      "target": "agora_market_market_list_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "agora_market_market_install",
+      "target": "agora_market_market_fetch_repo_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L162",
+      "weight": 1.0,
+      "source": "agora_market_market_install",
+      "target": "agora_market_run_cmd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "agora_market_rationale_142",
+      "target": "agora_market_market_install",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "agora_market_rationale_188",
+      "target": "agora_market_market_fetch_repo_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "agora_market_rationale_208",
+      "target": "agora_market_market_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "market.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "source": "agora_market_rationale_232",
+      "target": "agora_market_market_load_published",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_init_rationale_1",
+      "target": "init_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "event_bus_py",
+      "target": "agora_event_bus_subscription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "event_bus_py",
+      "target": "agora_event_bus_eventbus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_1",
+      "target": "event_bus_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_load",
+      "target": "agora_event_bus_subscription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_subscribe",
+      "target": "agora_event_bus_subscription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_match",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_deliver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_subscribe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_cleanup_expired",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_unsubscribe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_get_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus",
+      "target": "agora_event_bus_eventbus_list_subscriptions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_35",
+      "target": "agora_event_bus_eventbus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "router.py",
+      "source_location": "L17",
+      "weight": 0.8,
+      "source": "agora_router_router",
+      "target": "agora_event_bus_eventbus",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L519",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_event_bus_eventbus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "web/app.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "source": "web_app_api_event_log",
+      "target": "agora_event_bus_eventbus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "web/app.py",
+      "source_location": "L228",
+      "weight": 1.0,
+      "source": "web_app_api_event_publish",
+      "target": "agora_event_bus_eventbus"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_init",
+      "target": "agora_event_bus_eventbus_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_publish",
+      "target": "agora_event_bus_eventbus_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_subscribe",
+      "target": "agora_event_bus_eventbus_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_cleanup_expired",
+      "target": "agora_event_bus_eventbus_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_unsubscribe",
+      "target": "agora_event_bus_eventbus_save",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_deliver",
+      "target": "agora_event_bus_eventbus_match",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_71",
+      "target": "agora_event_bus_eventbus_match",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_publish",
+      "target": "agora_event_bus_eventbus_deliver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_79",
+      "target": "agora_event_bus_eventbus_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_108",
+      "target": "agora_event_bus_eventbus_deliver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "agora_event_bus_eventbus_subscribe",
+      "target": "agora_event_bus_eventbus_cleanup_expired",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_140",
+      "target": "agora_event_bus_eventbus_subscribe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_154",
+      "target": "agora_event_bus_eventbus_cleanup_expired",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_164",
+      "target": "agora_event_bus_eventbus_unsubscribe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_172",
+      "target": "agora_event_bus_eventbus_get_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "event_bus.py",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "agora_event_bus_rationale_179",
+      "target": "agora_event_bus_eventbus_list_subscriptions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "wizard_py",
+      "target": "agora_wizard_confirm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "wizard_py",
+      "target": "agora_wizard_run_wizard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_wizard_rationale_1",
+      "target": "wizard_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "agora_wizard_run_wizard",
+      "target": "agora_wizard_confirm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "agora_wizard_rationale_9",
+      "target": "agora_wizard_confirm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "wizard.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "agora_wizard_rationale_18",
+      "target": "agora_wizard_run_wizard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L446",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_wizard_run_wizard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_build_parser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_cmd_discover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_cmd_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_cmd_info",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_cmd_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L301",
+      "weight": 1.0,
+      "source": "cli_py",
+      "target": "agora_cli_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_cli_rationale_1",
+      "target": "cli_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_cli_build_parser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L311",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_cli_cmd_discover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "agora_cli_rationale_145",
+      "target": "agora_cli_cmd_discover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L314",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_cli_cmd_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "agora_cli_rationale_213",
+      "target": "agora_cli_cmd_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_cli_cmd_info",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L241",
+      "weight": 1.0,
+      "source": "agora_cli_rationale_241",
+      "target": "agora_cli_cmd_info",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L320",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_cli_cmd_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "cli.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "source": "agora_cli_rationale_279",
+      "target": "agora_cli_cmd_stats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_router_router"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "cli.py",
+      "source_location": "L467",
+      "weight": 1.0,
+      "source": "agora_cli_main",
+      "target": "agora_pipeline_pipeline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "pipeline_py",
+      "target": "agora_pipeline_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_1",
+      "target": "pipeline_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_load_builtins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_define",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_list_pipelines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_get_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_run_stream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_run_parallel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_render_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_save_definition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline",
+      "target": "agora_pipeline_pipeline_load_definition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_27",
+      "target": "agora_pipeline_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline_init",
+      "target": "agora_pipeline_pipeline_load_builtins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_42",
+      "target": "agora_pipeline_pipeline_load_builtins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L258",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline_load_definition",
+      "target": "agora_pipeline_pipeline_define",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_109",
+      "target": "agora_pipeline_pipeline_define",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_113",
+      "target": "agora_pipeline_pipeline_list_pipelines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_117",
+      "target": "agora_pipeline_pipeline_get_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline_run",
+      "target": "agora_pipeline_pipeline_run_stream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_121",
+      "target": "agora_pipeline_pipeline_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "agora_pipeline_pipeline_run_stream",
+      "target": "agora_pipeline_pipeline_render_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_133",
+      "target": "agora_pipeline_pipeline_run_stream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_159",
+      "target": "agora_pipeline_pipeline_run_parallel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_233",
+      "target": "agora_pipeline_pipeline_render_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_247",
+      "target": "agora_pipeline_pipeline_save_definition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "pipeline.py",
+      "source_location": "L256",
+      "weight": 1.0,
+      "source": "agora_pipeline_rationale_256",
+      "target": "agora_pipeline_pipeline_load_definition",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "router_py",
+      "target": "agora_router_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agora_router_rationale_1",
+      "target": "router_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_add_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_resolve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_next_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_add_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_maybe_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_trace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_flush_traces",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_get_percentiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "agora_router_router",
+      "target": "agora_router_router_list_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "agora_router_rationale_24",
+      "target": "agora_router_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "agora_router_rationale_46",
+      "target": "agora_router_router_add_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "agora_router_router_route",
+      "target": "agora_router_router_resolve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "agora_router_rationale_50",
+      "target": "agora_router_router_resolve",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "agora_router_router_route",
+      "target": "agora_router_router_next_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "agora_router_rationale_60",
+      "target": "agora_router_router_next_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "agora_router_rationale_88",
+      "target": "agora_router_router_add_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "agora_router_router_route",
+      "target": "agora_router_router_trace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "agora_router_router_route",
+      "target": "agora_router_router_maybe_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "source": "agora_router_rationale_106",
+      "target": "agora_router_router_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "agora_router_rationale_155",
+      "target": "agora_router_router_maybe_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "agora_router_router_trace",
+      "target": "agora_router_router_flush_traces",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "agora_router_rationale_160",
+      "target": "agora_router_router_trace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "agora_router_rationale_176",
+      "target": "agora_router_router_flush_traces",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "router.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "agora_router_rationale_187",
+      "target": "agora_router_router_get_percentiles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "web_init_rationale_1",
+      "target": "web_init_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_auth_middleware",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_get_dashboard_html",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_dashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_services",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_pipeline_dag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_pipelines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_discover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_run_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L179",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_clear",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_add_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_metrics_history",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_event_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_api_metrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L253",
+      "weight": 1.0,
+      "source": "web_app_py",
+      "target": "web_app_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "web_app_rationale_1",
+      "target": "web_app_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "web_app_rationale_35",
+      "target": "web_app_auth_middleware",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "web_app_dashboard",
+      "target": "web_app_get_dashboard_html",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "web_app_rationale_56",
+      "target": "web_app_get_dashboard_html",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "web_app_rationale_108",
+      "target": "web_app_api_pipeline_dag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "web_app_rationale_131",
+      "target": "web_app_api_pipelines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "web_app_rationale_187",
+      "target": "web_app_api_add_instance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L201",
+      "weight": 1.0,
+      "source": "web_app_rationale_201",
+      "target": "web_app_api_metrics_history",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "web_app_rationale_213",
+      "target": "web_app_api_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L225",
+      "weight": 1.0,
+      "source": "web_app_rationale_225",
+      "target": "web_app_api_event_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "web/app.py",
+      "source_location": "L239",
+      "weight": 1.0,
+      "source": "web_app_rationale_239",
+      "target": "web_app_api_metrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "server_init_rationale_1",
+      "target": "server_init_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_register_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_list_services",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_check_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_add_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_list_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_route_call",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_publish_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_subscribe_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_get_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "server_mcp_py",
+      "target": "server_mcp_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_1",
+      "target": "server_mcp_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_27",
+      "target": "server_mcp_register_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_56",
+      "target": "server_mcp_list_services",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_62",
+      "target": "server_mcp_check_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_73",
+      "target": "server_mcp_add_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_87",
+      "target": "server_mcp_list_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_93",
+      "target": "server_mcp_route_call",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_112",
+      "target": "server_mcp_publish_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_130",
+      "target": "server_mcp_subscribe_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "server/mcp.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "server_mcp_rationale_143",
+      "target": "server_mcp_get_event_log",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "f91cb3e26fae3255e70ade6e5c1c70dc181527ea"
+}

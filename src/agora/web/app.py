@@ -12,21 +12,19 @@ Features:
 
 from __future__ import annotations
 
+import os
 import time
 from pathlib import Path
 
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, JSONResponse
+from prometheus_client import REGISTRY, Gauge, generate_latest
 
 from agora.discovery import DiscoveryEngine
 from agora.pipeline import Pipeline
-import os
-
-from fastapi import Request
-from fastapi.responses import JSONResponse
-
 from agora.registry import Service, ServiceRegistry, _is_safe_url
+from agora.router import Router
 
 API_KEY = os.environ.get("AGORA_API_KEY", "")
 
@@ -40,8 +38,6 @@ async def _auth_middleware(request: Request, call_next):
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
     return await call_next(request)
 
-
-from agora.router import Router
 
 app = FastAPI(title="Agora Dashboard", version="1.2.0")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"], allow_methods=["GET", "POST"], allow_headers=["*"])
@@ -60,7 +56,6 @@ def _get_dashboard_html() -> str:
     return "<html><body><h1>Dashboard not found</h1><p>Run: agora web</p></body></html>"
 
 # Prometheus gauges — created once at module level (not per scrape)
-from prometheus_client import Gauge, generate_latest, REGISTRY
 _METRIC_SVC_TOTAL = Gauge("agora_services_total", "Total registered services", registry=REGISTRY)
 _METRIC_SVC_HEALTHY = Gauge("agora_services_healthy", "Healthy services", registry=REGISTRY)
 _METRIC_SVC_DEGRADED = Gauge("agora_services_degraded", "Degraded/offline services", registry=REGISTRY)
@@ -223,8 +218,9 @@ async def api_event_publish(
     source: str = Form("dashboard"),
 ):
     """Publish an event via the web dashboard."""
-    from agora.event_bus import EventBus
     import json as _json
+
+    from agora.event_bus import EventBus
     bus = EventBus(registry=registry)
     try:
         data = _json.loads(payload)

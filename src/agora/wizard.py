@@ -49,7 +49,7 @@ def run_wizard() -> int:
         print(f"   {status} {healthy}/{total} services healthy")
 
     # Step 4: Quick start
-    print(f"""
+    print("""
 ━ Step 4/4: You're ready to go!
 
    Quick commands:

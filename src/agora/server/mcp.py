@@ -6,9 +6,9 @@ import json
 
 from fastmcp import FastMCP
 
+from agora.event_bus import EventBus
 from agora.registry import ServiceRegistry, _is_safe_url
 from agora.router import Router
-from agora.event_bus import EventBus
 
 mcp = FastMCP(
     "Agora — Service Convergence Hub",

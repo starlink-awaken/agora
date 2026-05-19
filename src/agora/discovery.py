@@ -11,11 +11,12 @@ from __future__ import annotations
 
 import asyncio
 import socket
-import structlog
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
+
+import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -328,7 +329,7 @@ class DiscoveryEngine:
 
         return sorted(all_found.values(), key=lambda s: s.confidence, reverse=True)
 
-    async def watch(self, registry: "ServiceRegistry", interval: int = 30):
+    async def watch(self, registry: ServiceRegistry, interval: int = 30):
         """Watch for new services continuously. Yields discovery events."""
         import asyncio as _asyncio
         print(f"👁️  Watching for new services (interval: {interval}s). Ctrl+C to stop.")
@@ -346,7 +347,7 @@ class DiscoveryEngine:
         except asyncio.CancelledError:
             print("\n👁️  Watch stopped.")
 
-    def auto_register(self, registry: "ServiceRegistry") -> int:
+    def auto_register(self, registry: ServiceRegistry) -> int:
         """Discover and auto-register new services. Returns count registered."""
         from agora.registry import Service
 

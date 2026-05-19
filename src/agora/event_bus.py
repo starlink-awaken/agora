@@ -34,7 +34,7 @@ class Subscription:
 class EventBus:
     """Publish-subscribe event engine with JSON persistence."""
 
-    def __init__(self, storage_path: str | None = None, registry: "ServiceRegistry | None" = None,
+    def __init__(self, storage_path: str | None = None, registry: ServiceRegistry | None = None,
                  subscription_ttl_hours: float = 24.0):
         self._storage_path = Path(storage_path or str(
             Path(__file__).parent.parent.parent / "agora-events.json"
