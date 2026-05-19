@@ -449,13 +449,15 @@ def main():
         return run_wizard()
 
     elif args.command == "completion":
+        parser = build_parser()
+        cmds = sorted(a.dest for a in parser._actions if hasattr(a, 'dest') and a.dest != 'help' and a.dest)
+        cmd_list = " ".join(cmds)
         print('# Add to ~/.bashrc or ~/.zshrc:')
         print('#   eval "$(agora completion)"')
         print()
         print('_agora_completion() {')
         print('  local cur=${COMP_WORDS[COMP_CWORD]}')
-        cmd_names = [a.dest for a in build_parser()._actions if hasattr(a, 'dest') and a.dest != 'help']
-        print(f'  local cmds="{" ".join(cmd_names)}"')
+        print(f'  local cmds="{cmd_list}"')
         print('  COMPREPLY=($(compgen -W "$cmds" -- "$cur"))')
         print('}')
         print('complete -F _agora_completion agora')
