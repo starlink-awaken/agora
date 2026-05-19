@@ -167,35 +167,21 @@ async def api_add_instance(data: dict):
 @app.get("/metrics")
 async def api_metrics():
     """Prometheus-compatible metrics endpoint."""
+    from prometheus_client import Gauge, Summary, generate_latest, REGISTRY
+
     total = len(registry.list_all())
     healthy = len(registry.list_healthy())
-    lines = [
-        "# HELP agora_services_total Total registered services",
-        "# TYPE agora_services_total gauge",
-        f"agora_services_total {total}",
-        "# HELP agora_services_healthy Healthy services",
-        "# TYPE agora_services_healthy gauge",
-        f"agora_services_healthy {healthy}",
-        "# HELP agora_services_degraded Degraded/offline services",
-        "# TYPE agora_services_degraded gauge",
-        f"agora_services_degraded {total - healthy}",
-    ]
-    import time as _time
-    lines.append(f"# HELP agora_last_health_check Last health check timestamp")
-    lines.append("# TYPE agora_last_health_check gauge")
-    lines.append(f"agora_last_health_check {_time.time()}")
-
-    # Latency percentiles
     pct = router.get_percentiles()
-    lines.append("# HELP agora_route_latency_seconds Route call latency")
-    lines.append("# TYPE agora_route_latency_seconds summary")
-    lines.append(f"agora_route_latency_seconds{{quantile=\"0.5\"}} {pct['p50']}")
-    lines.append(f"agora_route_latency_seconds{{quantile=\"0.9\"}} {pct['p90']}")
-    lines.append(f"agora_route_latency_seconds{{quantile=\"0.99\"}} {pct['p99']}")
-    lines.append(f"agora_route_latency_seconds_count {pct['samples']}")
-    lines.append(f"agora_route_latency_seconds_sum {pct['avg'] * pct['samples']:.4f}")
 
-    return "\n".join(lines) + "\n", 200, {"Content-Type": "text/plain; version=0.0.4"}
+    svc_total = Gauge("agora_services_total", "Total registered services", registry=REGISTRY)
+    svc_healthy = Gauge("agora_services_healthy", "Healthy services", registry=REGISTRY)
+    svc_degraded = Gauge("agora_services_degraded", "Degraded/offline services", registry=REGISTRY)
+    svc_total.set(total)
+    svc_healthy.set(healthy)
+    svc_degraded.set(total - healthy)
+
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(content=generate_latest(REGISTRY), media_type="text/plain; version=0.0.4")
 
 
 # ── CLI entry ──────────────────────────────────────────────────

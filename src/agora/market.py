@@ -11,11 +11,14 @@ from __future__ import annotations
 
 import json
 import os
+import structlog
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 from urllib.parse import urlparse
+
+logger = structlog.get_logger(__name__)
 
 
 # Built-in MCP service registry
@@ -220,27 +223,19 @@ class Market:
             "port": 0,
         }
         # Persist to local market registry
+        from agora.persistence import json_load, json_save
         market_path = self.INSTALL_DIR / "published.json"
-        market_path.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            existing = {}
-            if market_path.exists():
-                existing = json.loads(market_path.read_text())
-            existing[name] = entry_data
-            market_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
-        except Exception:
-            pass
+        existing = json_load(market_path, default={})
+        existing[name] = entry_data
+        if not json_save(market_path, existing):
+            logger.warning("market_publish_failed", name=name)
+            raise RuntimeError(f"Failed to publish {name}")
         return entry_data
 
     def _load_published(self) -> dict:
         """Load all published services from local registry."""
-        market_path = self.INSTALL_DIR / "published.json"
-        try:
-            if market_path.exists():
-                return json.loads(market_path.read_text())
-        except Exception:
-            pass
-        return {}
+        from agora.persistence import json_load
+        return json_load(self.INSTALL_DIR / "published.json", default={})
 
     @staticmethod
     def _run_cmd(cmd: list[str], cwd: str | None = None):

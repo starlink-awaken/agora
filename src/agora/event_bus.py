@@ -45,31 +45,25 @@ class EventBus:
         self._load()
 
     def _load(self):
-        try:
-            if self._storage_path.exists():
-                data = json.loads(self._storage_path.read_text())
-                self._events = data.get("events", [])
-                for s in data.get("subscriptions", []):
-                    sub = Subscription(**s)
-                    self._subscriptions[sub.id] = sub
-                self._max_events = data.get("max_events", 1000)
-        except Exception:
-            pass
+        from agora.persistence import json_load
+        data = json_load(self._storage_path, default={"events": [], "subscriptions": []})
+        self._events = data.get("events", [])
+        for s in data.get("subscriptions", []):
+            sub = Subscription(**s)
+            self._subscriptions[sub.id] = sub
+        self._max_events = data.get("max_events", 1000)
 
     def _save(self):
-        try:
-            data = {
-                "events": self._events,
-                "subscriptions": [
-                    {"id": s.id, "service": s.service, "pattern": s.pattern,
-                     "callback_url": s.callback_url, "created": s.created}
-                    for s in self._subscriptions.values()
-                ],
-                "max_events": self._max_events,
-            }
-            self._storage_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
-        except Exception:
-            pass
+        from agora.persistence import json_save
+        json_save(self._storage_path, {
+            "events": self._events,
+            "subscriptions": [
+                {"id": s.id, "service": s.service, "pattern": s.pattern,
+                 "callback_url": s.callback_url, "created": s.created}
+                for s in self._subscriptions.values()
+            ],
+            "max_events": self._max_events,
+        })
 
     def _match(self, pattern: str, event_type: str) -> bool:
         """Check if event_type matches subscription pattern."""

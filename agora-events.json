@@ -83,6 +83,33 @@
       "payload": {
         "ok": true
       }
+    },
+    {
+      "id": "evt_1779159645_117dfd",
+      "time": "2026-05-19T03:00:45Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "id": "evt_1779159824_b7bb1e",
+      "time": "2026-05-19T03:03:44Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "id": "evt_1779159825_6fe4a8",
+      "time": "2026-05-19T03:03:45Z",
+      "source": "cli",
+      "type": "test:done",
+      "payload": {
+        "ok": true
+      }
     }
   ],
   "subscriptions": [

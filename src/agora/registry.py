@@ -137,23 +137,16 @@ class ServiceRegistry:
 
     def _load(self):
         """Load persisted services from JSON file."""
-        try:
-            p = Path(self._storage_path)
-            if p.exists():
-                data = json.loads(p.read_text())
-                for s in data.get("services", []):
-                    svc = Service(**{k: v for k, v in s.items() if k in Service.__dataclass_fields__})
-                    self._services[svc.name] = svc
-        except Exception:
-            pass
+        from agora.persistence import json_load
+        data = json_load(Path(self._storage_path))
+        for s in data.get("services", []):
+            svc = Service(**{k: v for k, v in s.items() if k in Service.__dataclass_fields__})
+            self._services[svc.name] = svc
 
     def _save(self):
         """Persist services to JSON file."""
-        try:
-            data = {"services": [s.__dict__ for s in self._services.values()]}
-            Path(self._storage_path).write_text(json.dumps(data, indent=2, default=str))
-        except Exception:
-            pass
+        from agora.persistence import json_save
+        json_save(Path(self._storage_path), {"services": [s.__dict__ for s in self._services.values()]})
 
     def register(self, service: Service):
         if len(self._services) >= self._MAX_SERVICES:

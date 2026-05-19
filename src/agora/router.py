@@ -6,6 +6,11 @@ with round-robin routing strategy.
 
 from __future__ import annotations
 
+import json as _json
+import time as _time
+from collections import deque
+from pathlib import Path as _Path
+
 import structlog
 
 from agora.registry import ServiceRegistry, _is_safe_url
@@ -27,8 +32,9 @@ class Router:
         self._routes: dict[str, str] = {}  # tool_name → service_name
         self._strategy = strategy
         self._rr_index: dict[str, int] = {}  # service_name → next instance index
-        self._latencies: list[float] = []  # rolling window for percentile calc
-        self._max_latency_samples = 1000
+        self._latencies: deque[float] = deque(maxlen=1000)  # auto-FIFO truncation
+        self._trace_buffer: list[str] = []  # batched disk writes
+        self._trace_path = _Path(__file__).parent.parent.parent / "trace_log.jsonl"
 
     def add_route(self, tool_name: str, service_name: str):
         """Register a tool → service mapping."""
@@ -132,27 +138,29 @@ class Router:
             return {"status": "error", "error": "Routing failed"}
 
     def _trace(self, tool: str, service: str, start: float, status: str, detail: str = ""):
-        """Write call trace to trace_log.jsonl and track latency for percentiles."""
-        import json as _json
-        import time as _time
-        from pathlib import Path as _Path
+        """Buffer trace entry; flush to disk every 50 calls."""
         elapsed = round(_time.monotonic() - start, 4)
 
-        # Track latency for percentile calculation
         if status == "ok":
             self._latencies.append(elapsed)
-            if len(self._latencies) > self._max_latency_samples:
-                self._latencies = self._latencies[-500:]
 
         entry = _json.dumps({
-            "time": _time.strftime("%Y-%m-%dT%H:%M:%SZ", _time.gmtime()),
+            "time": _time.time(),
             "tool": tool, "service": service, "status": status,
             "elapsed_s": elapsed, "detail": detail,
         })
+        self._trace_buffer.append(entry)
+        if len(self._trace_buffer) >= 50:
+            self._flush_traces()
+
+    def _flush_traces(self):
+        """Write buffered traces to disk."""
+        if not self._trace_buffer:
+            return
         try:
-            _path = _Path(__file__).parent.parent.parent / "trace_log.jsonl"
-            with open(_path, "a") as f:
-                f.write(entry + "\n")
+            with open(self._trace_path, "a") as f:
+                f.write("\n".join(self._trace_buffer) + "\n")
+            self._trace_buffer.clear()
         except Exception:
             pass
 
