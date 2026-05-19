@@ -184,6 +184,17 @@ async def api_metrics():
     lines.append(f"# HELP agora_last_health_check Last health check timestamp")
     lines.append("# TYPE agora_last_health_check gauge")
     lines.append(f"agora_last_health_check {_time.time()}")
+
+    # Latency percentiles
+    pct = router.get_percentiles()
+    lines.append("# HELP agora_route_latency_seconds Route call latency")
+    lines.append("# TYPE agora_route_latency_seconds summary")
+    lines.append(f"agora_route_latency_seconds{{quantile=\"0.5\"}} {pct['p50']}")
+    lines.append(f"agora_route_latency_seconds{{quantile=\"0.9\"}} {pct['p90']}")
+    lines.append(f"agora_route_latency_seconds{{quantile=\"0.99\"}} {pct['p99']}")
+    lines.append(f"agora_route_latency_seconds_count {pct['samples']}")
+    lines.append(f"agora_route_latency_seconds_sum {pct['avg'] * pct['samples']:.4f}")
+
     return "\n".join(lines) + "\n", 200, {"Content-Type": "text/plain; version=0.0.4"}
 
 

@@ -56,6 +56,15 @@
       "payload": {
         "ok": true
       }
+    },
+    {
+      "id": "evt_1779158247_f94171",
+      "time": "2026-05-19T02:37:27Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
     }
   ],
   "subscriptions": [
