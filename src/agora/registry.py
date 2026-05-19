@@ -135,9 +135,10 @@ class ServiceRegistry:
             loop = asyncio.get_running_loop()
             loop.create_task(_send())
         except RuntimeError:
-            asyncio.run(_send())
-        except Exception:
-            pass
+            try:
+                asyncio.run(_send())
+            except Exception:
+                pass
 
     def _load(self):
         """Load persisted services from JSON file."""
@@ -148,9 +149,14 @@ class ServiceRegistry:
             self._services[svc.name] = svc
 
     def _save(self):
-        """Persist services to JSON file."""
+        """Persist services to JSON file. Only stores static config, not runtime state."""
         from agora.persistence import json_save
-        json_save(Path(self._storage_path), {"services": [s.__dict__ for s in self._services.values()]})
+        json_save(Path(self._storage_path), {"services": [
+            {"name": s.name, "description": s.description,
+             "mcp_endpoint": s.mcp_endpoint, "health_endpoint": s.health_endpoint,
+             "port": s.port, "tags": s.tags, "instances": s.instances}
+            for s in self._services.values()
+        ]})
 
     def register(self, service: Service):
         if len(self._services) >= self._MAX_SERVICES:

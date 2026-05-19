@@ -127,8 +127,10 @@ class EventBus:
                     if attempt < 2:
                         await asyncio.sleep(2 ** attempt)
                     else:
-                        # Log failure but don't block
-                        pass
+                        import structlog
+                        _logger = structlog.get_logger(__name__)
+                        _logger.warning("event_delivery_failed", event_id=event["id"],
+                                       subscriber=sub.id, callback=callback)
 
     def subscribe(self, service: str, pattern: str, callback_url: str = "") -> str:
         """Subscribe to events. Returns subscription_id."""
