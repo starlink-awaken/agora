@@ -8,13 +8,15 @@ from fastmcp import FastMCP
 
 from agora.registry import ServiceRegistry, _is_safe_url
 from agora.router import Router
+from agora.event_bus import EventBus
 
 mcp = FastMCP(
     "Agora — Service Convergence Hub",
     mask_error_details=True,
 )
 registry = ServiceRegistry()
-router = Router(registry)
+_bus = EventBus(registry=registry)
+router = Router(registry, event_bus=_bus)
 
 
 # ── Service management tools ─────────────────────────────────────
@@ -106,15 +108,9 @@ def route_call(tool_name: str, arguments: str = "{}") -> str:
 
 # ── Event Bus tools (Phase 1, spec §4.2) ──────────────────────────────
 
-_bus = None  # Lazy init on first call
-
 
 def _get_bus():
-    global _bus
-    if _bus is None:
-        from agora.event_bus import EventBus
-        _bus = EventBus(registry=registry)
-    return _bus
+    return _bus  # Module-level bus, initialized alongside registry/router
 
 
 @mcp.tool()

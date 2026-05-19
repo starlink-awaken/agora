@@ -26,10 +26,13 @@ class Router:
     - Exact and prefix-based route resolution
     - Circuit breaker awareness (skips OPEN services)
     - Load balancing with round-robin across service instances
+    - Event bus integration: auto-publishes route:call.succeeded/failed events
     """
 
-    def __init__(self, registry: ServiceRegistry, strategy: str = "round-robin"):
+    def __init__(self, registry: ServiceRegistry, strategy: str = "round-robin",
+                 event_bus: object = None):
         self.registry = registry
+        self._event_bus = event_bus
         self._routes: dict[str, str] = {}  # tool_name → service_name
         self._strategy = strategy
         self._rr_index: dict[str, int] = {}  # service_name → next instance index
@@ -132,11 +135,21 @@ class Router:
                 resp.raise_for_status()
                 self.registry.mark_success(service_name)
                 self._trace(tool_name, service_name, _start, "ok")
+                if self._event_bus:
+                    self._event_bus.publish("route:call.succeeded", {
+                        "tool": tool_name, "service": service_name,
+                        "duration_s": round(_time.monotonic() - _start, 4),
+                    }, "agora-router")
                 return resp.json()
         except Exception as e:
             self._trace(tool_name, service_name, _start, "error", str(e)[:100])
             logger.warning("route_failed", tool=tool_name, service=service_name, error=str(e))
             self.registry.mark_failure(service_name)
+            if self._event_bus:
+                self._event_bus.publish("route:call.failed", {
+                    "tool": tool_name, "service": service_name,
+                    "error": str(e)[:100],
+                }, "agora-router")
             return {"status": "error", "error": "Routing failed"}
 
     def _trace(self, tool: str, service: str, start: float, status: str, detail: str = ""):
