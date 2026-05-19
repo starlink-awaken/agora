@@ -218,6 +218,24 @@
       "payload": {
         "ok": true
       }
+    },
+    {
+      "id": "evt_1779171602_b70b15",
+      "time": "2026-05-19T06:20:02Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "id": "evt_1779171700_d3e3dc",
+      "time": "2026-05-19T06:21:40Z",
+      "source": "e2e-test",
+      "type": "test:e2e",
+      "payload": {
+        "ok": true
+      }
     }
   ],
   "subscriptions": [
