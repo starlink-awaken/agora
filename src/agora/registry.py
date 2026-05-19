@@ -63,13 +63,10 @@ class Service:
 
     @property
     def is_available(self) -> bool:
-        """Service is available if healthy OR in half-open test mode."""
+        """Service is available if healthy OR cooldown expired (half-open candidate)."""
         if self.healthy:
             return True
-        if time.monotonic() >= self.cooldown_until:
-            self.half_open = True
-            return True  # Allow one probe in half-open
-        return False
+        return time.monotonic() >= self.cooldown_until
 
     @property
     def circuit_state(self) -> str:
@@ -159,13 +156,20 @@ class ServiceRegistry:
     def list_healthy(self) -> list[Service]:
         return [s for s in self._services.values() if s.is_available]
 
+    def _try_half_open(self, name: str) -> bool:
+        """Attempt a half-open probe. Returns True if probe should proceed."""
+        svc = self._services.get(name)
+        if svc and not svc.healthy and not svc.half_open and time.monotonic() >= svc.cooldown_until:
+            svc.half_open = True
+            return True
+        return False
+
     def mark_failure(self, name: str):
         svc = self._services.get(name)
         if svc:
             prev_state = svc.circuit_state
             svc.failure_count += 1
             if svc.half_open:
-                # Failed during half-open test → re-open circuit
                 svc.healthy = False
                 svc.half_open = False
                 svc.consecutive_successes = 0

@@ -32,6 +32,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 registry = ServiceRegistry()
 router = Router(registry)
 discovery = DiscoveryEngine()
+pipeline = Pipeline(registry, router)
 
 _DASHBOARD_HTML = (Path(__file__).parent / "dashboard.html").read_text()
 
@@ -39,7 +40,7 @@ _DASHBOARD_HTML = (Path(__file__).parent / "dashboard.html").read_text()
 # ── Pages ──────────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
-async def dashboard():
+def dashboard():
     return _DASHBOARD_HTML
 
 
@@ -125,12 +126,6 @@ async def api_register(
     return {"status": "registered", "name": name}
 
 
-@app.get("/api/pipelines")
-async def api_pipelines():
-    pl = Pipeline(registry, router)
-    return {"pipelines": pl.list_pipelines()}
-
-
 @app.post("/api/pipeline")
 async def api_run_pipeline(
     name: str = Form(...),
@@ -139,14 +134,13 @@ async def api_run_pipeline(
     project: str = Form("."),
     mode: str = Form("sequential"),
 ):
-    pl = Pipeline(registry, router)
     variables = {"goal": goal, "context": context, "project": project}
 
     start = time.monotonic()
     if mode == "parallel":
-        result = await pl.run_parallel(name, variables)
+        result = await pipeline.run_parallel(name, variables)
     else:
-        result = await pl.run(name, variables)
+        result = await pipeline.run(name, variables)
     elapsed = time.monotonic() - start
 
     return {"pipeline": name, "mode": mode, "elapsed_s": round(elapsed, 3), **result}

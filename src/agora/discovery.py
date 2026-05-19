@@ -189,9 +189,8 @@ class DiscoveryEngine:
             try:
                 data = tomllib.loads(compose_file.read_text()) if compose_file.suffix == ".toml" else None
                 if data is None:
-                    import yaml  # lazy import, may fail
                     try:
-                        import yaml  # type: ignore
+                        import yaml  # noqa: F811
                     except ImportError:
                         continue
                     data = yaml.safe_load(compose_file.read_text())
