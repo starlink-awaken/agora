@@ -49,8 +49,8 @@ class TestServiceRegistry:
         r.register(Service("test"))
         r.mark_failure("test"); r.mark_failure("test"); r.mark_failure("test")
         assert not r.get("test").is_available
-        r.mark_success("test")
-        assert r.get("test").is_available
+        r.mark_success("test"); r.mark_success("test"); r.mark_success("test")
+        assert r.get("test").is_available  # 3 successes gradually decay to 0
 
     def test_unregister(self):
         r = _new_registry()

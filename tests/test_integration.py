@@ -63,7 +63,8 @@ class TestAgoraIntegration:
         for _ in range(3):
             self.registry.mark_failure("flaky")
         assert not self.registry.get("flaky").is_available
-        self.registry.mark_success("flaky")
+        for _ in range(4):  # Gradual decay: 4 successes → 0 failures
+            self.registry.mark_success("flaky")
         assert self.registry.get("flaky").is_available
 
     def test_service_to_dict_serialization(self):

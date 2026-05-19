@@ -23,11 +23,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agora.discovery import DiscoveryEngine
 from agora.pipeline import Pipeline
-from agora.registry import Service, ServiceRegistry
+from agora.registry import Service, ServiceRegistry, _is_safe_url
 from agora.router import Router
 
 app = FastAPI(title="Agora Dashboard", version="1.2.0")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"], allow_methods=["GET", "POST"], allow_headers=["*"])
 
 registry = ServiceRegistry()
 router = Router(registry)
@@ -160,6 +160,9 @@ async def api_add_instance(data: dict):
     mcp_endpoint = data.get("mcp_endpoint", "")
     if not svc_name or not mcp_endpoint:
         return {"status": "error", "error": "service and mcp_endpoint required"}
+    # P1: Validate URL against SSRF before adding instance
+    if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
+        return {"status": "error", "error": "MCP endpoint URL blocked by SSRF policy"}
     router._add_instance(svc_name, mcp_endpoint)
     return {"status": "ok", "service": svc_name, "instance": mcp_endpoint}
 

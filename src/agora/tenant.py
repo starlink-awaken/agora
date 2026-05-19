@@ -47,7 +47,7 @@ class TenantManager:
     Falls back to a single 'default' tenant if no config exists.
     """
 
-    DEFUALT_TOKEN_ENV = "AGORA_TOKEN"
+    DEFAULT_TOKEN_ENV = "AGORA_TOKEN"
 
     def __init__(self, config_path: str | None = None):
         self._path = Path(config_path or os.path.expanduser("~/.config/agora/tenants.yaml"))
@@ -61,7 +61,7 @@ class TenantManager:
         if not self._path.exists():
             # Create default config with auto-generated token
             self._path.parent.mkdir(parents=True, exist_ok=True)
-            default_token = os.environ.get(self.DEFUALT_TOKEN_ENV, f"sk-{secrets.token_hex(16)}")
+            default_token = os.environ.get(self.DEFAULT_TOKEN_ENV, f"sk-{secrets.token_hex(16)}")
             default = {
                 "tenants": [
                     {

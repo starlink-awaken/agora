@@ -118,6 +118,12 @@ class ServiceRegistry:
         """Send circuit state change alert via webhook."""
         if not self._alert_webhook:
             return
+        # P0: Validate webhook URL against SSRF before sending
+        if not _is_safe_url(self._alert_webhook):
+            import structlog
+            logger = structlog.get_logger(__name__)
+            logger.warning("webhook_alert_blocked", service=name, webhook=self._alert_webhook)
+            return
         import httpx
 
         async def _send():
@@ -212,9 +218,10 @@ class ServiceRegistry:
                     svc.consecutive_successes = 0
                     svc.cooldown_until = 0.0
             else:
-                svc.failure_count = 0
-                svc.healthy = True
-                svc.cooldown_until = 0.0
+                svc.failure_count = max(0, svc.failure_count - 1)  # Gradual decay
+                if svc.failure_count < self._cb_max_failures and not svc.healthy:
+                    svc.healthy = True
+                    svc.cooldown_until = 0.0
 
     def get_circuit_status(self, name: str) -> dict:
         """Get detailed circuit breaker status for a service."""
