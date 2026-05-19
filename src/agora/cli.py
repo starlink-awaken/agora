@@ -551,7 +551,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n👋 Interrupted.")
         sys.exit(130)
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        print(f"   Run 'agora config' to check setup, or 'agora init' to re-run setup.")
+    except Exception:
+        print("❌ An unexpected error occurred.")
+        print("   Run 'agora config' to check setup, or 'agora init' to re-run setup.")
         sys.exit(1)

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-19T03:12:23.915Z",
+  "updatedAt": "2026-05-19T06:10:39.172Z",
   "missions": [
     {
       "id": "session:7e4858cc-be47-404f-97b1-613206ff717b:none",
@@ -7,14 +7,14 @@
       "name": "none",
       "objective": "Session mission",
       "createdAt": "2026-05-19T01:30:40.477Z",
-      "updatedAt": "2026-05-19T03:12:23.915Z",
-      "status": "done",
-      "workerCount": 8,
+      "updatedAt": "2026-05-19T06:10:39.172Z",
+      "status": "running",
+      "workerCount": 11,
       "taskCounts": {
-        "total": 8,
+        "total": 11,
         "pending": 0,
         "blocked": 0,
-        "inProgress": 0,
+        "inProgress": 3,
         "completed": 8,
         "failed": 0
       },
@@ -98,40 +98,62 @@
           "latestUpdate": "completed",
           "completedSummary": null,
           "updatedAt": "2026-05-19T03:12:23.915Z"
+        },
+        {
+          "name": "code-reviewer:a199d74",
+          "role": "code-reviewer",
+          "ownership": "a199d74623c321f05",
+          "status": "running",
+          "currentStep": null,
+          "latestUpdate": null,
+          "completedSummary": null,
+          "updatedAt": "2026-05-19T06:10:39.063Z"
+        },
+        {
+          "name": "code-reviewer:ac8b322",
+          "role": "code-reviewer",
+          "ownership": "ac8b32264c5c36d83",
+          "status": "running",
+          "currentStep": null,
+          "latestUpdate": null,
+          "completedSummary": null,
+          "updatedAt": "2026-05-19T06:10:39.117Z"
+        },
+        {
+          "name": "code-reviewer:a05d00f",
+          "role": "code-reviewer",
+          "ownership": "a05d00f8b8ec74395",
+          "status": "running",
+          "currentStep": null,
+          "latestUpdate": null,
+          "completedSummary": null,
+          "updatedAt": "2026-05-19T06:10:39.172Z"
         }
       ],
       "timeline": [
         {
-          "id": "session-stop:a8247a0deed0911a5:2026-05-19T02:58:01.252Z",
-          "at": "2026-05-19T02:58:01.252Z",
-          "kind": "completion",
-          "agent": "code-reviewer:a8247a0",
-          "detail": "completed",
-          "sourceKey": "session-stop:a8247a0deed0911a5"
-        },
-        {
-          "id": "session-stop:ad808059fee2b16c4:2026-05-19T02:58:10.867Z",
-          "at": "2026-05-19T02:58:10.867Z",
-          "kind": "completion",
-          "agent": "code-reviewer:ad80805",
-          "detail": "completed",
-          "sourceKey": "session-stop:ad808059fee2b16c4"
-        },
-        {
-          "id": "session-start:af34a1ecc69efccd6:2026-05-19T03:04:25.985Z",
-          "at": "2026-05-19T03:04:25.985Z",
+          "id": "session-start:a199d74623c321f05:2026-05-19T06:10:39.063Z",
+          "at": "2026-05-19T06:10:39.063Z",
           "kind": "update",
-          "agent": "general-purpose:af34a1e",
-          "detail": "started general-purpose:af34a1e",
-          "sourceKey": "session-start:af34a1ecc69efccd6"
+          "agent": "code-reviewer:a199d74",
+          "detail": "started code-reviewer:a199d74",
+          "sourceKey": "session-start:a199d74623c321f05"
         },
         {
-          "id": "session-stop:af34a1ecc69efccd6:2026-05-19T03:12:23.915Z",
-          "at": "2026-05-19T03:12:23.915Z",
-          "kind": "completion",
-          "agent": "general-purpose:af34a1e",
-          "detail": "completed",
-          "sourceKey": "session-stop:af34a1ecc69efccd6"
+          "id": "session-start:ac8b32264c5c36d83:2026-05-19T06:10:39.117Z",
+          "at": "2026-05-19T06:10:39.117Z",
+          "kind": "update",
+          "agent": "code-reviewer:ac8b322",
+          "detail": "started code-reviewer:ac8b322",
+          "sourceKey": "session-start:ac8b32264c5c36d83"
+        },
+        {
+          "id": "session-start:a05d00f8b8ec74395:2026-05-19T06:10:39.172Z",
+          "at": "2026-05-19T06:10:39.172Z",
+          "kind": "update",
+          "agent": "code-reviewer:a05d00f",
+          "detail": "started code-reviewer:a05d00f",
+          "sourceKey": "session-start:a05d00f8b8ec74395"
         }
       ]
     }

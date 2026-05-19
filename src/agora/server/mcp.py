@@ -109,10 +109,6 @@ def route_call(tool_name: str, arguments: str = "{}") -> str:
 # ── Event Bus tools (Phase 1, spec §4.2) ──────────────────────────────
 
 
-def _get_bus():
-    return _bus  # Module-level bus, initialized alongside registry/router
-
-
 @mcp.tool()
 def publish_event(event_type: str, payload: str, source: str = "") -> str:
     """Publish an event to the bus. payload is a JSON string.
@@ -122,7 +118,7 @@ def publish_event(event_type: str, payload: str, source: str = "") -> str:
         payload: JSON string with event data
         source: Source service name (e.g. 'kos', 'claude-code')
     """
-    bus = _get_bus()
+    bus = _bus
     try:
         data = json.loads(payload) if isinstance(payload, str) else payload
     except json.JSONDecodeError:
@@ -139,7 +135,7 @@ def subscribe_event(pattern: str, callback_url: str = "") -> str:
         pattern: Event pattern ('index:*', 'index:done', '*')
         callback_url: Optional HTTP callback URL for push delivery
     """
-    bus = _get_bus()
+    bus = _bus
     sub_id = bus.subscribe("mcp-caller", pattern, callback_url)
     return json.dumps({"subscription_id": sub_id, "pattern": pattern})
 
@@ -152,7 +148,7 @@ def get_event_log(limit: int = 50, since: str = "") -> str:
         limit: Max events to return (default 50)
         since: ISO timestamp, only return events after this time
     """
-    bus = _get_bus()
+    bus = _bus
     events = bus.get_event_log(limit, since)
     return json.dumps(events, ensure_ascii=False, indent=2)
 
