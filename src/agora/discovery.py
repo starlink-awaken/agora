@@ -1,11 +1,21 @@
-"""Auto-discovery engine — scan workspace for MCP-capable services."""
+"""Auto-discovery engine — scan workspace for MCP-capable services.
+
+Phase 2 strategies:
+1. Known projects (.venv confirmation)
+2. pyproject.toml script/dependency scan
+3. Port probe: scan localhost ranges for .well-known/mcp
+4. docker-compose.yml port mapping extraction
+"""
 
 from __future__ import annotations
 
+import asyncio
+import json
+import socket
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from agora.registry import ServiceRegistry
@@ -26,8 +36,11 @@ class DiscoveredService:
 class DiscoveryEngine:
     """Auto-discover MCP services in the workspace.
 
-    Uses fast static analysis — reads pyproject.toml metadata,
-    no subprocess calls needed.
+    Uses four strategies:
+    1. Known projects with .venv confirmation
+    2. pyproject.toml metadata analysis
+    3. Port probe on localhost ranges
+    4. docker-compose.yml extraction
     """
 
     # Known MCP-capable projects with extended metadata
@@ -75,6 +88,14 @@ class DiscoveryEngine:
             "tags": ["skill", "discovery", "cli"],
         },
     }
+
+    # Default port ranges to probe
+    PORT_RANGES = [
+        (7420, 7430),   # Agora convention
+        (8765, 8766),   # Minerva
+        (9000, 9005),   # Common MCP services
+        (3000, 3002),   # AgentMesh / web apps
+    ]
 
     def __init__(self, workspace_root: str | None = None):
         self.root = Path(workspace_root or self._find_workspace())
@@ -161,15 +182,147 @@ class DiscoveryEngine:
                 ))
         return found
 
-    def discover_all(self) -> list[DiscoveredService]:
-        """Run all discovery strategies and deduplicate by confidence."""
+    def scan_docker_compose(self) -> list[DiscoveredService]:
+        """Scan docker-compose.yml files for MCP-capable services."""
+        found = []
+        for compose_file in self.root.rglob("docker-compose*.yml"):
+            try:
+                data = tomllib.loads(compose_file.read_text()) if compose_file.suffix == ".toml" else None
+                if data is None:
+                    import yaml  # lazy import, may fail
+                    try:
+                        import yaml  # type: ignore
+                    except ImportError:
+                        continue
+                    data = yaml.safe_load(compose_file.read_text())
+                if not data or "services" not in data:
+                    continue
+                for svc_name, svc_config in data["services"].items():
+                    # Skip if no ports exposed
+                    ports = svc_config.get("ports", [])
+                    if not ports:
+                        continue
+                    # Look for MCP-related images or labels
+                    image = svc_config.get("image", "")
+                    labels = svc_config.get("labels", {})
+                    is_mcp = (
+                        "mcp" in str(svc_config).lower()
+                        or "mcp" in image.lower()
+                        or labels.get("mcp") == "true"
+                    )
+                    if not is_mcp:
+                        continue
+
+                    port_info = str(ports[0]).split(":")
+                    host_port = int(port_info[-1]) if port_info[-1].isdigit() else 0
+                    found.append(DiscoveredService(
+                        name=svc_name,
+                        description=f"Docker MCP service: {image or svc_name}",
+                        mcp_endpoint=f"http://localhost:{host_port}/mcp" if host_port else "",
+                        health_endpoint=f"http://localhost:{host_port}/health" if host_port else "",
+                        port=host_port,
+                        tags=["docker", "mcp"],
+                        source=f"compose:{compose_file}",
+                        confidence=0.70,
+                    ))
+            except Exception:
+                continue
+        return found
+
+    async def _probe_port(self, host: str, port: int, timeout: float = 2.0) -> bool:
+        """Check if a port is open."""
+        try:
+            _, _, _, _, sockaddr = socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM)[0]
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.settimeout(timeout)
+                result = sock.connect_ex(sockaddr)
+                return result == 0
+        except Exception:
+            return False
+
+    async def _probe_mcp_endpoint(self, host: str, port: int, timeout: float = 2.0) -> str:
+        """Probe a port for MCP .well-known endpoint. Returns endpoint URL or empty string."""
+        import httpx
+
+        candidates = [
+            f"http://{host}:{port}/mcp",
+            f"http://{host}:{port}/sse",
+            f"http://{host}:{port}/.well-known/mcp",
+            f"http://{host}:{port}/mcp/sse",
+        ]
+        for url in candidates:
+            try:
+                async with httpx.AsyncClient(timeout=timeout) as client:
+                    r = await client.get(url)
+                    if r.status_code < 500:
+                        return url
+            except Exception:
+                continue
+        return ""
+
+    async def scan_port_range(self, hosts: list[str] | None = None) -> list[DiscoveredService]:
+        """Scan port ranges for MCP-capable services listening on given hosts.
+
+        Probes each host:port in the configured ranges, then checks
+        for common MCP endpoints on open ports.
+        """
+        if hosts is None:
+            hosts = ["localhost", "127.0.0.1", "0.0.0.0"]
+
+        found: list[DiscoveredService] = []
+
+        for host in hosts:
+            for start, end in self.PORT_RANGES:
+                for port in range(start, end + 1):
+                    if not await self._probe_port(host, port, timeout=1.0):
+                        continue
+                    # Port is open — probe for MCP endpoint
+                    mcp_url = await self._probe_mcp_endpoint(host, port, timeout=1.0)
+                    if not mcp_url:
+                        continue
+                    found.append(DiscoveredService(
+                        name=f"service-{port}",
+                        description=f"Auto-detected MCP service on port {port}",
+                        mcp_endpoint=mcp_url,
+                        health_endpoint=f"http://{host}:{port}/health",
+                        port=port,
+                        tags=["auto-detected", "port-probe"],
+                        source=f"port-probe:{host}:{port}",
+                        confidence=0.50,
+                    ))
+        return found
+
+    def discover_all(self, enable_port_probe: bool = False) -> list[DiscoveredService]:
+        """Run all synchronous discovery strategies and deduplicate by confidence.
+
+        Args:
+            enable_port_probe: If True, includes async port probing
+                               (caller must run within an event loop).
+        """
         all_found: dict[str, DiscoveredService] = {}
 
         for svc in self.scan_known_projects():
             all_found[svc.name] = svc
 
         for svc in self.scan_pyproject_scripts():
-            if svc.name not in all_found:
+            if svc.name not in all_found or svc.confidence > all_found[svc.name].confidence:
+                all_found[svc.name] = svc
+
+        for svc in self.scan_docker_compose():
+            if svc.name not in all_found or svc.confidence > all_found[svc.name].confidence:
+                all_found[svc.name] = svc
+
+        return sorted(all_found.values(), key=lambda s: s.confidence, reverse=True)
+
+    async def discover_all_async(self) -> list[DiscoveredService]:
+        """Run all discovery strategies including async port probing."""
+        sync_result = self.discover_all(enable_port_probe=False)
+        all_found: dict[str, DiscoveredService] = {s.name: s for s in sync_result}
+
+        # Port probe
+        port_services = await self.scan_port_range()
+        for svc in port_services:
+            if svc.name not in all_found or svc.confidence > all_found[svc.name].confidence:
                 all_found[svc.name] = svc
 
         return sorted(all_found.values(), key=lambda s: s.confidence, reverse=True)
@@ -181,12 +334,14 @@ class DiscoveryEngine:
         count = 0
         for svc in self.discover_all():
             if svc.name not in {s.name for s in registry.list_all()}:
+                # Handle duplicate port
+                port = svc.port or 0
                 registry.register(Service(
                     name=svc.name,
                     description=svc.description,
                     mcp_endpoint=svc.mcp_endpoint,
                     health_endpoint=svc.health_endpoint,
-                    port=svc.port,
+                    port=port,
                     tags=svc.tags,
                 ))
                 count += 1

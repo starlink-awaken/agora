@@ -25,7 +25,7 @@ tr:hover{background:#0f172a}
 .badge-open{background:#7f1d1d;color:#f87171}
 .badge-half{background:#78350f;color:#facc15}
 .tag{display:inline-block;padding:.1rem .4rem;margin:0 .1rem;border-radius:3px;font-size:.7rem;background:#334155;color:#94a3b8}
-button,input[type=text]{padding:.5rem 1rem;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;cursor:pointer;font-size:.85rem}
+button,input[type=text],select{padding:.5rem 1rem;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;cursor:pointer;font-size:.85rem}
 button:hover{background:#1e293b;border-color:#38bdf8}
 button.primary{background:#0369a1;border-color:#38bdf8;color:#fff}
 button.primary:hover{background:#0284c7}
@@ -37,9 +37,21 @@ form input{padding:.4rem .6rem}
 .actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
 #output{background:#0f172a;padding:1rem;border-radius:6px;font-family:monospace;font-size:.8rem;max-height:300px;overflow-y:auto;white-space:pre-wrap}
 .refresh{font-size:.75rem;color:#94a3b8;text-align:right}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);justify-content:center;align-items:center}
-.modal.active{display:flex}
-.modal>div{background:#1e293b;padding:2rem;border-radius:12px;width:500px;max-width:90%}
+.dag-container{background:#0f172a;border-radius:8px;min-height:250px;overflow:auto;position:relative}
+.dag-container svg{width:100%;min-height:250px}
+.dag-node{fill:#1e293b;stroke:#334155;stroke-width:1.5;rx:8;ry:8}
+.dag-node:hover{stroke:#38bdf8;cursor:pointer}
+.dag-node.completed{fill:#064e3b;stroke:#4ade80}
+.dag-node.running{fill:#78350f;stroke:#facc15}
+.dag-label{fill:#e2e8f0;font-size:11px;text-anchor:middle;pointer-events:none}
+.dag-tool{fill:#94a3b8;font-size:9px;text-anchor:middle;pointer-events:none}
+.dag-edge{stroke:#475569;stroke-width:2;fill:none;marker-end:url(#arrowhead)}
+.dag-edge-label{fill:#94a3b8;font-size:9px;text-anchor:middle}
+.dag-selector{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+.dag-selector select{flex:1}
+.dag-step-detail{background:#0f172a;border-radius:6px;padding:.5rem;margin-top:.5rem;font-size:.8rem;display:none}
+.dag-step-detail .key{color:#94a3b8}
+.dag-step-detail .val{color:#38bdf8}
 </style>
 </head>
 <body>
@@ -55,46 +67,46 @@ form input{padding:.4rem .6rem}
 </header>
 
 <main>
-<div class="grid">
-  <div>
-    <div class="panel">
-      <h2>🔌 Registered Services</h2>
-      <table><thead><tr><th>Name</th><th>Circuit</th><th>Fails</th><th>Port</th><th>Tags</th></tr></thead>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+  <div class="panel">
+    <h2>🔌 Registered Services</h2>
+    <table><thead><tr><th>Name</th><th>Circuit</th><th>Fails</th><th>Port</th><th>Tags</th><th>Inst</th></tr></thead>
       <tbody id="service-table"></tbody></table>
-    </div>
+  </div>
 
-    <div class="panel" style="margin-top:1rem">
-      <h2>⚡ Pipeline Runner</h2>
-      <form id="pipeline-form">
-        <label>Pipeline</label>
-        <select id="pl-name" style="padding:.4rem;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px">
-          <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
-        </select>
-        <label>Goal</label><input type="text" id="pl-goal" value="分析新能源汽车市场">
-        <label>Context</label><input type="text" id="pl-context" value="竞争,政策">
-        <label>Project</label><input type="text" id="pl-project" value=".">
-        <div style="display:flex;gap:.5rem;margin-top:.5rem">
-          <button type="submit" class="primary">▶ Run</button>
-          <button type="button" onclick="runPipeline('parallel')">⚡ Parallel</button>
-          <button type="button" onclick="runPipeline('stream')">📡 Stream</button>
-        </div>
-      </form>
-      <div id="output" style="margin-top:1rem">Pipeline output will appear here...</div>
+  <div class="panel">
+    <h2>🛠️ Actions</h2>
+    <div class="actions">
+      <button class="primary" onclick="discover()">🔍 Discover</button>
+      <button onclick="healthCheck()">🫀 Health Check</button>
+      <button class="danger" onclick="clearAll()">🗑️ Clear All</button>
     </div>
+    <div id="action-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:2rem"></div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 350px;gap:1.5rem;margin-bottom:1.5rem">
+  <div class="panel">
+    <h2>⚡ Pipeline Runner</h2>
+    <form id="pipeline-form">
+      <label>Pipeline</label>
+      <select id="pl-name" style="padding:.4rem">
+        <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
+      </select>
+      <label>Goal</label><input type="text" id="pl-goal" value="分析新能源汽车市场">
+      <label>Context</label><input type="text" id="pl-context" value="竞争,政策">
+      <label>Project</label><input type="text" id="pl-project" value=".">
+      <div style="display:flex;gap:.5rem;margin-top:.5rem">
+        <button type="submit" class="primary">▶ Run</button>
+        <button type="button" onclick="runPipeline('parallel')">⚡ Parallel</button>
+        <button type="button" onclick="runPipeline('stream')">📡 Stream</button>
+      </div>
+    </form>
+    <div id="output" style="margin-top:1rem">Pipeline output will appear here...</div>
   </div>
 
   <div>
     <div class="panel">
-      <h2>🛠️ Actions</h2>
-      <div class="actions">
-        <button class="primary" onclick="discover()">🔍 Discover</button>
-        <button onclick="healthCheck()">🫀 Health Check</button>
-        <button class="danger" onclick="clearAll()">🗑️ Clear All</button>
-      </div>
-      <div id="action-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:2rem"></div>
-    </div>
-
-    <div class="panel" style="margin-top:1rem">
       <h2>📋 Register Service</h2>
       <form id="reg-form">
         <label>Name</label><input type="text" id="reg-name" required>
@@ -103,7 +115,30 @@ form input{padding:.4rem .6rem}
         <button type="submit" class="primary">Register</button>
       </form>
     </div>
+    <div class="panel" style="margin-top:1rem">
+      <h2>📋 Instances</h2>
+      <form id="inst-form">
+        <label>Service</label><input type="text" id="inst-service" placeholder="minerva">
+        <label>MCP URL</label><input type="text" id="inst-mcp" placeholder="http://localhost:8766">
+        <button type="submit" class="primary">+ Add Instance</button>
+      </form>
+      <div id="inst-output" style="background:#0f172a;padding:.5rem;border-radius:6px;font-family:monospace;font-size:.8rem;min-height:1rem;margin-top:.5rem"></div>
+    </div>
   </div>
+</div>
+
+<div class="panel">
+  <h2>🔀 Pipeline DAG</h2>
+  <div class="dag-selector">
+    <select id="dag-pl" onchange="renderDAG()">
+      <option>full-pipeline</option><option>match-derive</option><option>research-derive</option><option>derive-check</option>
+    </select>
+    <button onclick="renderDAG()" class="primary">🔄 Render</button>
+  </div>
+  <div class="dag-container" id="dag-container">
+    <div style="text-align:center;padding:3rem;color:#94a3b8">Loading DAG...</div>
+  </div>
+  <div class="dag-step-detail" id="dag-detail"></div>
 </div>
 </main>
 
@@ -124,7 +159,79 @@ async function refresh() {
     <td>${s.failure_count}</td>
     <td>${s.port||'-'}</td>
     <td>${(s.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>
-  </tr>`).join('') || '<tr><td colspan="5" style="color:#94a3b8">No services — click Discover</td></tr>';
+    <td>${s.instances||1}</td>
+  </tr>`).join('') || '<tr><td colspan="6" style="color:#94a3b8">No services — click Discover</td></tr>';
+}
+
+async function renderDAG() {
+  const name = document.getElementById('dag-pl').value;
+  const container = document.getElementById('dag-container');
+  const detail = document.getElementById('dag-detail');
+  detail.style.display = 'none';
+  container.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8">Loading...</div>';
+
+  try {
+    const r = await fetch(API+'/pipeline/'+encodeURIComponent(name)+'/dag');
+    const data = await r.json();
+    if (data.error) { container.innerHTML = `<div style="text-align:center;padding:2rem;color:#f87171">${data.error}</div>`; return; }
+
+    const W = 800, H = 100 + data.nodes.length * 120;
+    const nodeW = 180, nodeH = 50, colW = 220, rowH = 100;
+    const offsetX = 40, offsetY = 30;
+
+    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/></marker></defs>`;
+
+    // Draw edges
+    data.edges.forEach(e => {
+      const si = data.nodes.findIndex(n => n.id === e.source);
+      const ti = data.nodes.findIndex(n => n.id === e.target);
+      if (si === -1 || ti === -1) return;
+      const x1 = offsetX + (si + 1) * colW - colW/2;
+      const y1 = offsetY + si * rowH + nodeH;
+      const x2 = offsetX + (ti + 1) * colW - colW/2;
+      const y2 = offsetY + ti * rowH;
+      svg += `<path d="M${x1},${y1} C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}" class="dag-edge"/>`;
+      const my = (y1+y2)/2;
+      svg += `<text x="${(x1+x2)/2}" y="${my-5}" class="dag-edge-label">${e.label}</text>`;
+    });
+
+    // Draw nodes
+    data.nodes.forEach((n, i) => {
+      const x = offsetX + (i + 1) * colW - nodeW/2;
+      const y = offsetY + i * rowH;
+      svg += `<rect x="${x}" y="${y}" width="${nodeW}" height="${nodeH}" class="dag-node" data-index="${n.index}" onclick="showStepDetail(${n.index})"/>`;
+      const label = n.label.length > 15 ? n.label.slice(0, 14)+'…' : n.label;
+      svg += `<text x="${x+nodeW/2}" y="${y+20}" class="dag-label">${label}</text>`;
+      const tool = n.tool.length > 18 ? n.tool.slice(0, 17)+'…' : n.tool;
+      svg += `<text x="${x+nodeW/2}" y="${y+38}" class="dag-tool">${tool}</text>`;
+    });
+
+    svg += '</svg>';
+    container.innerHTML = svg;
+  } catch(e) {
+    container.innerHTML = `<div style="text-align:center;padding:2rem;color:#f87171">Error: ${e.message}</div>`;
+  }
+}
+
+let dagData = null;
+
+async function showStepDetail(index) {
+  const name = document.getElementById('dag-pl').value;
+  const detail = document.getElementById('dag-detail');
+  const r = await fetch(API+'/pipeline/'+encodeURIComponent(name)+'/dag');
+  const data = await r.json();
+  dagData = data;
+  const step = data.nodes.find(n => n.index === index);
+  if (!step) return;
+  const deps = data.edges.filter(e => e.target === step.id).map(e => e.label).join(', ');
+  detail.style.display = 'block';
+  detail.innerHTML = `
+    <div><span class="key">Step:</span> <span class="val">#${step.index+1}</span></div>
+    <div><span class="key">Tool:</span> <span class="val">${step.tool}</span></div>
+    <div><span class="key">Output:</span> <span class="val">${step.label}</span></div>
+    <div><span class="key">Depends on:</span> <span class="val">${deps || '(none)'}</span></div>`;
 }
 
 async function discover() {
@@ -177,7 +284,23 @@ document.getElementById('reg-form').onsubmit = async e => {
 
 document.getElementById('pipeline-form').onsubmit = e => { e.preventDefault(); runPipeline('sequential'); };
 
+document.getElementById('inst-form').onsubmit = async e => {
+  e.preventDefault();
+  const o = document.getElementById('inst-output');
+  const svc = document.getElementById('inst-service').value;
+  const mcp = document.getElementById('inst-mcp').value;
+  o.textContent = 'Adding instance...';
+  const r = await fetch(API+'/instance', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({service: svc, mcp_endpoint: mcp})
+  });
+  const d = await r.json();
+  o.textContent = d.status === 'ok' ? `✅ Instance added: ${svc} → ${mcp}` : `❌ ${d.error}`;
+  refresh();
+};
+
 refresh(); setInterval(refresh, 5000);
+setTimeout(renderDAG, 1000);
 </script>
 </body>
 </html>

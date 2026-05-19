@@ -52,7 +52,7 @@ async def api_services():
             "name": s.name, "description": s.description,
             "circuit": s.circuit_state, "healthy": s.healthy,
             "failure_count": s.failure_count, "port": s.port,
-            "tags": s.tags,
+            "tags": s.tags, "instances": len(s.instances) + 1,
         }
         for s in registry.list_all()
     ]
@@ -71,6 +71,35 @@ async def api_health():
             for s in registry.list_all()
         },
     }
+
+
+@app.get("/api/pipeline/{name}/dag")
+async def api_pipeline_dag(name: str):
+    """Return pipeline dependency graph as node/edge data."""
+    steps = pipeline.get_pipeline(name)
+    if not steps:
+        return {"error": f"Pipeline not found: {name}"}
+    nodes = []
+    edges = []
+    for i, step in enumerate(steps):
+        node_id = f"step_{i}"
+        tool = step["tool"]
+        label = step.get("output_as", f"Step {i+1}")
+        deps = step.get("depends_on", [])
+        nodes.append({"id": node_id, "label": label, "tool": tool, "index": i})
+        for dep in deps:
+            # Find which step produces this dependency
+            for j, s in enumerate(steps):
+                if s.get("output_as") == dep:
+                    edges.append({"source": f"step_{j}", "target": node_id, "label": dep})
+                    break
+    return {"name": name, "nodes": nodes, "edges": edges}
+
+
+@app.get("/api/pipelines")
+async def api_pipelines():
+    """List all available pipeline names."""
+    return {"pipelines": pipeline.list_pipelines()}
 
 
 @app.post("/api/discover")
@@ -128,6 +157,17 @@ async def api_clear():
     for s in list(registry.list_all()):
         registry.unregister(s.name)
     return {"status": "cleared"}
+
+
+@app.post("/api/instance")
+async def api_add_instance(data: dict):
+    """Add a load-balanced instance to a service."""
+    svc_name = data.get("service", "")
+    mcp_endpoint = data.get("mcp_endpoint", "")
+    if not svc_name or not mcp_endpoint:
+        return {"status": "error", "error": "service and mcp_endpoint required"}
+    router._add_instance(svc_name, mcp_endpoint)
+    return {"status": "ok", "service": svc_name, "instance": mcp_endpoint}
 
 
 # ── CLI entry ──────────────────────────────────────────────────

@@ -1,0 +1,53 @@
+{
+  "events": [
+    {
+      "id": "evt_1779098576_b484d9",
+      "time": "2026-05-18T10:02:56Z",
+      "source": "kos",
+      "type": "index:done",
+      "payload": {
+        "docs": 8941
+      }
+    },
+    {
+      "id": "evt_1779098603_919d42",
+      "time": "2026-05-18T10:03:23Z",
+      "source": "kos",
+      "type": "index:done",
+      "payload": {
+        "docs": 8941
+      }
+    },
+    {
+      "id": "evt_1779098603_8c262e",
+      "time": "2026-05-18T10:03:23Z",
+      "source": "claude-code",
+      "type": "registry:tools.updated",
+      "payload": {
+        "added": [
+          "hermes",
+          "ima"
+        ]
+      }
+    },
+    {
+      "id": "evt_1779152160_8b0c62",
+      "time": "2026-05-19T00:56:00Z",
+      "source": "cli",
+      "type": "test:done",
+      "payload": {
+        "ok": true
+      }
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub_aaad76a8",
+      "service": "cli",
+      "pattern": "index:*",
+      "callback_url": "",
+      "created": "2026-05-18T10:03:24Z"
+    }
+  ],
+  "max_events": 1000
+}

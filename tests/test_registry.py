@@ -1,5 +1,13 @@
 """Tests for Agora service registry."""
+import tempfile
+from pathlib import Path
+
 from agora.registry import ServiceRegistry, Service
+
+
+def _new_registry():
+    """Create a fresh registry with temp storage (no persistence cross-contamination)."""
+    return ServiceRegistry(storage_path=str(Path(tempfile.mkdtemp()) / "test-services.json"))
 
 
 class TestService:
@@ -21,7 +29,7 @@ class TestService:
 
 class TestServiceRegistry:
     def test_register_and_get(self):
-        r = ServiceRegistry()
+        r = _new_registry()
         r.register(Service("minerva", port=8765))
         r.register(Service("sophia", port=9001))
         assert len(r.list_all()) == 2
@@ -29,7 +37,7 @@ class TestServiceRegistry:
         assert r.get("nonexistent") is None
 
     def test_list_healthy(self):
-        r = ServiceRegistry()
+        r = _new_registry()
         r.register(Service("minerva", port=8765))
         r.register(Service("sophia", port=9001))
         assert len(r.list_healthy()) == 2
@@ -37,7 +45,7 @@ class TestServiceRegistry:
         assert len(r.list_healthy()) == 1
 
     def test_mark_success_recovery(self):
-        r = ServiceRegistry()
+        r = _new_registry()
         r.register(Service("test"))
         r.mark_failure("test"); r.mark_failure("test"); r.mark_failure("test")
         assert not r.get("test").is_available
@@ -45,13 +53,13 @@ class TestServiceRegistry:
         assert r.get("test").is_available
 
     def test_unregister(self):
-        r = ServiceRegistry()
+        r = _new_registry()
         r.register(Service("test"))
         r.unregister("test")
         assert r.get("test") is None
 
     def test_to_dict(self):
-        r = ServiceRegistry()
+        r = _new_registry()
         r.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765"))
         d = r.to_dict()
         assert len(d) == 1

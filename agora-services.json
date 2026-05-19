@@ -1,0 +1,143 @@
+{
+  "services": [
+    {
+      "name": "minerva",
+      "description": "",
+      "mcp_endpoint": "http://192.0.2.1:8765",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "sophia",
+      "description": "",
+      "mcp_endpoint": "http://192.0.2.2:9001",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "ontoderive",
+      "description": "",
+      "mcp_endpoint": "stdio",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "//ontoderive:knowledge-engineering",
+        "derivation"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "agora",
+      "description": "",
+      "mcp_endpoint": "stdio",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "//agora:gateway",
+        "registry"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "bos-skill-cli",
+      "description": "Skill discovery and staged activation CLI",
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "skill",
+        "discovery",
+        "cli"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "kos",
+      "description": "",
+      "mcp_endpoint": "stdio",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "//kos-mcp:knowledge",
+        "search"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "bos-daemon",
+      "description": "Docker MCP service: sharedbrain-bos:dev",
+      "mcp_endpoint": "http://localhost:7420/mcp",
+      "health_endpoint": "http://localhost:7420/health",
+      "port": 7420,
+      "tags": [
+        "docker",
+        "mcp"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    },
+    {
+      "name": "bos",
+      "description": "Docker MCP service: bos",
+      "mcp_endpoint": "http://localhost:7420/mcp",
+      "health_endpoint": "http://localhost:7420/health",
+      "port": 7420,
+      "tags": [
+        "docker",
+        "mcp"
+      ],
+      "instances": [],
+      "healthy": true,
+      "last_health_check": 0.0,
+      "failure_count": 0,
+      "cooldown_until": 0.0,
+      "half_open": false,
+      "consecutive_successes": 0
+    }
+  ]
+}

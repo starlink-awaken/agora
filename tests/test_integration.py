@@ -1,11 +1,7 @@
-"""Integration tests: Agora routing to Minerva + Sophia.
+"""Integration tests: Agora routing to Minerva + Sophia."""
 
-Verifies that Agora can:
-1. Register Minerva and Sophia as services
-2. Route paradigm compilation to Sophia
-3. Route knowledge search to Minerva
-4. Handle unavailable services gracefully
-"""
+import tempfile
+from pathlib import Path
 
 import pytest
 from agora.registry import ServiceRegistry, Service
@@ -16,7 +12,9 @@ class TestAgoraIntegration:
     """End-to-end routing tests with real Minerva + Sophia."""
 
     def setup_method(self):
-        self.registry = ServiceRegistry()
+        self.registry = ServiceRegistry(
+            storage_path=str(Path(tempfile.mkdtemp()) / "test-services.json")
+        )
         self.router = Router(self.registry)
 
     def test_register_all_services(self):

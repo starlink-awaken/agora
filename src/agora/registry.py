@@ -7,6 +7,7 @@ import ipaddress
 import json
 import socket
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlparse
@@ -50,6 +51,8 @@ class Service:
     health_endpoint: str = ""    # GET /health endpoint
     port: int = 0
     tags: list[str] = field(default_factory=list)
+    # Load-balanced instances (Phase 3)
+    instances: list[dict] = field(default_factory=list)
     # Runtime state
     healthy: bool = True
     last_health_check: float = 0.0
@@ -90,6 +93,7 @@ class ServiceRegistry:
 
     Services register themselves (or are configured statically).
     The registry is the only place that knows the full topology.
+    Supports health alert firing via optional EventBus callback.
     """
 
     _MAX_SERVICES = 50
@@ -98,12 +102,14 @@ class ServiceRegistry:
 
     def __init__(self, storage_path: str | None = None,
                  cb_max_failures: int = 3, cb_cooldown: float = 60.0,
-                 cb_success_threshold: int = 2):
+                 cb_success_threshold: int = 2,
+                 alert_callback: Callable | None = None):
         self._services: dict[str, Service] = {}
         self._last_health_check: float = 0.0
         self._cb_max_failures = cb_max_failures
         self._cb_cooldown = cb_cooldown
         self._cb_success_threshold = cb_success_threshold
+        self._alert_callback = alert_callback
         self._storage_path = storage_path or str(
             Path(__file__).parent.parent.parent / "agora-services.json"
         )
@@ -156,6 +162,7 @@ class ServiceRegistry:
     def mark_failure(self, name: str):
         svc = self._services.get(name)
         if svc:
+            prev_state = svc.circuit_state
             svc.failure_count += 1
             if svc.half_open:
                 # Failed during half-open test → re-open circuit
@@ -163,9 +170,13 @@ class ServiceRegistry:
                 svc.half_open = False
                 svc.consecutive_successes = 0
                 svc.cooldown_until = time.monotonic() + (self._cb_cooldown * 2)
+                if self._alert_callback:
+                    self._alert_callback(name, prev_state, "OPEN (HALF_OPEN→OPEN)", svc.failure_count)
             elif svc.failure_count >= self._cb_max_failures:
                 svc.cooldown_until = time.monotonic() + self._cb_cooldown
                 svc.healthy = False
+                if self._alert_callback and prev_state != "OPEN":
+                    self._alert_callback(name, prev_state, "OPEN", svc.failure_count)
 
     def mark_success(self, name: str):
         svc = self._services.get(name)

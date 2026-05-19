@@ -29,6 +29,36 @@ def build_parser() -> argparse.ArgumentParser:
     d.add_argument("--register", action="store_true", help="Auto-register discovered services")
     d.add_argument("--json", action="store_true", help="JSON output")
     d.add_argument("--workspace", default="", help="Workspace root path")
+    d.add_argument("--probe", action="store_true", help="Enable port probing (async, slow)")
+
+    # instance
+    inst = sub.add_parser("instance", help="Load-balanced instance operations")
+    inst_sub = inst.add_subparsers(dest="instance_cmd")
+    inst_add = inst_sub.add_parser("add", help="Add an instance for load balancing")
+    inst_add.add_argument("service", help="Service name")
+    inst_add.add_argument("--mcp", required=True, help="MCP endpoint URL")
+    inst_add.add_argument("--health", default="", help="Health check URL")
+    inst_add.add_argument("--port", type=int, default=0)
+
+    # tenant
+    ten = sub.add_parser("tenant", help="Multi-tenant management")
+    ten_sub = ten.add_subparsers(dest="tenant_cmd")
+    ten_list = ten_sub.add_parser("list", help="List all tenants")
+    ten_add = ten_sub.add_parser("add", help="Add a tenant")
+    ten_add.add_argument("name", help="Tenant name")
+    ten_add.add_argument("--services", default="", help="Comma-separated allowed services")
+    ten_add.add_argument("--rate-limit", type=int, default=60, help="Requests per minute")
+    ten_rm = ten_sub.add_parser("remove", help="Remove a tenant")
+    ten_rm.add_argument("name", help="Tenant name")
+
+    # market
+    mkt = sub.add_parser("market", help="MCP tool marketplace")
+    mkt_sub = mkt.add_subparsers(dest="market_cmd")
+    mkt_list = mkt_sub.add_parser("list", help="List available MCP services")
+    mkt_search = mkt_sub.add_parser("search", help="Search MCP services")
+    mkt_search.add_argument("keyword", help="Search keyword")
+    mkt_install = mkt_sub.add_parser("install", help="Install an MCP service")
+    mkt_install.add_argument("name", help="Service name or GitHub repo (e.g. filesystem, starlink-awaken/minerva)")
 
     # search
     s = sub.add_parser("search", help="Search services by keyword")
@@ -104,7 +134,14 @@ def _cmd_discover(args) -> int:
 
     workspace = args.workspace or None
     engine = DiscoveryEngine(workspace)
-    services = engine.discover_all()
+
+    if args.probe:
+        import asyncio
+        services = asyncio.run(engine.discover_all_async())
+        print(f"🔍 Discovered {len(services)} MCP-capable services (incl. port probe):\n")
+    else:
+        services = engine.discover_all()
+        print(f"🔍 Discovered {len(services)} MCP-capable services (strategies: known + pyproject + compose):\n")
 
     if args.register:
         from agora.registry import ServiceRegistry
@@ -255,6 +292,60 @@ def main():
 
     if args.command == "stats":
         return _cmd_stats(args)
+
+    if args.command == "instance":
+        from agora.registry import ServiceRegistry
+        from agora.router import Router
+        registry = ServiceRegistry()
+        router = Router(registry)
+        if args.instance_cmd == "add":
+            router._add_instance(args.service, args.mcp, args.health, args.port)
+            print(f"✅ Instance added: {args.service} → {args.mcp}")
+        return 0
+
+    if args.command == "tenant":
+        from agora.tenant import TenantManager
+        tm = TenantManager()
+        if args.tenant_cmd == "list":
+            print("📋 Tenants:\n")
+            for t in tm.list_tenants():
+                svcs = ', '.join(t['services']) if t['services'] else '(all)'
+                print(f"  👤 {t['name']:20s}  rate: {t['rate_limit']:4d} req/min  services: {svcs}")
+        elif args.tenant_cmd == "add":
+            services = [s.strip() for s in args.services.split(",") if s.strip()]
+            token = tm.add_tenant(args.name, services, args.rate_limit)
+            print(f"✅ Tenant '{args.name}' created")
+            print(f"   Token: {token}")
+        elif args.tenant_cmd == "remove":
+            ok = tm.remove_tenant(args.name)
+            print(f"{'✅' if ok else '❌'} Tenant '{args.name}' {'removed' if ok else 'not found'}")
+        return 0
+
+    if args.command == "market":
+        from agora.market import Market
+        mkt = Market()
+        if args.market_cmd == "list":
+            print("📦 MCP Tool Market\n")
+            for s in mkt.list_all():
+                print(f"  {s['name']:20s}  {s['description'][:60]}")
+                print(f"  {'':20s}  repo: {s['repo']:30s}  type: {s['type']}")
+                print()
+        elif args.market_cmd == "search":
+            results = mkt.search(args.keyword)
+            print(f"🔍 '{args.keyword}' → {len(results)} results:\n")
+            for s in results:
+                print(f"  📦 {s['name']:20s}  {s['description']}")
+                print(f"  {'':20s}  repo: {s['repo']}  tags: {', '.join(s['tags'])}")
+                print()
+        elif args.market_cmd == "install":
+            print(f"⬇️  Installing {args.name}...")
+            result = mkt.install(args.name)
+            print(f"✅ {result['name']} installed")
+            print(f"   Entry: {result['entry']}")
+            print(f"   Type:  {result['type']}")
+            if result.get("port"):
+                print(f"   Port:  {result['port']}")
+        return 0
 
     from agora.registry import Service, ServiceRegistry
     from agora.router import Router
