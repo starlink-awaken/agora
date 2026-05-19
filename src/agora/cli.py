@@ -28,6 +28,8 @@ def build_parser() -> argparse.ArgumentParser:
     d = sub.add_parser("discover", help="Auto-discover MCP services in workspace")
     d.add_argument("--register", action="store_true", help="Auto-register discovered services")
     d.add_argument("--json", action="store_true", help="JSON output")
+    d.add_argument("--watch", action="store_true", help="Watch mode: continuous discovery")
+    d.add_argument("--interval", type=int, default=30, help="Watch interval in seconds (default: 30)")
     d.add_argument("--workspace", default="", help="Workspace root path")
     d.add_argument("--probe", action="store_true", help="Enable port probing (async, slow)")
 
@@ -59,6 +61,12 @@ def build_parser() -> argparse.ArgumentParser:
     mkt_search.add_argument("keyword", help="Search keyword")
     mkt_install = mkt_sub.add_parser("install", help="Install an MCP service")
     mkt_install.add_argument("name", help="Service name or GitHub repo (e.g. filesystem, starlink-awaken/minerva)")
+    mkt_pub = mkt_sub.add_parser("publish", help="Publish a service to the market")
+    mkt_pub.add_argument("name", help="Service name")
+    mkt_pub.add_argument("--repo", default="", help="GitHub repo (e.g. starlink-awaken/my-service)")
+    mkt_pub.add_argument("--description", default="", help="Service description")
+    mkt_pub.add_argument("--entry", default="server.py", help="Entry point file")
+    mkt_pub.add_argument("--type", default="python", help="Service type (python|node)")
 
     # search
     s = sub.add_parser("search", help="Search services by keyword")
@@ -134,6 +142,19 @@ def _cmd_discover(args) -> int:
 
     workspace = args.workspace or None
     engine = DiscoveryEngine(workspace)
+
+    if args.watch:
+        import asyncio
+        from agora.registry import ServiceRegistry
+        registry = ServiceRegistry()
+        async def _watch():
+            async for svc in engine.watch(registry, args.interval):
+                pass
+        try:
+            asyncio.run(_watch())
+        except KeyboardInterrupt:
+            pass
+        return 0
 
     if args.probe:
         import asyncio

@@ -326,6 +326,24 @@ class DiscoveryEngine:
 
         return sorted(all_found.values(), key=lambda s: s.confidence, reverse=True)
 
+    async def watch(self, registry: "ServiceRegistry", interval: int = 30):
+        """Watch for new services continuously. Yields discovery events."""
+        import asyncio as _asyncio
+        print(f"👁️  Watching for new services (interval: {interval}s). Ctrl+C to stop.")
+        seen = {s.name for s in registry.list_all()}
+        try:
+            while True:
+                await _asyncio.sleep(interval)
+                count = self.auto_register(registry)
+                if count > 0:
+                    new = [s for s in registry.list_all() if s.name not in seen]
+                    for s in new:
+                        print(f"  🆕 Discovered: {s.name} ({s.mcp_endpoint or 'no endpoint'})")
+                        yield s
+                    seen = {s.name for s in registry.list_all()}
+        except asyncio.CancelledError:
+            print("\n👁️  Watch stopped.")
+
     def auto_register(self, registry: "ServiceRegistry") -> int:
         """Discover and auto-register new services. Returns count registered."""
         from agora.registry import Service

@@ -203,6 +203,45 @@ class Market:
             pass
         return {"name": repo.split("/")[-1], "description": "", "type": "python", "entry": "server.py", "tags": []}
 
+    def publish(self, name: str, repo: str, description: str = "",
+                entry: str = "server.py", svc_type: str = "python",
+                tags: list[str] | None = None) -> dict:
+        """Publish an MCP service to the market.
+
+        Returns metadata for registration.
+        """
+        entry_data = {
+            "name": name,
+            "description": description or f"MCP service: {name}",
+            "repo": repo,
+            "type": svc_type,
+            "entry": entry,
+            "tags": tags or [],
+            "port": 0,
+        }
+        # Persist to local market registry
+        market_path = self.INSTALL_DIR / "published.json"
+        market_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            existing = {}
+            if market_path.exists():
+                existing = json.loads(market_path.read_text())
+            existing[name] = entry_data
+            market_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
+        except Exception:
+            pass
+        return entry_data
+
+    def _load_published(self) -> dict:
+        """Load all published services from local registry."""
+        market_path = self.INSTALL_DIR / "published.json"
+        try:
+            if market_path.exists():
+                return json.loads(market_path.read_text())
+        except Exception:
+            pass
+        return {}
+
     @staticmethod
     def _run_cmd(cmd: list[str], cwd: str | None = None):
         """Run a shell command, raise on failure."""
