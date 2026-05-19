@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agora": {
+      "command": "agora",
+      "args": ["mcp"],
+      "description": "Agora MCP Service Hub — registry, routing, pipeline orchestration, event bus"
+    }
+  }
+}
