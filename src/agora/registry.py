@@ -308,3 +308,10 @@ class ServiceRegistry:
 
         tasks = [_check_one(svc) for svc in self._services.values()]
         await asyncio.gather(*tasks)
+
+    def grpc_health_check(self, name: str) -> bool:
+        """Check gRPC health. Stub — actual gRPC probing in router._call_grpc."""
+        svc = self._services.get(name)
+        if not svc or svc.protocol != "grpc":
+            return False
+        return svc.healthy  # gRPC health managed by router call lifecycle

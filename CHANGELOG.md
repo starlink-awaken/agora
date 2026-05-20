@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.4.0] — 2026-05-20
+
+### Added
+- **gRPC handler**: `_call_grpc()` stub with proto/config guidance
+- **REST handler enhancement**: PUT/DELETE/PATCH + auto-retry (GET/HEAD, max 2)
+- **WebSocket handler**: `_call_ws()` stub for ws/wss endpoints
+- **HTTP connection pool**: module-level httpx.AsyncClient singleton (`_get_client`)
+- **Dashboard WebSocket**: `/ws` endpoint with real-time push (2s interval)
+- **Service topology SVG**: Hub-Spoke visualization + protocol color coding
+- **CLI register**: `--proto` (gRPC proto path) + `--rest-method` (REST method)
+
+### Changed
+- Router._dispatch: grpc/websocket/stdio call specific handlers
+- Dashboard: WebSocket real-time updates with polling fallback
+- Registry: grpc_health_check() stub for gRPC services
+
+### Fixed
+- Unknown protocol dispatch test (registry pre-validation bypass)
+- atexit registration deduplication
+- Connection pool cleanup via FastAPI shutdown
+
+### Test Coverage
+- **203 tests** (↑ from 84) — 119 new: _call_mcp SSRF/httpx/retry, _call_rest POST/retry/SSRF, pipeline run_stream/run_parallel, MCP proxy tools, _trace flush, _maybe_publish, close cleanup, get_percentiles
+
 ## [1.3.0] — 2026-05-20
 
 ### Added

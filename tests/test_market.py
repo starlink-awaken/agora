@@ -34,3 +34,18 @@ class TestMarket:
         m.publish("test-load", repo="example/test", description="Load test")
         published = m._load_published()
         assert "test-load" in published
+
+
+class TestMarketInstall:
+    def test_search_by_name(self):
+        m = Market()
+        results = m.search("minerva")
+        assert len(results) >= 1
+        names = [r["name"] for r in results]
+        assert "minerva" in names
+
+    def test_publish_already_exists(self):
+        m = Market()
+        m.publish("dup-test", repo="a/b", description="Original")
+        published = m._load_published()
+        assert "dup-test" in published

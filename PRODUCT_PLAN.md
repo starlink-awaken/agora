@@ -1,6 +1,6 @@
 # Agora — MCP 服务注册中心 · 产品规划
 
-> v1.3 定位：API Gateway for AI Agents · 多协议 MCP 服务市场
+> v1.4 定位：API Gateway for AI Agents · 多协议 Handler + 连接池 + Dashboard 实时推送
 > 核心理念：Hub-Spoke 收敛 N²→N，零代码级耦合
 
 ---
@@ -13,7 +13,7 @@ Agora 是 Workspace 智能体生态的中央枢纽。任何 MCP 服务注册后�
 
 ---
 
-## 当前架构 (v1.3.0)
+## 当前架构 (v1.4.0)
 
 ```
                     ┌──────────────────────────┐
@@ -148,18 +148,18 @@ agora market search "知识图谱"                           # 搜索市场
 
 ## 产品指标
 
-| 指标 | v1.2 | v1.3 (当前) | v2.0 |
-|------|------|-------------|------|
-| 注册服务数 | 4 | ∞ (auto + multi-protocol) | ∞ |
-| 服务发现方式 | 手动 CLI + 4策略自动 | ✅ 自动扫描 + 识别协议 | 市场安装 |
-| Pipeline 类型 | 4 条预定义 | ✅ 自定义 + DAG 可视化 | 拖拽编排 |
-| 高可用 | 心跳监控 | ✅ 熔断器(三态) + webhook告警 | 多实例LB |
-| 管理界面 | CLI only | ✅ Web Dashboard (glassmorphism) | 拖拽编排 |
-| 多协议 | MCP only | ✅ MCP + REST (完整) + gRPC/WS (预留) | 全协议完善 |
-| 多租户 | 无 | ✅ API Token + 速率限制 | 团队协作 |
-| 工具市场 | 无 | ✅ 18个内置 + GitHub安装 | 社区贡献 |
-| MCP Tools | 9 | ✅ 14 (5 proxy + 3 registry + 3 route + 3 event) | 20+ |
-| 测试 | 61 | ✅ 84 | 100+ |
+| 指标 | v1.2 | v1.3 | v1.4 (当前) | v2.0 |
+|------|------|------|------------|------|
+| 注册服务数 | 4 | ∞ (auto + multi-protocol) | ∞ | ∞ |
+| 服务发现方式 | 手动 CLI + 4策略自动 | ✅ 自动扫描 + 识别协议 | ✅ 自动扫描 + 识别协议 | 市场安装 |
+| Pipeline 类型 | 4 条预定义 | ✅ 自定义 + DAG 可视化 | ✅ 自定义 + DAG 可视化 | 拖拽编排 |
+| 高可用 | 心跳监控 | ✅ 熔断器(三态) + webhook告警 | ✅ 熔断器 + 连接池复用 | 多实例LB |
+| 管理界面 | CLI only | ✅ Web Dashboard (glassmorphism) | ✅ Dashboard + WebSocket 实时推送 + 拓扑图 | 拖拽编排 |
+| 多协议 | MCP only | ✅ MCP + REST (完整) + gRPC/WS (预留) | ✅ MCP + REST (GET/POST/PUT/DELETE/PATCH + retry) + gRPC/WS/stdio (handler stubs) | 全协议完善 |
+| 多租户 | 无 | ✅ API Token + 速率限制 | ✅ API Token + 速率限制 | 团队协作 |
+| 工具市场 | 无 | ✅ 18个内置 + GitHub安装 | ✅ 18个内置 + GitHub安装 | 社区贡献 |
+| MCP Tools | 9 | ✅ 14 (5 proxy + 3 registry + 3 route + 3 event) | ✅ 14 | 20+ |
+| 测试 | 61 | ✅ 84 | ✅ 203 | 200+ |
 
 ---
 

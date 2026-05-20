@@ -66,8 +66,9 @@ agora mcp             # start MCP server
 | Phase | Version | Focus | Timeline |
 |-------|---------|-------|----------|
 | Phase 1 | v1.2 | Core convergence: registry + router + health + MCP (14 tools) | ✅ Done |
-| Phase 2 | v1.3 | Multi-protocol + proxy + REST handler + event bus + dashboard v3 | ✅ Current |
-| Phase 3 | v2.0 | REST full impl + gRPC + Governance: rate limiting + quotas + dependency graph | 1-2 months |
+| Phase 2 | v1.3 | Multi-protocol + proxy + REST handler + event bus + dashboard v3 | ✅ Done |
+| Phase 3 | v1.4 | gRPC/WS/stdio handlers + connection pool + WebSocket push + topology SVG | ✅ Current |
+| Phase 4 | v2.0 | REST full impl + gRPC + Governance: rate limiting + quotas + dependency graph | 1-2 months |
 
 ### Installation
 
@@ -157,8 +158,9 @@ agora mcp             # 启动 MCP server
 | 阶段 | 版本 | 重点 | 时间 |
 |------|------|------|------|
 | Phase 1 | v1.2 | 核心收敛：注册表 + 路由 + 健康检查 + MCP (14 tools) | ✅ 完成 |
-| Phase 2 | v1.3 | 多协议 + Proxy + REST 处理 + 事件总线 + Dashboard v3 | ✅ 当前 |
-| Phase 3 | v2.0 | REST/gRPC 完善 + 治理：速率限制 + 配额 + 依赖图 | 1-2 月 |
+| Phase 2 | v1.3 | 多协议 + Proxy + REST 处理 + 事件总线 + Dashboard v3 | ✅ 完成 |
+| Phase 3 | v1.4 | gRPC/WS/stdio handlers + 连接池 + WebSocket 推送 + 拓扑图 | ✅ 当前 |
+| Phase 4 | v2.0 | REST/gRPC 完善 + 治理：速率限制 + 配额 + 依赖图 | 1-2 月 |
 
 ### 许可证
 

@@ -8,15 +8,17 @@ Features:
 - Quick actions (discover, health check, register)
 - Pipeline runner
 - JSON API for programmatic access
+- WebSocket real-time push (/ws)
 """
 
 from __future__ import annotations
 
+import asyncio
 import os
 import time
 from pathlib import Path
 
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form, Request, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from prometheus_client import REGISTRY, Gauge, generate_latest
@@ -40,7 +42,7 @@ async def _auth_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-app = FastAPI(title="Agora Dashboard", version="1.3.0")
+app = FastAPI(title="Agora Dashboard", version="1.4.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"],
@@ -54,6 +56,13 @@ _bus = EventBus(registry=registry)
 router = Router(registry, event_bus=_bus)
 discovery = DiscoveryEngine()
 pipeline = Pipeline(registry, router)
+
+
+@app.on_event("shutdown")
+async def _shutdown():
+    """Clean up connection pool on server shutdown."""
+    await router.close()
+
 
 def _get_dashboard_html() -> str:
     """Lazy-load dashboard HTML to avoid import-time crash if file missing."""
@@ -73,6 +82,31 @@ _METRIC_SVC_DEGRADED = Gauge("agora_services_degraded", "Degraded/offline servic
 @app.get("/", response_class=HTMLResponse)
 def dashboard():
     return _get_dashboard_html()
+
+
+# ── WebSocket ──────────────────────────────────────────────────
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            svcs = registry.list_all()
+            data = {
+                "services": [
+                    {
+                        "name": s.name, "circuit": s.circuit_state, "healthy": s.healthy,
+                        "failure_count": s.failure_count, "protocol": s.protocol,
+                    }
+                    for s in svcs
+                ],
+                "healthy": len(registry.list_healthy()),
+                "total": len(svcs),
+            }
+            await websocket.send_json(data)
+            await asyncio.sleep(2)
+    except Exception:
+        pass
 
 
 # ── API ────────────────────────────────────────────────────────

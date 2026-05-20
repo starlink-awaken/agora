@@ -24,6 +24,10 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--health", default="", help="Health check URL")
     r.add_argument("--port", type=int, default=0)
     r.add_argument("--tags", default="")
+    r.add_argument("--proto", default="", help="gRPC proto file path")
+    r.add_argument("--rest-method", default=None,
+                   choices=["GET", "POST", "PUT", "DELETE", "PATCH"],
+                   help="REST API method (default: GET)")
 
     # list
     sub.add_parser("list", help="List all services")
@@ -398,6 +402,13 @@ def main():
         if err:
             print(f"Error: --protocol-config is not valid JSON: {err}")
             return
+        # Merge CLI-specific proto/rest-method into protocol_config
+        if args.proto:
+            proto_cfg["proto_path"] = args.proto
+        if args.rest_method is not None:
+            proto_cfg["method"] = args.rest_method
+        elif "method" not in proto_cfg:
+            proto_cfg["method"] = "GET"
         svc = Service(name=args.name, protocol=args.protocol, protocol_config=proto_cfg,
                       mcp_endpoint=args.mcp, health_endpoint=args.health,
                       port=args.port, tags=_parse_tags(args.tags))

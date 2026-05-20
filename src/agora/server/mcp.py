@@ -334,5 +334,27 @@ def main():
     mcp.run()
 
 
+def http_main():
+    """Start the Agora MCP server in HTTP mode with proxy initialization."""
+    import asyncio
+
+    async def _start():
+        services = _load_proxy_services()
+        if services:
+            global _proxy_manager
+            _proxy_manager = ProxyManager()
+            results = await _proxy_manager.start(services)
+            for name, client in _proxy_manager.registry._clients.items():
+                svc = registry.get(name)
+                if svc:
+                    svc.healthy = client.connected
+                    svc.mcp_endpoint = f"proxy:{name}"
+            registry._save()
+            print(f"Proxy connected: {json.dumps(results, indent=2)}")
+        await mcp.run_http_async(host="127.0.0.1", port=7422)
+
+    asyncio.run(_start())
+
+
 if __name__ == "__main__":
-    main()
+    http_main()

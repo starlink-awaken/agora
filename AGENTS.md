@@ -7,7 +7,7 @@
 ## 项目身份
 
 - **名称**: Agora — MCP Service Convergence Hub
-- **版本**: 1.3.0 (Beta)
+- **版本**: 1.4.0 (Beta)
 - **定位**: API Gateway for AI Agents · Hub-Spoke 拓扑
 - **Python**: >= 3.11
 - **安装**: `pip install -e "."`
@@ -29,16 +29,15 @@
 
 | 文件 | 行数 | 核心类/函数 |
 |------|------|-----------|
-| `registry.py` | 271 | `Service`, `ServiceRegistry`, `_is_safe_url` |
-| `router.py` | 201 | `Router`, `_maybe_publish`, `get_percentiles` |
+| `registry.py` | 271+ | `Service`, `ServiceRegistry`, `_is_safe_url`, `grpc_health_check` |
+| `router.py` | 335 | `Router`, `_call_mcp/_call_rest/_call_grpc/_call_ws`, `_get_client`, `close` |
 | `event_bus.py` | 163 | `EventBus`, `Subscription` |
 | `pipeline.py` | 256 | `Pipeline`, `run/run_stream/run_parallel` |
 | `discovery.py` | 367 | `DiscoveryEngine`, `DiscoveredService` |
 | `market.py` | 241 | `Market` |
-| `cli.py` | 556 | `main`, 20 顶级命令 + 12 子命令 |
-| `server/mcp.py` | 230+ | 14 MCP 工具 (5 proxy + 3 registry + 3 route + 3 event) |
-| `web/app.py` | 221 | 16 REST 端点 (含 /metrics/history + event-log/publish) |
-| `registry.py` | 290+ | `KNOWN_PROTOCOLS`, `_parse_tags`, `_parse_protocol_config` |
+| `cli.py` | 595 | `main`, 20 顶级命令 + 12 子命令 (含 --proto/--rest-method) |
+| `server/mcp.py` | 338 | 14 MCP 工具 (5 proxy + 3 registry + 3 route + 3 event) |
+| `web/app.py` | 293 | 16 REST 端点 + WebSocket /ws 推送 + 拓扑图 SVG |
 | `wizard.py` | 67 | `run_wizard` |
 
 ---
@@ -70,7 +69,7 @@ agora discover     # 服务发现
 
 ## 当前状态
 
-- **测试**: 61 passed, 0 failed
+- **测试**: 203 passed, 0 failed
 - **ruff**: 0 errors
-- **覆盖率**: ~28%
+- **覆盖率**: 61%
 - **文档**: README + QUICKSTART + INSTALL + PRODUCT_PLAN + INFRA_PLAN + API_REFERENCE + USER_GUIDE

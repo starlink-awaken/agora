@@ -14,6 +14,8 @@ agora register <name>                    # 注册服务
   --health <url>                          # 健康检查地址
   --port <port>                           # 服务端口
   --tags "tag1,tag2"                      # 标签
+  --proto <path>                          # gRPC proto 文件路径
+  --rest-method GET|POST|PUT|DELETE|PATCH # REST 请求方法
 
 agora list                               # 列出所有服务及健康状态
 agora health                             # 主动探测所有服务健康

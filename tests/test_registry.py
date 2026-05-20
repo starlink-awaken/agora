@@ -168,3 +168,58 @@ class TestServiceRegistry:
         count = r.clear_all()
         assert count == 0
         assert r.list_all() == []
+
+
+class TestGrpcHealthCheck:
+    def test_grpc_returns_healthy(self):
+        """gRPC protocol service returns True from grpc_health_check."""
+        r = _new_registry()
+        svc = Service("grpc-svc", protocol="grpc", mcp_endpoint="http://192.0.2.1:50051")
+        r.register(svc)
+        assert r.grpc_health_check("grpc-svc") is True
+
+    def test_non_grpc_returns_false(self):
+        """Non-gRPC service returns False from grpc_health_check."""
+        r = _new_registry()
+        r.register(Service("rest-svc", protocol="rest", mcp_endpoint="http://192.0.2.1:3000"))
+        assert r.grpc_health_check("rest-svc") is False
+
+    def test_nonexistent_returns_false(self):
+        """Nonexistent service returns False from grpc_health_check."""
+        r = _new_registry()
+        assert r.grpc_health_check("nonexistent") is False
+
+    def test_grpc_health_check_unhealthy(self):
+        """gRPC service marked unhealthy returns False."""
+        r = _new_registry()
+        svc = Service("grpc-svc", protocol="grpc", mcp_endpoint="http://192.0.2.1:50051")
+        r.register(svc)
+        svc.healthy = False
+        assert r.grpc_health_check("grpc-svc") is False
+
+
+class TestCircuitStatus:
+    def test_get_circuit_status(self):
+        """Circuit status returns detailed breaker state."""
+        r = _new_registry()
+        r.register(Service("minerva", port=8765))
+        status = r.get_circuit_status("minerva")
+        assert status["name"] == "minerva"
+        assert status["state"] == "CLOSED"
+        assert status["healthy"] is True
+        assert status["failure_count"] == 0
+
+    def test_get_circuit_status_nonexistent(self):
+        """Circuit status for unknown service returns empty dict."""
+        r = _new_registry()
+        assert r.get_circuit_status("ghost") == {}
+
+    def test_get_circuit_status_open(self):
+        """Circuit status shows OPEN after tripping breaker."""
+        r = _new_registry()
+        r.register(Service("test"))
+        for _ in range(3):
+            r.mark_failure("test")
+        status = r.get_circuit_status("test")
+        assert status["state"] == "OPEN"
+        assert status["failure_count"] == 3

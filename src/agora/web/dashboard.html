@@ -144,6 +144,16 @@ textarea.mono-input:focus{outline:none;border-color:var(--border-active)}
 .form-inline-2 .form-group{flex:1;min-width:0}
 
 @media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.topology-container{display:flex;justify-content:center;align-items:center;padding:0.5rem 0}
+#topology-svg line{stroke:rgba(255,255,255,0.08);stroke-width:1.5}
+#topology-svg circle.hub{fill:var(--bg);stroke:var(--accent);stroke-width:3}
+#topology-svg text.hub-label{fill:var(--text-bright);font-size:14px;font-weight:600;text-anchor:middle}
+#topology-svg circle.spoke{stroke-width:2;fill:var(--bg)}
+#topology-svg circle.spoke.unhealthy{stroke-dasharray:4 3}
+#topology-svg text.spoke-label{fill:var(--text);font-size:10px;text-anchor:middle}
+.topology-legend{display:flex;gap:1rem;justify-content:center;margin-top:0.5rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:0.3rem;font-size:0.7rem;color:var(--text-dim)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
 </style>
 </head>
 <body>
@@ -152,7 +162,7 @@ textarea.mono-input:focus{outline:none;border-color:var(--border-active)}
   <div class="brand">
     <div class="logo">🏛</div>
     <h1>Agora 服务中心</h1>
-    <span class="version">v1.3</span>
+    <span class="version">v1.4</span>
   </div>
   <div class="stats-bar">
     <div class="stat-item"><span class="stat-dot ok"></span> 已注册 <span class="stat-value" id="svc-total">-</span></div>
@@ -232,6 +242,26 @@ textarea.mono-input:focus{outline:none;border-color:var(--border-active)}
       </div>
     </div>
     <button class="btn-primary" onclick="registerSvc()" style="width:100%">注册</button>
+  </div>
+</div>
+
+<!-- 服务拓扑图 -->
+<div class="card" style="grid-column:1/-1">
+  <div class="card-header">
+    <h2>🔗 服务拓扑</h2>
+    <span class="card-badge live" id="topo-badge">0 spokes</span>
+  </div>
+  <div class="topology-container">
+    <svg id="topology-svg" viewBox="-400 -300 800 600" style="width:100%;max-height:450px">
+      <!-- Hub-Spoke 在这里动态渲染 -->
+    </svg>
+  </div>
+  <div class="topology-legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>MCP</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--success)"></span>REST</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--warning)"></span>gRPC</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>stdio</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--danger)"></span>WS</span>
   </div>
 </div>
 
@@ -334,6 +364,7 @@ async function refresh(){
         </tr>`;
       }).join('');
     }
+    renderTopology(allServices);
   }catch(e){}
 }
 
@@ -513,8 +544,111 @@ async function publishEvent(){
 
 refresh();
 loadEvents();
-setInterval(refresh, 5000);
+let wsTimer = setInterval(refresh, 5000);
 setInterval(loadEvents, 10000);
+
+/* ── WebSocket 实时推送 ─────────────────────────────────── */
+const WS_URL = 'ws://localhost:7430/ws';
+let ws = null;
+let wsReconnectTimer = null;
+
+function connectWS(){
+  if(ws && (ws.readyState===WebSocket.OPEN||ws.readyState===WebSocket.CONNECTING)) return;
+  try{
+    ws = new WebSocket(WS_URL);
+    ws.onopen = ()=>{
+      if(wsTimer){clearInterval(wsTimer);wsTimer=null}  // WS通了就停轮询
+    };
+    ws.onmessage = (e)=>{
+      try{
+        const data = JSON.parse(e.data);
+        const snapshot = JSON.stringify(data.services);
+        if(snapshot === _lastServices) return;
+        _lastServices = snapshot;
+        allServices = data.services;
+        renderDashboard(data);
+      }catch(_){}
+    };
+    ws.onclose = ()=>{
+      ws = null;
+      if(!wsTimer) wsTimer = setInterval(refresh, 5000);  // 断线恢复轮询
+      if(wsReconnectTimer) clearTimeout(wsReconnectTimer);
+      wsReconnectTimer = setTimeout(connectWS, 3000);       // 3s重连
+    };
+    ws.onerror = ()=>{ws && ws.close()};
+  }catch(_){}
+}
+
+/* 从WS数据渲染仪表盘（复用refresh逻辑的子集） */
+function renderDashboard(data){
+  const healthy = data.healthy;
+  const total = data.total;
+  document.getElementById('svc-total').textContent = total;
+  document.getElementById('svc-healthy').textContent = healthy;
+  document.getElementById('refresh-time').textContent = new Date().toLocaleTimeString('zh-CN');
+
+  const badge = document.getElementById('svc-live-badge');
+  if(total===0){badge.textContent='空';badge.className='card-badge'}
+  else{badge.textContent= healthy===total ? '运行中' : `${healthy}/${total}`;badge.className='card-badge live'}
+
+  const tbody = document.getElementById('svc-table');
+  if(total===0){
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📡</div>暂无服务 — 点击「发现服务」</div></td></tr>';
+  }else{
+    tbody.innerHTML = data.services.map(s=>{
+      const tags = (s.tags||[]).filter(t=>t).map(t=>`<span class="tag">${t}</span>`).join('') || '<span class="text-dim">—</span>';
+      const f = s.failure_count||0;
+      const cn = circuitName(s.circuit);
+      const proto = protocolName(s.protocol);
+      return `<tr class="svc-row" onclick="showDetail('${s.name}')">
+        <td><span style="color:var(--text-bright);font-weight:500">${s.name}</span></td>
+        <td><span class="tag" style="background:var(--accent-glow);color:var(--accent);font-size:0.65rem;padding:0.15rem 0.45rem">${proto}</span></td>
+        <td><span class="circuit-badge circuit-${cn}"><span class="circuit-dot"></span>${cn}</span></td>
+        <td><span style="color:${f>0?'var(--warning)':'var(--text-dim)'}">${f}</span></td>
+        <td>${tags}</td>
+      </tr>`;
+    }).join('');
+  }
+  renderTopology(data.services);
+}
+
+/* ── 服务拓扑图 SVG ─────────────────────────────────────── */
+const PROTOCOL_COLORS = {
+  mcp:'#38bdf8', rest:'#4ade80', grpc:'#fbbf24', stdio:'#a78bfa', websocket:'#f87171'
+};
+
+function renderTopology(services){
+  const svg = document.getElementById('topology-svg');
+  const badge = document.getElementById('topo-badge');
+  if(!services || !services.length){
+    svg.innerHTML = '';
+    badge.textContent = '0 spokes';
+    return;
+  }
+  badge.textContent = services.length + ' spokes';
+  const spokeCount = services.length;
+  const angleStep = (2 * Math.PI) / Math.max(spokeCount, 1);
+  const radius = 220;
+
+  let html = '';
+  // Hub-Agora
+  html += '<circle cx="0" cy="0" r="28" class="hub"/><text x="0" y="4" class="hub-label">🏛 Hub</text>';
+  // Lines spokes -> Hub
+  services.forEach((s,i)=>{
+    const a = angleStep * i - Math.PI/2;
+    const cx = Math.cos(a) * radius;
+    const cy = Math.sin(a) * radius;
+    const color = PROTOCOL_COLORS[s.protocol]||'#38bdf8';
+    const cls = s.circuit==='CLOSED'?'spoke':'spoke unhealthy';
+    html += `<line x1="0" y1="0" x2="${cx}" y2="${cy}" stroke="${color}" stroke-opacity="${s.circuit==='CLOSED'?0.6:0.2}"/>`;
+    html += `<circle cx="${cx}" cy="${cy}" r="18" class="${cls}" stroke="${color}"/>`;
+    html += `<text x="${cx}" y="${cy+28}" class="spoke-label" fill="${color}">${s.name}</text>`;
+  });
+  svg.innerHTML = html;
+}
+
+// 启动 WS 连接；初始空拓扑图
+connectWS();
 </script>
 </body>
 </html>

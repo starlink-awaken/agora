@@ -94,3 +94,46 @@ class TestEventBus:
         result = json.loads(subscribe_event("test:*"))
         assert "subscription_id" in result
         assert result["pattern"] == "test:*"
+
+
+class TestRouteCall:
+    def test_route_call_bad_json(self):
+        """route_call with invalid JSON returns error."""
+        import asyncio
+
+        from agora.server.mcp import route_call
+        result = json.loads(asyncio.run(route_call("nonexistent", "not json")))
+        assert "error" in str(result)
+
+
+class TestProxyTools:
+    def test_proxy_status_not_initialized(self):
+        """proxy_status without initialization returns not_initialized."""
+        import asyncio
+
+        from agora.server.mcp import proxy_status
+        result = json.loads(asyncio.run(proxy_status()))
+        assert result["status"] == "not_initialized"
+
+    def test_proxy_call_not_initialized(self):
+        """proxy_call without initialization returns error."""
+        import asyncio
+
+        from agora.server.mcp import proxy_call
+        result = json.loads(asyncio.run(proxy_call("test.tool")))
+        assert result["status"] == "error"
+        assert "not initialized" in result["error"].lower()
+
+    def test_proxy_remove_not_initialized(self):
+        """proxy_remove_service without initialization returns not_initialized."""
+        import asyncio
+
+        from agora.server.mcp import proxy_remove_service
+        result = json.loads(asyncio.run(proxy_remove_service("test")))
+        assert result["status"] == "not_initialized"
+
+    def test_add_route_empty(self):
+        """add_route with empty name returns error."""
+        result = json.loads(add_route("", ""))
+        assert result["status"] == "error"
+        assert "required" in result["error"].lower()
