@@ -12,6 +12,7 @@ import time as _time
 from collections import deque
 from pathlib import Path as _Path
 
+import httpx
 import structlog
 
 from agora.event_bus import EventBus
@@ -21,12 +22,13 @@ logger = structlog.get_logger(__name__)
 
 
 class Router:
-    """Routes MCP tool calls to the appropriate registered service.
+    """Routes tool calls to the appropriate registered service via protocol dispatch.
 
     Supports:
     - Exact and prefix-based route resolution
     - Circuit breaker awareness (skips OPEN services)
     - Load balancing with round-robin across service instances
+    - Multi-protocol dispatch: mcp (implemented), rest/grpc/stdio (reserved)
     - Event bus integration: auto-publishes route:call.succeeded/failed events
     """
 
@@ -71,6 +73,8 @@ class Router:
             "mcp_endpoint": svc.mcp_endpoint,
             "health_endpoint": svc.health_endpoint,
             "port": svc.port,
+            "protocol": svc.protocol,
+            "protocol_config": svc.protocol_config,
         }
 
         # Check if this service has multiple instances
@@ -102,9 +106,83 @@ class Router:
             "port": port or 0,
         })
 
+    async def _dispatch(self, tool_name: str, arguments: dict,
+                         instance: dict) -> dict:
+        """Dispatch a tool call via the service's protocol.
+
+        Extension point: add new protocol handlers here.
+        Currently only MCP is fully implemented; rest/grpc/websocket are reserved.
+        """
+        protocol = instance.get("protocol", "mcp")
+
+        if protocol == "mcp":
+            return await self._call_mcp(tool_name, arguments, instance["mcp_endpoint"])
+        elif protocol == "rest":
+            return await self._call_rest(tool_name, arguments, instance)
+        elif protocol in ("grpc", "stdio", "websocket"):
+            return {"status": "error",
+                    "error": f"Protocol '{protocol}' is reserved but not yet implemented"}
+        else:
+            return {"status": "error", "error": f"Unknown protocol: {protocol}"}
+
+    async def _call_mcp(self, tool_name: str, arguments: dict, mcp_endpoint: str) -> dict:
+        """Execute an MCP tools/call request against the target endpoint."""
+        if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
+            return {"status": "error", "error": "Service unavailable"}
+
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                mcp_endpoint,
+                json={"method": "tools/call", "params": {"name": tool_name, "arguments": arguments}},
+            )
+            resp.raise_for_status()
+            return resp.json()
+
+    async def _call_rest(self, tool_name: str, arguments: dict, instance: dict) -> dict:
+        """Execute a REST API call against the target endpoint.
+
+        Uses protocol_config for method, path, headers. Defaults to GET with
+        tool_name-derived path suffix and query params from arguments.
+        """
+        base_url = instance["mcp_endpoint"].rstrip("/")
+        cfg = instance.get("protocol_config", {})
+
+        if base_url.startswith("http") and not _is_safe_url(base_url):
+            return {"status": "error", "error": "Service unavailable"}
+
+        # Resolve path: cfg path > tool_name-derived path
+        path = cfg.get("path", "")
+        if not path:
+            parts = tool_name.split(".", 1)
+            path = "/" + (parts[1] if len(parts) > 1 else parts[0])
+
+        method = cfg.get("method", "GET").upper()
+        headers = cfg.get("headers", {})
+        url = f"{base_url}{path}"
+
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                if method in ("POST", "PUT", "PATCH"):
+                    resp = await client.request(method, url, json=arguments, headers=headers)
+                else:  # GET, DELETE, etc.
+                    resp = await client.request(method, url, params=arguments, headers=headers)
+
+                # Try JSON first, fall back to text
+                try:
+                    body = resp.json()
+                except Exception:
+                    body = {"_body": resp.text[:2000]}
+                body["_http_status"] = resp.status_code
+                resp.raise_for_status()
+                return body
+        except httpx.HTTPStatusError as e:
+            return {"status": "error", "_http_status": e.response.status_code,
+                    "error": str(e)[:200]}
+        except Exception as e:
+            return {"status": "error", "error": f"REST call failed: {str(e)[:200]}"}
+
     async def route(self, tool_name: str, arguments: dict) -> dict:
-        """Route a tool call to the target service and return the result."""
-        import time as _time
+        """Route a tool call to the target service via protocol dispatch."""
         _start = _time.monotonic()
 
         service_name = self.resolve(tool_name)
@@ -118,29 +196,25 @@ class Router:
             self._trace(tool_name, service_name, _start, "error", "no_instance")
             return {"status": "error", "error": "Service temporarily unavailable"}
 
-        mcp_endpoint = instance["mcp_endpoint"]
-
-        # SSRF check for HTTP endpoints
-        if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
-            self._trace(tool_name, service_name, _start, "error", "ssrf_blocked")
-            logger.warning("ssrf_blocked", service=service_name, url=mcp_endpoint)
-            return {"status": "error", "error": "Service unavailable"}
-
         try:
-            import httpx
-            async with httpx.AsyncClient(timeout=30) as client:
-                resp = await client.post(
-                    mcp_endpoint,
-                    json={"method": "tools/call", "params": {"name": tool_name, "arguments": arguments}},
-                )
-                resp.raise_for_status()
+            result = await self._dispatch(tool_name, arguments, instance)
+            if result.get("status") == "error":
+                self._trace(tool_name, service_name, _start, "error", result.get("error", "")[:100])
+                logger.warning("route_dispatch_failed", tool=tool_name, service=service_name,
+                               error=result.get("error", ""))
+                self.registry.mark_failure(service_name)
+                self._maybe_publish("route:call.failed", {
+                    "tool": tool_name, "service": service_name,
+                    "error": result.get("error", "")[:100],
+                })
+            else:
                 self.registry.mark_success(service_name)
                 self._trace(tool_name, service_name, _start, "ok")
                 self._maybe_publish("route:call.succeeded", {
                     "tool": tool_name, "service": service_name,
                     "duration_s": round(_time.monotonic() - _start, 4),
                 })
-                return resp.json()
+            return result
         except Exception as e:
             self._trace(tool_name, service_name, _start, "error", str(e)[:100])
             logger.warning("route_failed", tool=tool_name, service=service_name, error=str(e))

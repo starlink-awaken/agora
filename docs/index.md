@@ -1,6 +1,6 @@
 # Agora Documentation
 
-> API Gateway for AI Agents · v1.2.0
+> API Gateway for AI Agents · v1.3.0
 
 ## Quick Links
 
@@ -18,10 +18,11 @@ Agora is a Hub-Spoke MCP service convergence hub. All services register with Ago
 
 ## Key Features
 
-- **20 CLI commands** — register, discover, health, pipeline, event, market
-- **9 MCP tools** — AI agents can call services directly  
-- **14 REST endpoints** — Web Dashboard + Prometheus metrics
-- **Circuit breaker** — CLOSED/OPEN/HALF_OPEN with gradual recovery
+- **20+ CLI commands** — register (multi-protocol), discover, health, pipeline, event, market, tenant, instance
+- **14 MCP tools** — 5 proxy + 3 registry + 3 route + 3 event bus
+- **16 REST endpoints** — Web Dashboard + Prometheus /metrics/history + event-log/publish
+- **Multi-protocol support** — MCP (full), REST/gRPC/WebSocket/stdio (reserved with extension points)
+- **Circuit breaker** — CLOSED/OPEN/HALF_OPEN with gradual recovery + webhook alerts
 - **Auto-discovery** — 4 strategies to find MCP services
 - **MCP Tool Market** — 18 built-in services
 - **Multi-tenant** — API token auth + rate limiting

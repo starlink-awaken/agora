@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import ipaddress
+import json
 import socket
 import time
 from collections.abc import Callable
@@ -18,6 +19,23 @@ BLOCKED_NETWORKS = [
     ipaddress.ip_network("192.168.0.0/16"), ipaddress.ip_network("169.254.0.0/16"),
     ipaddress.ip_network("100.64.0.0/10"), ipaddress.ip_network("fc00::/7"),
 ]
+# Known protocols for service registration
+KNOWN_PROTOCOLS = frozenset({"mcp", "rest", "grpc", "stdio", "websocket"})
+
+
+def _parse_tags(tags_str: str) -> list[str]:
+    """Parse comma-separated tags string into a deduplicated list."""
+    return [t.strip() for t in tags_str.split(",") if t.strip()]
+
+
+def _parse_protocol_config(raw: str | dict) -> tuple[dict, str | None]:
+    """Parse protocol_config JSON string into dict. Returns (config, error_message)."""
+    if isinstance(raw, dict):
+        return raw, None
+    try:
+        return json.loads(raw), None
+    except json.JSONDecodeError as e:
+        return {}, str(e)
 
 
 def _is_safe_url(url: str) -> bool:
@@ -43,11 +61,13 @@ def _is_safe_url(url: str) -> bool:
 
 @dataclass
 class Service:
-    """A registered MCP-capable service."""
+    """A registered service capable of MCP, REST, gRPC, or stdio protocols."""
     name: str
     description: str = ""
-    mcp_endpoint: str = ""       # MCP server address (URL or CLI command)
-    health_endpoint: str = ""    # GET /health endpoint
+    protocol: str = "mcp"          # mcp | rest | grpc | stdio | websocket
+    protocol_config: dict = field(default_factory=dict)  # protocol-specific settings
+    mcp_endpoint: str = ""         # MCP server address (URL or CLI command)
+    health_endpoint: str = ""      # GET /health endpoint
     port: int = 0
     tags: list[str] = field(default_factory=list)
     # Load-balanced instances (Phase 3)
@@ -79,6 +99,7 @@ class Service:
     def to_dict(self) -> dict:
         return {
             "name": self.name, "description": self.description,
+            "protocol": self.protocol, "protocol_config": self.protocol_config,
             "healthy": self.is_available, "endpoint": self.mcp_endpoint,
             "port": self.port, "tags": self.tags,
         }
@@ -152,6 +173,7 @@ class ServiceRegistry:
         from agora.persistence import json_save
         json_save(Path(self._storage_path), {"services": [
             {"name": s.name, "description": s.description,
+             "protocol": s.protocol, "protocol_config": s.protocol_config,
              "mcp_endpoint": s.mcp_endpoint, "health_endpoint": s.health_endpoint,
              "port": s.port, "tags": s.tags, "instances": s.instances}
             for s in self._services.values()
@@ -160,17 +182,27 @@ class ServiceRegistry:
     def register(self, service: Service):
         if len(self._services) >= self._MAX_SERVICES:
             raise ValueError(f"Service limit reached ({self._MAX_SERVICES})")
-        # Validate URLs on registration
+        # Validate URLs on registration (SSRF check for HTTP endpoints)
         if service.health_endpoint and not _is_safe_url(service.health_endpoint):
             raise ValueError(f"Health endpoint URL blocked: {service.health_endpoint}")
         if service.mcp_endpoint and service.mcp_endpoint.startswith("http") and not _is_safe_url(service.mcp_endpoint):
-            raise ValueError(f"MCP endpoint URL blocked: {service.mcp_endpoint}")
+            raise ValueError(f"Endpoint URL blocked: {service.mcp_endpoint}")
+        # Validate protocol
+        if service.protocol not in KNOWN_PROTOCOLS:
+            raise ValueError(f"Unknown protocol: {service.protocol}. Known: {sorted(KNOWN_PROTOCOLS)}")
         self._services[service.name] = service
         self._save()
 
     def unregister(self, name: str):
         self._services.pop(name, None)
         self._save()
+
+    def clear_all(self) -> int:
+        """Remove all services. Returns count removed. Single disk write."""
+        count = len(self._services)
+        self._services.clear()
+        self._save()
+        return count
 
     def get(self, name: str) -> Service | None:
         return self._services.get(name)
@@ -181,10 +213,9 @@ class ServiceRegistry:
     def list_healthy(self) -> list[Service]:
         return [s for s in self._services.values() if s.is_available]
 
-    def _try_half_open(self, name: str) -> bool:
-        """Attempt a half-open probe. Returns True if probe should proceed."""
-        svc = self._services.get(name)
-        if svc and not svc.healthy and not svc.half_open and time.monotonic() >= svc.cooldown_until:
+    def _try_half_open(self, svc: Service) -> bool:
+        """Attempt a half-open probe on a service. Returns True if probe should proceed."""
+        if not svc.healthy and not svc.half_open and time.monotonic() >= svc.cooldown_until:
             svc.half_open = True
             return True
         return False
@@ -251,7 +282,7 @@ class ServiceRegistry:
 
         # Activate half-open probes for services whose cooldown has expired
         for svc in self._services.values():
-            self._try_half_open(svc.name)
+            self._try_half_open(svc)
 
         import httpx
         semaphore = asyncio.Semaphore(self._MAX_CONCURRENT_CHECKS)

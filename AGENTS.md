@@ -7,7 +7,7 @@
 ## 项目身份
 
 - **名称**: Agora — MCP Service Convergence Hub
-- **版本**: 1.2.0 (Beta)
+- **版本**: 1.3.0 (Beta)
 - **定位**: API Gateway for AI Agents · Hub-Spoke 拓扑
 - **Python**: >= 3.11
 - **安装**: `pip install -e "."`
@@ -35,9 +35,10 @@
 | `pipeline.py` | 256 | `Pipeline`, `run/run_stream/run_parallel` |
 | `discovery.py` | 367 | `DiscoveryEngine`, `DiscoveredService` |
 | `market.py` | 241 | `Market` |
-| `cli.py` | 556 | `main`, 20 子命令 |
-| `server/mcp.py` | 162 | 9 MCP 工具 |
-| `web/app.py` | 221 | 14 REST 端点 |
+| `cli.py` | 556 | `main`, 20 顶级命令 + 12 子命令 |
+| `server/mcp.py` | 230+ | 14 MCP 工具 (5 proxy + 3 registry + 3 route + 3 event) |
+| `web/app.py` | 221 | 16 REST 端点 (含 /metrics/history + event-log/publish) |
+| `registry.py` | 290+ | `KNOWN_PROTOCOLS`, `_parse_tags`, `_parse_protocol_config` |
 | `wizard.py` | 67 | `run_wizard` |
 
 ---

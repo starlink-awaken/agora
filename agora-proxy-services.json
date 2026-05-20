@@ -1,0 +1,7 @@
+[
+  {
+    "name": "bos-daemon",
+    "description": "SharedBrain B-OS daemon MCP service",
+    "mcp_endpoint": "http://localhost:7421/mcp"
+  }
+]

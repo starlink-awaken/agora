@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.3.0] — 2026-05-20
+
+### Added
+- **Multi-protocol Support**: Service model now supports mcp/rest/grpc/stdio/websocket protocols (registry.py)
+- **REST Protocol Handler**: `_call_rest()` in router.py — REST APIs can be routed via Agora
+- **Protocol Config Extension**: `protocol_config` dict for custom headers/methods/paths per service
+- **KNOWN_PROTOCOLS**: shared frozenset constant + `_parse_protocol_config`/`_parse_tags` utilities
+- **MCP Proxy Tools**: 5 new tools — proxy_connect/call/status/add_service/remove_service (server/mcp.py)
+- **Event Bus Tools**: publish_event/subscribe_event/get_event_log (3 tools)
+- **Dashboard**: protocol selector + advanced config panel (collapsible) + auto-detect protocol type
+- **Service Detail Modal**: click-to-expand with protocol info + config display
+- **Dashboard Change Detection**: skip DOM rebuild when data unchanged (polling optimization)
+- **Registry.clear_all()**: batch unregister with single disk write
+- **ProxyManager.start()**: parallel `asyncio.gather` instead of serial connections
+- **Agora Skill**: `/agora` skill registered in `~/.claude/skills/agora/`
+
+### Changed
+- **SSRF validation**: centralized in registry.register(); removed duplicate checks from server/mcp.py
+- **Proxy persistence**: `_load_proxy_services`/`_save_proxy_service` now use shared `json_load`/`json_save`
+- **Hot-path imports**: `httpx`/`time` promoted to module-level in router.py
+- **`_dispatch`**: protocol detection from instance dict (no redundant registry lookup)
+- **`_try_half_open`**: accepts Service object directly (no redundant name lookup)
+- **`persistence.json_load`**: EAFP pattern (catch FileNotFoundError) instead of TOCTOU `exists()` check
+- **Web EventBus**: module-level `_bus` singleton instead of per-request instantiation
+- **API_REFERENCE.md**: full rewrite with 14 tools + protocol extension docs
+
+### Fixed
+- **Ruff**: 0 errors across all code + tests (linted E702 semicolons, I001 imports, E501 line length)
+- **AGENTS.md**: outdated counts (9→14 MCP, 20→20+ CLI)
+- **docs/index.md**: outdated feature counts
+- **CAPABILITIES.md**: Agora section rewritten (7→14 tools, +Proxy/+Event/+Market rows)
+
+### Test Coverage
+- **84 tests** (↑ from 61) — 23 new: parse_tags/protocol_config/known_protocols/clear_all/protocol validation/rest dispatch/proxy manager
+
 ## [1.2.0] — 2026-05-19
 
 ### Added

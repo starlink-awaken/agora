@@ -13,8 +13,9 @@ logger = structlog.get_logger(__name__)
 def json_load(path: Path, default=None) -> dict | list:
     """Load JSON from path, returning default on failure."""
     try:
-        if path.exists():
-            return json.loads(path.read_text())
+        return json.loads(path.read_text())
+    except FileNotFoundError:
+        return default if default is not None else {}
     except Exception as e:
         logger.warning("persistence_load_failed", path=str(path), error=str(e))
     return default if default is not None else {}

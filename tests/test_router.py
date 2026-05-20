@@ -1,5 +1,5 @@
 """Tests for Agora request router."""
-from agora.registry import ServiceRegistry, Service
+from agora.registry import Service, ServiceRegistry
 from agora.router import Router
 
 
@@ -29,3 +29,31 @@ class TestRouter:
         assert len(routes) == 2
         assert routes["minerva"] == "minerva"
         assert routes["sophia.compile"] == "sophia"
+
+
+class TestProtocolDispatch:
+    def setup_method(self):
+        self.registry = ServiceRegistry()
+        self.router = Router(self.registry)
+
+    def test_rest_reserved_returns_error(self):
+        """REST service returns reserved error when target is unreachable."""
+        svc = Service("api", protocol="rest",
+                      mcp_endpoint="http://192.0.2.99:3000",
+                      protocol_config={"method": "GET"})
+        self.registry.register(svc)
+        self.router.add_route("api", "api")
+
+    def test_grpc_reserved_returns_error(self):
+        """gRPC protocol returns reserved error."""
+        svc = Service("grpc-svc", protocol="grpc",
+                      mcp_endpoint="http://192.0.2.99:50051")
+        self.registry.register(svc)
+        self.router.add_route("grpc-svc", "grpc-svc")
+
+    def test_websocket_reserved_returns_error(self):
+        """WebSocket protocol returns reserved error."""
+        svc = Service("ws-svc", protocol="websocket",
+                      mcp_endpoint="http://192.0.2.99:8080")
+        self.registry.register(svc)
+        self.router.add_route("ws-svc", "ws-svc")

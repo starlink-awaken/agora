@@ -16,7 +16,11 @@ def build_parser() -> argparse.ArgumentParser:
     # register
     r = sub.add_parser("register", help="Register a service")
     r.add_argument("name", help="Service name")
-    r.add_argument("--mcp", default="", help="MCP endpoint URL")
+    from agora.registry import KNOWN_PROTOCOLS
+    r.add_argument("--protocol", default="mcp", choices=sorted(KNOWN_PROTOCOLS),
+                   help="Service protocol (default: mcp)")
+    r.add_argument("--protocol-config", default="{}", help="Protocol-specific config as JSON")
+    r.add_argument("--mcp", default="", help="MCP endpoint URL (or generic endpoint for non-MCP)")
     r.add_argument("--health", default="", help="Health check URL")
     r.add_argument("--port", type=int, default=0)
     r.add_argument("--tags", default="")
@@ -389,10 +393,16 @@ def main():
     router = Router(registry)
 
     if args.command == "register":
-        svc = Service(name=args.name, mcp_endpoint=args.mcp, health_endpoint=args.health,
-                      port=args.port, tags=[t.strip() for t in args.tags.split(",") if t.strip()])
+        from agora.registry import _parse_protocol_config, _parse_tags
+        proto_cfg, err = _parse_protocol_config(args.protocol_config)
+        if err:
+            print(f"Error: --protocol-config is not valid JSON: {err}")
+            return
+        svc = Service(name=args.name, protocol=args.protocol, protocol_config=proto_cfg,
+                      mcp_endpoint=args.mcp, health_endpoint=args.health,
+                      port=args.port, tags=_parse_tags(args.tags))
         registry.register(svc)
-        print(f"Registered: {args.name}")
+        print(f"Registered: {args.name} (protocol: {args.protocol})")
 
     elif args.command == "list":
         print(json.dumps(registry.to_dict(), ensure_ascii=False, indent=2))
@@ -449,7 +459,8 @@ def main():
         return run_wizard()
 
     elif args.command == "completion":
-        cmds = "register list discover instance tenant market search info stats health route routes mcp init config web pipeline pipelines pipeline-define event completion"
+        cmds = ("register list discover instance tenant market search info stats health "
+                 "route routes mcp init config web pipeline pipelines pipeline-define event completion")
         print('# Add to ~/.bashrc or ~/.zshrc:')
         print('#   eval "$(agora completion)"')
         print()

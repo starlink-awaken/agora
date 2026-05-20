@@ -26,7 +26,7 @@ class TestEventBusPublish:
 
     def test_publish_default_source(self):
         bus = _new_bus()
-        eid = bus.publish("test", {})
+        bus.publish("test", {})
         events = bus.get_event_log(1)
         assert events[0]["source"] == "unknown"
 

@@ -3,8 +3,7 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-from agora.registry import ServiceRegistry, Service
+from agora.registry import Service, ServiceRegistry
 from agora.router import Router
 
 
@@ -81,7 +80,9 @@ class TestAgoraIntegration:
     def test_full_route_flow(self):
         """Complete flow: register → route → resolve → check health."""
         # Register
-        self.registry.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765", health_endpoint="http://192.0.2.1:8765/health", port=8765))
+        self.registry.register(Service(
+            "minerva", mcp_endpoint="http://192.0.2.1:8765",
+            health_endpoint="http://192.0.2.1:8765/health", port=8765))
         self.registry.register(Service("sophia", mcp_endpoint="sophia-mcp", port=9001))
 
         # Route

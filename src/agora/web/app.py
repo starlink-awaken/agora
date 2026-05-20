@@ -22,8 +22,9 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from prometheus_client import REGISTRY, Gauge, generate_latest
 
 from agora.discovery import DiscoveryEngine
+from agora.event_bus import EventBus
 from agora.pipeline import Pipeline
-from agora.registry import Service, ServiceRegistry, _is_safe_url
+from agora.registry import Service, ServiceRegistry, _is_safe_url, _parse_protocol_config, _parse_tags
 from agora.router import Router
 
 API_KEY = os.environ.get("AGORA_API_KEY", "")
@@ -39,7 +40,7 @@ async def _auth_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-app = FastAPI(title="Agora Dashboard", version="1.2.0")
+app = FastAPI(title="Agora Dashboard", version="1.3.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"],
@@ -49,7 +50,8 @@ app.add_middleware(
 app.middleware("http")(_auth_middleware)
 
 registry = ServiceRegistry()
-router = Router(registry)
+_bus = EventBus(registry=registry)
+router = Router(registry, event_bus=_bus)
 discovery = DiscoveryEngine()
 pipeline = Pipeline(registry, router)
 
@@ -80,6 +82,8 @@ async def api_services():
     return [
         {
             "name": s.name, "description": s.description,
+            "protocol": s.protocol, "protocol_config": s.protocol_config,
+            "mcp_endpoint": s.mcp_endpoint, "health_endpoint": s.health_endpoint,
             "circuit": s.circuit_state, "healthy": s.healthy,
             "failure_count": s.failure_count, "port": s.port,
             "tags": s.tags, "instances": len(s.instances) + 1,
@@ -141,18 +145,25 @@ async def api_discover():
 @app.post("/api/register")
 async def api_register(
     name: str = Form(...),
+    protocol: str = Form("mcp"),
+    protocol_config: str = Form("{}"),
     mcp_endpoint: str = Form(""),
     health_endpoint: str = Form(""),
     port: int = Form(0),
     tags: str = Form(""),
 ):
+    # Parse protocol config JSON
+    proto_cfg, err = _parse_protocol_config(protocol_config)
+    if err:
+        return JSONResponse({"status": "error", "error": f"protocol_config is not valid JSON: {err}"}, status_code=400)
+
     svc = Service(
-        name=name, mcp_endpoint=mcp_endpoint,
-        health_endpoint=health_endpoint, port=port,
-        tags=[t.strip() for t in tags.split(",") if t.strip()],
+        name=name, protocol=protocol, protocol_config=proto_cfg,
+        mcp_endpoint=mcp_endpoint, health_endpoint=health_endpoint, port=port,
+        tags=_parse_tags(tags),
     )
     registry.register(svc)
-    return {"status": "registered", "name": name}
+    return {"status": "registered", "name": name, "protocol": protocol}
 
 
 @app.post("/api/pipeline")
@@ -177,9 +188,8 @@ async def api_run_pipeline(
 
 @app.post("/api/clear")
 async def api_clear():
-    for s in list(registry.list_all()):
-        registry.unregister(s.name)
-    return {"status": "cleared"}
+    count = registry.clear_all()
+    return {"status": "cleared", "removed": count}
 
 
 @app.post("/api/instance")
@@ -211,9 +221,7 @@ async def api_metrics_history():
 @app.get("/api/event-log")
 async def api_event_log(limit: int = 20):
     """Return recent events from the event bus."""
-    from agora.event_bus import EventBus
-    bus = EventBus(registry=registry)
-    return bus.get_event_log(limit)
+    return _bus.get_event_log(limit)
 
 
 @app.post("/api/event-publish")
@@ -225,13 +233,11 @@ async def api_event_publish(
     """Publish an event via the web dashboard."""
     import json as _json
 
-    from agora.event_bus import EventBus
-    bus = EventBus(registry=registry)
     try:
         data = _json.loads(payload)
     except _json.JSONDecodeError:
         data = {"raw": payload}
-    eid = bus.publish(event_type, data, source)
+    eid = _bus.publish(event_type, data, source)
     return {"event_id": eid, "status": "published"}
 
 

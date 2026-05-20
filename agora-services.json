@@ -3,6 +3,8 @@
     {
       "name": "minerva",
       "description": "",
+      "protocol": "mcp",
+      "protocol_config": {},
       "mcp_endpoint": "http://192.0.2.1:8765",
       "health_endpoint": "",
       "port": 0,
@@ -10,21 +12,10 @@
       "instances": []
     },
     {
-      "name": "ontoderive",
-      "description": "Fact-driven knowledge engineering — ToolForge + derive + check",
-      "mcp_endpoint": "stdio://ontoderive",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [
-        "knowledge-engineering",
-        "derivation",
-        "ontology"
-      ],
-      "instances": []
-    },
-    {
       "name": "sophia",
       "description": "",
+      "protocol": "mcp",
+      "protocol_config": {},
       "mcp_endpoint": "http://192.0.2.2:9001",
       "health_endpoint": "",
       "port": 0,
@@ -32,21 +23,38 @@
       "instances": []
     },
     {
-      "name": "agora",
-      "description": "MCP service convergence hub — registry, routing, pipeline",
-      "mcp_endpoint": "stdio://agora",
+      "name": "ontoderive",
+      "description": "",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio",
       "health_endpoint": "",
       "port": 0,
       "tags": [
-        "gateway",
-        "registry",
-        "pipeline"
+        "//ontoderive:knowledge-engineering",
+        "derivation"
+      ],
+      "instances": []
+    },
+    {
+      "name": "agora",
+      "description": "",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "//agora:gateway",
+        "registry"
       ],
       "instances": []
     },
     {
       "name": "bos-skill-cli",
       "description": "Skill discovery and staged activation CLI",
+      "protocol": "mcp",
+      "protocol_config": {},
       "mcp_endpoint": "",
       "health_endpoint": "",
       "port": 0,
@@ -58,27 +66,99 @@
       "instances": []
     },
     {
-      "name": "bos-daemon",
-      "description": "Docker MCP service: sharedbrain-bos:dev",
-      "mcp_endpoint": "http://localhost:7420/mcp",
-      "health_endpoint": "http://localhost:7420/health",
-      "port": 7420,
+      "name": "kos",
+      "description": "",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio",
+      "health_endpoint": "",
+      "port": 0,
       "tags": [
-        "docker",
-        "mcp"
+        "//kos-mcp:knowledge",
+        "search"
+      ],
+      "instances": []
+    },
+    {
+      "name": "bos-daemon",
+      "description": "SharedBrain B-OS daemon MCP service (via agora proxy)",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "http://localhost:7421/mcp",
+      "health_endpoint": "http://localhost:7420/health",
+      "port": 7421,
+      "tags": [
+        "bos",
+        "mcp",
+        "daemon",
+        "proxy"
       ],
       "instances": []
     },
     {
       "name": "bos",
-      "description": "Docker MCP service: bos",
-      "mcp_endpoint": "http://localhost:7420/mcp",
-      "health_endpoint": "http://localhost:7420/health",
-      "port": 7420,
+      "description": "SharedBrain B-OS MCP (alias via agora proxy)",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "http://localhost:7421/mcp",
+      "health_endpoint": "",
+      "port": 7421,
       "tags": [
-        "docker",
-        "mcp"
+        "bos",
+        "mcp",
+        "proxy"
       ],
+      "instances": []
+    },
+    {
+      "name": "sharedbrain",
+      "description": "SharedBrain B-OS daemon (via agora proxy)",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "http://localhost:7421/mcp",
+      "health_endpoint": "http://localhost:7420/health",
+      "port": 7421,
+      "tags": [
+        "bos",
+        "mcp",
+        "sharedbrain",
+        "proxy"
+      ],
+      "instances": []
+    },
+    {
+      "name": "api",
+      "description": "",
+      "protocol": "rest",
+      "protocol_config": {
+        "method": "GET"
+      },
+      "mcp_endpoint": "http://192.0.2.99:3000",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": []
+    },
+    {
+      "name": "grpc-svc",
+      "description": "",
+      "protocol": "grpc",
+      "protocol_config": {},
+      "mcp_endpoint": "http://192.0.2.99:50051",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
+      "instances": []
+    },
+    {
+      "name": "ws-svc",
+      "description": "",
+      "protocol": "websocket",
+      "protocol_config": {},
+      "mcp_endpoint": "http://192.0.2.99:8080",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [],
       "instances": []
     }
   ]

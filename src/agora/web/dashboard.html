@@ -130,6 +130,19 @@ button:focus-visible,input:focus-visible{border-color:var(--accent);box-shadow:0
 .auto-detect-result .detect-name{color:var(--accent);font-weight:600}
 .auto-detect-result .detect-type{color:var(--text-dim);font-size:0.7rem}
 
+.advanced-toggle{cursor:pointer;color:var(--text-dim);font-size:0.7rem;padding:0.25rem 0;user-select:none;display:flex;align-items:center;gap:0.3rem}
+.advanced-toggle:hover{color:var(--accent)}
+.advanced-toggle .arrow{transition:transform 0.2s;font-size:0.6rem}
+.advanced-toggle.open .arrow{transform:rotate(90deg)}
+.advanced-panel{display:none;padding:0.5rem 0;border-top:1px solid var(--border);margin-top:0.25rem}
+.advanced-panel.active{display:block}
+select.protocol-select{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.45rem 0.75rem;font-size:0.8rem;width:100%}
+select.protocol-select:focus{outline:none;border-color:var(--border-active)}
+textarea.mono-input{font-family:"SF Mono","Fira Code",monospace;font-size:0.7rem;background:rgba(0,0,0,0.3);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem;width:100%;resize:vertical;min-height:48px}
+textarea.mono-input:focus{outline:none;border-color:var(--border-active)}
+.form-inline-2{display:flex;gap:0.5rem;align-items:flex-end}
+.form-inline-2 .form-group{flex:1;min-width:0}
+
 @media(max-width:1000px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -139,7 +152,7 @@ button:focus-visible,input:focus-visible{border-color:var(--accent);box-shadow:0
   <div class="brand">
     <div class="logo">🏛</div>
     <h1>Agora 服务中心</h1>
-    <span class="version">v1.2</span>
+    <span class="version">v1.3</span>
   </div>
   <div class="stats-bar">
     <div class="stat-item"><span class="stat-dot ok"></span> 已注册 <span class="stat-value" id="svc-total">-</span></div>
@@ -157,9 +170,9 @@ button:focus-visible,input:focus-visible{border-color:var(--accent);box-shadow:0
       <span class="card-badge live" id="svc-live-badge">运行中</span>
     </div>
     <table>
-      <thead><tr><th>名称</th><th>断路器</th><th>失败</th><th>标签</th></tr></thead>
+      <thead><tr><th>名称</th><th>协议</th><th>断路器</th><th>失败</th><th>标签</th></tr></thead>
       <tbody id="svc-table">
-        <tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📡</div>暂无服务 — 点击「发现服务」</div></td></tr>
+        <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📡</div>暂无服务 — 点击「发现服务」</div></td></tr>
       </tbody>
     </table>
   </div>
@@ -195,8 +208,28 @@ button:focus-visible,input:focus-visible{border-color:var(--accent);box-shadow:0
       <input type="text" id="reg-name" placeholder="自动识别中...">
     </div>
     <div class="form-group mb-1">
+      <label>协议</label>
+      <select class="protocol-select" id="reg-protocol">
+        <option value="mcp">MCP（默认）</option>
+        <option value="rest">REST API</option>
+        <option value="grpc">gRPC</option>
+        <option value="stdio">stdio 命令行</option>
+        <option value="websocket">WebSocket</option>
+      </select>
+    </div>
+    <div class="form-group mb-1">
       <label>标签（逗号分隔）</label>
       <input type="text" id="reg-tags" placeholder="research, knowledge">
+    </div>
+    <!-- 高级选项 -->
+    <span class="advanced-toggle" onclick="toggleAdvanced()">
+      <span class="arrow">▶</span> 高级选项（协议配置）
+    </span>
+    <div class="advanced-panel" id="advanced-panel">
+      <div class="form-group mb-1">
+        <label>协议配置（JSON）</label>
+        <textarea class="mono-input" id="reg-protocol-config" placeholder='{"method":"GET","headers":{"Authorization":"Bearer xxx"}}'></textarea>
+      </div>
     </div>
     <button class="btn-primary" onclick="registerSvc()" style="width:100%">注册</button>
   </div>
@@ -260,11 +293,20 @@ function circuitName(s){
   if(s==='HALF_OPEN') return '半开';
   return s;
 }
+function protocolName(p){
+  const m = {mcp:'MCP', rest:'REST', grpc:'gRPC', stdio:'stdio', websocket:'WS'};
+  return m[p]||p||'mcp';
+}
 
+let _lastServices = '';
 async function refresh(){
   try{
     const r = await fetch(API+'/services');
-    allServices = await r.json();
+    const data = await r.json();
+    const snapshot = JSON.stringify(data);
+    if (snapshot === _lastServices) return;  // no change, skip DOM rebuild
+    _lastServices = snapshot;
+    allServices = data;
     const healthy = allServices.filter(s=>s.circuit==='CLOSED').length;
     document.getElementById('svc-total').textContent = allServices.length;
     document.getElementById('svc-healthy').textContent = healthy;
@@ -276,14 +318,16 @@ async function refresh(){
 
     const tbody = document.getElementById('svc-table');
     if(allServices.length===0){
-      tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📡</div>暂无服务 — 点击「发现服务」</div></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📡</div>暂无服务 — 点击「发现服务」</div></td></tr>';
     }else{
       tbody.innerHTML = allServices.map(s=>{
         const tags = (s.tags||[]).filter(t=>t).map(t=>`<span class="tag">${t}</span>`).join('') || '<span class="text-dim">—</span>';
         const f = s.failure_count||0;
         const cn = circuitName(s.circuit);
+        const proto = protocolName(s.protocol);
         return `<tr class="svc-row" onclick="showDetail('${s.name}')">
           <td><span style="color:var(--text-bright);font-weight:500">${s.name}</span></td>
+          <td><span class="tag" style="background:var(--accent-glow);color:var(--accent);font-size:0.65rem;padding:0.15rem 0.45rem">${proto}</span></td>
           <td><span class="circuit-badge circuit-${cn}"><span class="circuit-dot"></span>${cn}</span></td>
           <td><span style="color:${f>0?'var(--warning)':'var(--text-dim)'}">${f}</span></td>
           <td>${tags}</td>
@@ -297,18 +341,22 @@ function showDetail(name){
   const s = allServices.find(x=>x.name===name);
   if(!s) return;
   const cn = circuitName(s.circuit);
+  const proto = protocolName(s.protocol);
+  const protoCfg = JSON.stringify(s.protocol_config||{},null,2);
   document.getElementById('detail-content').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center">
       <h3>📦 ${s.name}</h3>
       <span class="circuit-badge circuit-${cn}" style="font-size:0.85rem"><span class="circuit-dot"></span>${cn}</span>
     </div>
+    <div class="detail-row"><span class="detail-label">协议</span><span class="detail-value"><span class="tag" style="background:var(--accent-glow);color:var(--accent)">${proto}</span></span></div>
     <div class="detail-row"><span class="detail-label">描述</span><span class="detail-value">${s.description||'—'}</span></div>
-    <div class="detail-row"><span class="detail-label">MCP 端点</span><span class="detail-value">${s.mcp_endpoint||'—'}</span></div>
+    <div class="detail-row"><span class="detail-label">端点</span><span class="detail-value">${s.mcp_endpoint||'—'}</span></div>
     <div class="detail-row"><span class="detail-label">健康检查</span><span class="detail-value">${s.health_endpoint||'—'}</span></div>
     <div class="detail-row"><span class="detail-label">端口</span><span class="detail-value">${s.port||'—'}</span></div>
     <div class="detail-row"><span class="detail-label">断路状态</span><span class="detail-value">${cn}</span></div>
     <div class="detail-row"><span class="detail-label">失败计数</span><span class="detail-value">${s.failure_count||0} / 3</span></div>
     <div class="detail-row"><span class="detail-label">实例数</span><span class="detail-value">${(s.instances||[]).length||1}</span></div>
+    ${protoCfg!=='{}'?`<div class="detail-row"><span class="detail-label">协议配置</span><span class="detail-value" style="font-family:monospace;font-size:0.7rem;white-space:pre-wrap">${protoCfg}</span></div>`:''}
     <div class="detail-tags">${(s.tags||[]).filter(t=>t).map(t=>`<span class="tag">${t}</span>`).join('')||'<span class="text-dim">无标签</span>'}</div>
     <button class="btn-ghost" style="width:100%;margin-top:1.25rem" onclick="closeDetail()">关闭</button>
   `;
@@ -341,21 +389,23 @@ function autoDetect(){
     if(addr.startsWith('http://')||addr.startsWith('https://')){
       const u = new URL(addr); const host = u.hostname; const port = u.port||'80';
       const parts = u.pathname.split('/').filter(Boolean);
-      detected = {name:host+(port!=='80'?'-'+port:''), type:'HTTP 服务', endpoint:addr, health:addr+'/health'};
+      const isMCP = addr.endsWith('/mcp');
+      detected = {name:host+(port!=='80'?'-'+port:''), type:isMCP?'HTTP MCP 服务':'HTTP 服务', endpoint:addr, health:addr.replace(/\/mcp$/,'')+'/health', protocol:isMCP?'mcp':'rest'};
     }else if(addr.startsWith('stdio://')){
       const name = addr.replace('stdio://','');
-      detected = {name:name, type:'标准输入输出', endpoint:addr};
+      detected = {name:name, type:'标准输入输出', endpoint:addr, protocol:'stdio'};
     }else if(addr.startsWith('/')||addr.startsWith('~')||addr.startsWith('.')){
       const parts = addr.replace(/^~\/|^\.\//,'').split('/').filter(Boolean);
-      detected = {name:parts[parts.length-1]||parts[0]||'project', type:'本地项目', endpoint:'stdio://'+ (parts[parts.length-1]||parts[0])};
+      detected = {name:parts[parts.length-1]||parts[0]||'project', type:'本地项目', endpoint:'stdio://'+ (parts[parts.length-1]||parts[0]), protocol:'stdio'};
     }else{
-      detected = {name:addr, type:'未知类型', endpoint:'stdio://'+addr};
+      detected = {name:addr, type:'未知类型', endpoint:'stdio://'+addr, protocol:'stdio'};
     }
 
     nameEl.textContent = '📦 ' + detected.name;
-    typeEl.textContent = detected.type;
+    typeEl.textContent = (detected.type||'') + ' · ' + (detected.protocol||'mcp').toUpperCase();
     document.getElementById('reg-name').value = detected.name;
     document.getElementById('reg-name').dataset.endpoint = detected.endpoint||'';
+    if(detected.protocol) document.getElementById('reg-protocol').value = detected.protocol;
   }, 500);
 }
 
@@ -389,18 +439,29 @@ async function clearAll(){
   refresh();
 }
 
+function toggleAdvanced(){
+  const toggle = document.querySelector('.advanced-toggle');
+  const panel = document.getElementById('advanced-panel');
+  toggle.classList.toggle('open');
+  panel.classList.toggle('active');
+}
+
 async function registerSvc(){
   const fd = new FormData();
   fd.set('name', document.getElementById('reg-name').value);
+  fd.set('protocol', document.getElementById('reg-protocol').value);
+  fd.set('protocol_config', document.getElementById('reg-protocol-config').value||'{}');
   fd.set('mcp_endpoint', document.getElementById('reg-name').dataset.endpoint || document.getElementById('reg-addr').value);
   fd.set('tags', document.getElementById('reg-tags').value);
   const o = document.getElementById('action-output');
   try{
     const r = await fetch(API+'/register',{method:'POST',body:fd});
     const d = await r.json();
-    o.innerHTML = `<span class="ok">✓ 已注册: ${d.name}</span>`;
+    const proto = (d.protocol||'mcp').toUpperCase();
+    o.innerHTML = `<span class="ok">✓ 已注册: ${d.name}</span> · <span class="tag" style="background:var(--accent-glow);color:var(--accent);font-size:0.65rem">${proto}</span>`;
     document.getElementById('reg-name').value='';
     document.getElementById('reg-addr').value='';
+    document.getElementById('reg-protocol-config').value='';
     document.getElementById('detect-result').classList.remove('active');
     refresh();
   }catch(e){o.innerHTML = `<span class="err">✗ ${e.message}</span>`}

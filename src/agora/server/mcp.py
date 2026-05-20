@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from fastmcp import FastMCP
 
 from agora.event_bus import EventBus
-from agora.registry import ServiceRegistry, _is_safe_url
+from agora.mcp_proxy.manager import ProxyManager
+from agora.registry import ServiceRegistry, _parse_protocol_config, _parse_tags
 from agora.router import Router
 
 mcp = FastMCP(
@@ -18,37 +20,220 @@ registry = ServiceRegistry()
 _bus = EventBus(registry=registry)
 router = Router(registry, event_bus=_bus)
 
+# ── MCP Proxy ───────────────────────────────────────────────────────
+
+_proxy_manager: ProxyManager | None = None
+
+# Path to enriched service config (with command/args for stdio services)
+_PROXY_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent.parent / "agora-proxy-services.json"
+
+
+def _load_proxy_services() -> list[dict]:
+    """Load proxy service configs from the enriched config file."""
+    from agora.persistence import json_load
+    data = json_load(_PROXY_CONFIG_PATH, default={})
+    return data if isinstance(data, list) else data.get("services", [])
+
+
+async def _init_proxy():
+    """Initialize the proxy manager and connect to all configured downstream services."""
+    global _proxy_manager
+    if _proxy_manager is not None:
+        return
+
+    _proxy_manager = ProxyManager()
+    services = _load_proxy_services()
+
+    if not services:
+        return
+
+    results = await _proxy_manager.start(services)
+    ok = sum(1 for r in results.values() if r.startswith("ok"))
+    total = len(results)
+    if ok < total:
+        failed = [(n, r) for n, r in results.items() if not r.startswith("ok")]
+        for _name, _reason in failed:
+            pass  # logging handled in manager
+    # Re-register: for each connected proxy service, add to the existing registry
+    for name, client in _proxy_manager.registry.list_clients().items():
+        svc = registry.get(name)
+        if svc:
+            svc.healthy = client.connected
+            svc.mcp_endpoint = f"proxy:{name}"
+    registry._save()
+
+
+@mcp.tool()
+async def proxy_connect() -> str:
+    """Connect to all configured downstream MCP services via the proxy.
+
+    Reads from agora-proxy-services.json for service definitions.
+    Returns connection results for each service.
+    """
+    global _proxy_manager
+    if _proxy_manager is None:
+        _proxy_manager = ProxyManager()
+
+    services = _load_proxy_services()
+    if not services:
+        return json.dumps({
+            "status": "warning",
+            "message": "No proxy services configured in agora-proxy-services.json",
+        }, ensure_ascii=False)
+
+    results = await _proxy_manager.start(services)
+    return json.dumps({
+        "status": "done",
+        "services": results,
+    }, ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+async def proxy_call(tool_name: str, arguments: str = "{}") -> str:
+    """Call a downstream service tool through the MCP proxy.
+
+    The proxy connects to registered downstream MCP services (via stdio or HTTP)
+    and forwards tool calls. Supports both exact and prefix tool name matching.
+
+    Args:
+        tool_name: Full tool name (e.g. 'kos.semantic_search', 'minerva.research_now')
+        arguments: JSON string of tool arguments
+    """
+    if _proxy_manager is None:
+        return json.dumps({
+            "status": "error", "error": "Proxy not initialized. Call proxy_connect first."
+        }, ensure_ascii=False)
+
+    try:
+        args = json.loads(arguments) if isinstance(arguments, str) else arguments
+    except json.JSONDecodeError:
+        args = {}
+
+    try:
+        result = await _proxy_manager.dispatch(tool_name, args)
+        return json.dumps(result, ensure_ascii=False, indent=2)
+    except ValueError as e:
+        return json.dumps({"status": "error", "error": str(e)}, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "status": "error", "error": f"Proxy call failed: {str(e)[:200]}"
+        }, ensure_ascii=False)
+
+
+@mcp.tool()
+async def proxy_status() -> str:
+    """Show current proxy connection status and available tools."""
+    if _proxy_manager is None:
+        return json.dumps({"status": "not_initialized"}, ensure_ascii=False)
+
+    status = _proxy_manager.status()
+    return json.dumps(status, ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+async def proxy_add_service(
+    name: str,
+    mcp_endpoint: str = "",
+    command: str = "",
+    args: str = "",
+) -> str:
+    """Add and connect a downstream MCP service to the proxy.
+
+    Args:
+        name: Service name (e.g. 'kos', 'minerva')
+        mcp_endpoint: HTTP endpoint URL (e.g. 'http://localhost:7420/mcp')
+                      Leave empty for stdio services
+        command: Command for stdio services (e.g. 'python3')
+        args: Space-separated arguments for stdio command
+    """
+    global _proxy_manager
+    if _proxy_manager is None:
+        _proxy_manager = ProxyManager()
+
+    svc: dict = {"name": name}
+    if mcp_endpoint:
+        svc["mcp_endpoint"] = mcp_endpoint
+    if command:
+        svc["command"] = command
+    if args:
+        svc["args"] = args.split()
+
+    result = await _proxy_manager.add_service(svc)
+    return json.dumps({"status": result}, ensure_ascii=False)
+
+
+@mcp.tool()
+async def proxy_remove_service(name: str) -> str:
+    """Disconnect and remove a downstream service from the proxy."""
+    if _proxy_manager is None:
+        return json.dumps({"status": "not_initialized"}, ensure_ascii=False)
+    await _proxy_manager.remove_service(name)
+    return json.dumps({"status": "removed", "service": name}, ensure_ascii=False)
+
 
 # ── Service management tools ─────────────────────────────────────
 
+
 @mcp.tool()
-def register_service(name: str, description: str = "", mcp_endpoint: str = "",
-                     health_endpoint: str = "", port: int = 0, tags: str = "") -> str:
+def register_service(name: str, description: str = "", protocol: str = "mcp",
+                     protocol_config: str = "{}", mcp_endpoint: str = "",
+                     health_endpoint: str = "", port: int = 0, tags: str = "",
+                     command: str = "", mcp_args: str = "") -> str:
     """Register a service with the Agora hub.
 
     Args:
         name: Unique service name (e.g. 'minerva', 'kos', 'sophia')
         description: Human-readable description
-        mcp_endpoint: MCP server URL (e.g. 'http://localhost:8765/mcp')
+        protocol: Service protocol — mcp | rest | grpc | stdio | websocket (default: mcp)
+        protocol_config: JSON string of protocol-specific settings (default: {})
+        mcp_endpoint: Server URL (e.g. 'http://localhost:8765/mcp'), also used for REST endpoints
         health_endpoint: Health check URL (e.g. 'http://localhost:8765/health')
         port: Service port
         tags: Comma-separated tags
+        command: Command for proxy/stdio connection (e.g. 'python3')
+        mcp_args: Space-separated args for proxy/stdio command
     """
     from agora.registry import Service
 
-    # Validate URLs against SSRF
-    if health_endpoint and not _is_safe_url(health_endpoint):
-        return json.dumps({"status": "error", "error": "Health endpoint URL targets internal network"})
-    if mcp_endpoint and not _is_safe_url(mcp_endpoint):
-        return json.dumps({"status": "error", "error": "MCP endpoint URL targets internal network"})
     if not (0 <= port <= 65535):
         return json.dumps({"status": "error", "error": "Port must be 0-65535"})
 
-    svc = Service(name=name, description=description, mcp_endpoint=mcp_endpoint,
+    # Parse protocol config
+    proto_cfg, err = _parse_protocol_config(protocol_config)
+    if err:
+        return json.dumps({"status": "error", "error": f"protocol_config is not valid JSON: {err}"})
+
+    # Group proxy info — only used if command is provided
+    proxy_info = {"command": command, "args": mcp_args.split() if mcp_args else []}
+
+    # Build and register service
+    svc = Service(name=name, description=description, protocol=protocol,
+                  protocol_config=proto_cfg, mcp_endpoint=mcp_endpoint,
                   health_endpoint=health_endpoint, port=port,
-                  tags=[t.strip() for t in tags.split(",") if t.strip()])
-    registry.register(svc)
+                  tags=_parse_tags(tags))
+    # SSRF/URL validation handled by registry.register()
+    try:
+        registry.register(svc)
+    except ValueError as e:
+        return json.dumps({"status": "error", "error": str(e)})
+
+    if command:
+        _save_proxy_service({
+            "name": name, "command": proxy_info["command"],
+            "args": proxy_info["args"], "mcp_endpoint": mcp_endpoint,
+        })
+
     return json.dumps({"status": "registered", "name": name})
+
+
+def _save_proxy_service(svc: dict):
+    """Append a service config to the proxy services file."""
+    from agora.persistence import json_save
+    existing = _load_proxy_services()
+    # Replace if exists, else append
+    existing = [s for s in existing if s.get("name") != svc.get("name")]
+    existing.append(svc)
+    json_save(_PROXY_CONFIG_PATH, existing)
 
 
 @mcp.tool()

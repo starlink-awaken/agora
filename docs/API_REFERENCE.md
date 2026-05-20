@@ -8,20 +8,37 @@
 
 ```bash
 agora register <name>                    # 注册服务
-  --mcp <url>         MCP server 地址
-  --health <url>      健康检查地址
-  --port <port>       服务端口
-  --description "..."  描述
-  --tags "tag1,tag2"  标签
+  --protocol mcp|rest|grpc|stdio|websocket  # 服务协议 (默认: mcp)
+  --protocol-config '{"key":"val"}'       # 协议配置 JSON
+  --mcp <url>                             # 端点地址
+  --health <url>                          # 健康检查地址
+  --port <port>                           # 服务端口
+  --tags "tag1,tag2"                      # 标签
 
 agora list                               # 列出所有服务及健康状态
 agora health                             # 主动探测所有服务健康
+agora discover                           # 自动发现 workspace MCP 服务
+agora search <keyword>                   # 搜索注册服务
+agora info <name>                        # 服务详情 (含断路器)
+agora stats                              # 调用统计 (P50/P90/P99)
 
 agora route <tool_name> <service_name>   # 添加工具→服务路由
-
 agora routes                             # 列出所有路由
 
+agora pipeline <name>                    # 运行 Pipeline
+  --stream                               # 流式输出
+  --parallel                             # 并行执行
+agora pipeline-define <file>             # 自定义 Pipeline
+
+agora market list|search|install|publish # 服务市场
+agora tenant list|add|remove             # 多租户管理
+agora instance add <svc> --mcp <url>      # 多实例负载均衡
+
 agora mcp                                # 启动 MCP Server
+agora web                                # 启动 Web Dashboard (:7430)
+agora init                               # 引导向导
+agora completion                         # Shell 补全
+agora event publish|log|subscribe        # 事件总线
 ```
 
 ---
@@ -46,14 +63,18 @@ Tool: register_service
 Params:
   name            (string, required)  — 唯一服务名
   description     (string, optional)  — 描述
-  mcp_endpoint    (string, optional)  — MCP URL (e.g. http://... 或 CLI 命令)
+  protocol        (string, optional)  — 协议: mcp|rest|grpc|stdio|websocket (默认: mcp)
+  protocol_config (string, optional)  — 协议配置 JSON (默认: "{}")
+  mcp_endpoint    (string, optional)  — 端点 URL (MCP/REST 通用)
   health_endpoint (string, optional)  — Health URL
   port            (number, optional)  — 端口 (0-65535)
   tags            (string, optional)  — 逗号分隔标签
+  command         (string, optional)  — stdio/proxy 命令 (e.g. "python3")
+  mcp_args        (string, optional)  — 命令参数 (空格分隔)
 
 Security:
-  - health_endpoint URL 验证：阻止私有/内部 IP (SSRF 防护)
-  - mcp_endpoint 如果是 HTTP URL 同样验证
+  - health_endpoint/mcp_endpoint SSRF 防护由 registry.register() 统一校验
+  - 协议校验: 仅允许已知协议 (mcp/rest/grpc/stdio/websocket)
   - 端口范围 0-65535
   - 最多 50 个注册服务
 ```
@@ -184,6 +205,55 @@ Internally:
   "summary": "...",
   ...
 }
+```
+
+---
+
+#### 7. publish_event / subscribe_event / get_event_log
+
+事件总线 — 发布/订阅/查询事件。
+
+```
+Tool: publish_event
+Params: event_type (required), payload (required, JSON string), source (optional)
+
+Tool: subscribe_event
+Params: pattern (required), callback_url (optional)
+
+Tool: get_event_log
+Params: limit (optional, default=50), since (optional, ISO timestamp)
+```
+
+---
+
+#### 8. proxy_connect / proxy_call / proxy_status / proxy_add_service / proxy_remove_service
+
+MCP Proxy — 管理下游 MCP 服务透传连接。
+
+```
+Tool: proxy_connect     — 连接所有配置的下游服务
+Tool: proxy_call        — 透传调用下游服务工具
+  Params: tool_name (required), arguments (optional, JSON)
+Tool: proxy_status      — 查看连接状态
+Tool: proxy_add_service — 动态添加下游服务
+  Params: name (required), mcp_endpoint/command/args (optional)
+Tool: proxy_remove_service — 移除下游服务
+  Params: name (required)
+```
+
+---
+
+### 协议扩展
+
+```python
+# 注册 REST API 服务
+register_service(name="my-api", protocol="rest",
+                 protocol_config='{"method":"GET","headers":{"X-Key":"xxx"}}',
+                 mcp_endpoint="http://localhost:3000/api")
+
+# 注册 stdio 命令行服务
+register_service(name="my-tool", protocol="stdio",
+                 protocol_config='{"command":"python3","args":["-m","my_tool"]}')
 ```
 
 ---

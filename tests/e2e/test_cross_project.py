@@ -9,7 +9,6 @@ Verifies:
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 AGORA = str(Path(__file__).parent.parent.parent / ".venv" / "bin" / "agora")

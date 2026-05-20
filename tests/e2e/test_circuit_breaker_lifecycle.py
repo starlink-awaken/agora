@@ -1,5 +1,5 @@
 """E2E test: Circuit breaker lifecycle — CLOSED → OPEN → HALF_OPEN → CLOSED."""
-from agora.registry import ServiceRegistry, Service
+from agora.registry import Service, ServiceRegistry
 
 
 def _new_registry(**kwargs):
@@ -36,7 +36,7 @@ class TestCircuitBreakerLifecycle:
 
     def test_circuit_state_persistence_only_static(self):
         """Only static config should be persisted, not runtime state."""
-        import tempfile, json
+        import tempfile
         from pathlib import Path
         path = Path(tempfile.mkdtemp()) / "test-cb.json"
         r = ServiceRegistry(storage_path=str(path))
