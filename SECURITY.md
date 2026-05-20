@@ -10,7 +10,7 @@ Email the details to the maintainers. We will respond within 48 hours.
 
 | Version | Supported |
 |---------|-----------|
-| 1.2.x  | Active |
+| 1.3.x  | Active |
 
 ## Security Design
 

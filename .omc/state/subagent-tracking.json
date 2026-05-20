@@ -125,10 +125,64 @@
       "status": "completed",
       "completed_at": "2026-05-19T06:42:15.919Z",
       "duration_ms": 770082
+    },
+    {
+      "agent_id": "a97897e414419f070",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T02:08:56.289Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T02:11:34.660Z",
+      "duration_ms": 158371
+    },
+    {
+      "agent_id": "a82e27fca6f1a8aff",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T02:08:56.347Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T02:11:51.552Z",
+      "duration_ms": 175205
+    },
+    {
+      "agent_id": "a72f2b67d1ba55d21",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T02:08:56.400Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T02:12:55.748Z",
+      "duration_ms": 239348
+    },
+    {
+      "agent_id": "ac615615dcb58de6c",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T03:14:12.537Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T03:20:33.233Z",
+      "duration_ms": 380696
+    },
+    {
+      "agent_id": "a80f9e150c10b2a44",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T03:14:12.591Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T03:19:03.576Z",
+      "duration_ms": 290985
+    },
+    {
+      "agent_id": "aa33c1ab93a9e092b",
+      "agent_type": "general-purpose",
+      "started_at": "2026-05-20T03:14:12.648Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T03:19:11.860Z",
+      "duration_ms": 299212
     }
   ],
-  "total_spawned": 8,
-  "total_completed": 14,
+  "total_spawned": 12,
+  "total_completed": 20,
   "total_failed": 0,
-  "last_updated": "2026-05-19T06:54:06.918Z"
+  "last_updated": "2026-05-20T03:20:33.335Z"
 }

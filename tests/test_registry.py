@@ -162,3 +162,9 @@ class TestServiceRegistry:
         count = r.clear_all()
         assert count == 3
         assert r.list_all() == []
+
+    def test_clear_all_empty(self):
+        r = _new_registry()
+        count = r.clear_all()
+        assert count == 0
+        assert r.list_all() == []

@@ -235,7 +235,7 @@ async def proxy_call(tool_name: str, arguments: str = "{}") -> str:
   "name": "kos",
   "mcp_endpoint": "stdio",
   "command": "python3",
-  "args": ["/Users/xiamingxing/Workspace/Tools/kos/kos-mcp-server.py"],
+  "args": ["/Users/xiamingxing/Workspace/kos/kos-mcp-server.py"],
   ...
 }
 ```

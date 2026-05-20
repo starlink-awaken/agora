@@ -31,6 +31,22 @@ class TestRouter:
         assert routes["sophia.compile"] == "sophia"
 
 
+class TestAddInstance:
+    def test_promotes_to_list_with_protocol(self):
+        """Adding an instance should propagate protocol/config to instance dicts."""
+        registry = ServiceRegistry()
+        router = Router(registry)
+        registry.register(Service("api", protocol="rest",
+                                  mcp_endpoint="http://192.0.2.1:3000",
+                                  protocol_config={"method": "POST"}))
+        router._add_instance("api", "http://192.0.2.2:3000")
+        svc = registry.get("api")
+        assert len(svc.instances) == 2
+        for inst in svc.instances:
+            assert inst["protocol"] == "rest"
+            assert inst["protocol_config"] == {"method": "POST"}
+
+
 class TestProtocolDispatch:
     def setup_method(self):
         self.registry = ServiceRegistry()

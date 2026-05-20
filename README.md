@@ -65,9 +65,9 @@ agora mcp             # start MCP server
 
 | Phase | Version | Focus | Timeline |
 |-------|---------|-------|----------|
-| Phase 1 | v1.2 | Core convergence: registry + router + health + MCP | Current |
-| Phase 2 | v1.2 | Observability: tracing + Prometheus + circuit breaker panel | 2-4 weeks |
-| Phase 3 | v2.0 | Governance: rate limiting + quotas + dependency graph + auto-discovery | 1-2 months |
+| Phase 1 | v1.2 | Core convergence: registry + router + health + MCP (14 tools) | ✅ Done |
+| Phase 2 | v1.3 | Multi-protocol + proxy + REST handler + event bus + dashboard v3 | ✅ Current |
+| Phase 3 | v2.0 | REST full impl + gRPC + Governance: rate limiting + quotas + dependency graph | 1-2 months |
 
 ### Installation
 
@@ -156,9 +156,9 @@ agora mcp             # 启动 MCP server
 
 | 阶段 | 版本 | 重点 | 时间 |
 |------|------|------|------|
-| Phase 1 | v1.2 | 核心收敛：注册表 + 路由 + 健康检查 + MCP | 当前 |
-| Phase 2 | v1.2 | 可观测性：调用链追踪 + Prometheus + 断路器面板 | 2-4 周 |
-| Phase 3 | v2.0 | 治理：速率限制 + 配额 + 依赖图 + 自动发现 | 1-2 月 |
+| Phase 1 | v1.2 | 核心收敛：注册表 + 路由 + 健康检查 + MCP (14 tools) | ✅ 完成 |
+| Phase 2 | v1.3 | 多协议 + Proxy + REST 处理 + 事件总线 + Dashboard v3 | ✅ 当前 |
+| Phase 3 | v2.0 | REST/gRPC 完善 + 治理：速率限制 + 配额 + 依赖图 | 1-2 月 |
 
 ### 许可证
 
