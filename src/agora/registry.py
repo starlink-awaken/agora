@@ -60,6 +60,21 @@ def _is_safe_url(url: str) -> bool:
 
 
 @dataclass
+class ServiceConfig:
+    """Grouped params for register_service to reduce parameter sprawl."""
+    name: str
+    description: str = ""
+    protocol: str = "mcp"
+    protocol_config: dict = field(default_factory=dict)
+    mcp_endpoint: str = ""
+    health_endpoint: str = ""
+    port: int = 0
+    tags: str = ""
+    command: str = ""
+    mcp_args: str = ""
+
+
+@dataclass
 class Service:
     """A registered service capable of MCP, REST, gRPC, or stdio protocols."""
     name: str

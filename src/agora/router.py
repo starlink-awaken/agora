@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import atexit
 import json as _json
+import os
 import time as _time
 from collections import deque
 from pathlib import Path as _Path
@@ -211,10 +212,16 @@ class Router:
             self._flush_traces()
 
     def _flush_traces(self):
-        """Write buffered traces to disk."""
+        """Write buffered traces to disk, auto-rotate at 1MB."""
         if not self._trace_buffer:
             return
         try:
+            # Rotate if exceeds 1MB
+            if self._trace_path.exists() and self._trace_path.stat().st_size > 1_048_576:
+                rotated = self._trace_path.with_suffix(".jsonl.1")
+                if rotated.exists():
+                    rotated.unlink()
+                os.rename(self._trace_path, rotated)
             with open(self._trace_path, "a") as f:
                 f.write("\n".join(self._trace_buffer) + "\n")
             self._trace_buffer.clear()

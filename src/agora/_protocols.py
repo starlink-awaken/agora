@@ -17,6 +17,15 @@ from agora.registry import _is_safe_url
 
 logger = structlog.get_logger(__name__)
 
+
+def _check_ssrf(url: str, tool_name: str = "") -> dict | None:
+    """Check URL for SSRF. Returns error dict if blocked, None if safe."""
+    if url.startswith("http") and not _is_safe_url(url):
+        if tool_name:
+            logger.warning("ssrf_blocked", tool=tool_name, url=url)
+        return {"status": "error", "error": "Service unavailable"}
+    return None
+
 # ── Connection pool singleton ──────────────────────────────────────
 
 _client: httpx.AsyncClient | None = None
@@ -63,9 +72,8 @@ async def dispatch(instance: dict, tool_name: str, arguments: dict) -> dict:
 
 async def _call_mcp(tool_name: str, arguments: dict, mcp_endpoint: str) -> dict:
     """Execute an MCP tools/call request against the target endpoint."""
-    if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
-        logger.warning("ssrf_blocked", tool=tool_name, url=mcp_endpoint)
-        return {"status": "error", "error": "Service unavailable"}
+    if (err := _check_ssrf(mcp_endpoint, tool_name)):
+        return err
 
     client = _get_client()
     resp = await client.post(
@@ -89,9 +97,8 @@ async def _call_rest(tool_name: str, arguments: dict, instance: dict) -> dict:
     base_url = instance["mcp_endpoint"].rstrip("/")
     cfg = instance.get("protocol_config", {})
 
-    if base_url.startswith("http") and not _is_safe_url(base_url):
-        logger.warning("ssrf_blocked", tool=tool_name, url=base_url)
-        return {"status": "error", "error": "Service unavailable"}
+    if (err := _check_ssrf(base_url, tool_name)):
+        return err
 
     path = cfg.get("path", "")
     if not path:

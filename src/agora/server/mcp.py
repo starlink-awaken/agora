@@ -188,32 +188,33 @@ def register_service(name: str, description: str = "", protocol: str = "mcp",
         command: Command for proxy/stdio connection (e.g. 'python3')
         mcp_args: Space-separated args for proxy/stdio command
     """
-    from agora.registry import Service
+    from agora.registry import Service, ServiceConfig
 
-    if not (0 <= port <= 65535):
+    cfg = ServiceConfig(name=name, description=description, protocol=protocol,
+                        protocol_config=protocol_config, mcp_endpoint=mcp_endpoint,
+                        health_endpoint=health_endpoint, port=port, tags=tags,
+                        command=command, mcp_args=mcp_args)
+    if not (0 <= cfg.port <= 65535):
         return json.dumps({"status": "error", "error": "Port must be 0-65535"})
 
-    # Parse protocol config
-    proto_cfg, err = _parse_protocol_config(protocol_config)
+    proto_cfg, err = _parse_protocol_config(cfg.protocol_config)
     if err:
         return json.dumps({"status": "error", "error": f"protocol_config is not valid JSON: {err}"})
 
-    # Build and register service
-    svc = Service(name=name, description=description, protocol=protocol,
-                  protocol_config=proto_cfg, mcp_endpoint=mcp_endpoint,
-                  health_endpoint=health_endpoint, port=port,
-                  tags=_parse_tags(tags))
-    # SSRF/URL validation handled by registry.register()
+    svc = Service(name=cfg.name, description=cfg.description, protocol=cfg.protocol,
+                  protocol_config=proto_cfg, mcp_endpoint=cfg.mcp_endpoint,
+                  health_endpoint=cfg.health_endpoint, port=cfg.port,
+                  tags=_parse_tags(cfg.tags))
     try:
         registry.register(svc)
     except ValueError as e:
         return json.dumps({"status": "error", "error": str(e)})
 
-    if command:
+    if cfg.command:
         _save_proxy_service({
-            "name": name, "command": command,
-            "args": mcp_args.split() if mcp_args else [],
-            "mcp_endpoint": mcp_endpoint,
+            "name": cfg.name, "command": cfg.command,
+            "args": cfg.mcp_args.split() if cfg.mcp_args else [],
+            "mcp_endpoint": cfg.mcp_endpoint,
         })
 
     return json.dumps({"status": "registered", "name": name})
