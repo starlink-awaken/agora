@@ -3,7 +3,7 @@
     "agora": {
       "command": "agora",
       "args": ["mcp"],
-      "description": "Agora MCP Service Hub — registry, routing, pipeline orchestration, event bus"
+      "description": "Agora v1.5 — 14 MCP tools: registry, multi-protocol routing (MCP/REST/gRPC/WS), proxy, pipeline orchestration, event bus"
     }
   }
 }

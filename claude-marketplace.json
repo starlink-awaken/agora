@@ -3,12 +3,15 @@
 **API Gateway for AI Agents.** Discover, monitor, and orchestrate all your MCP services from one place.
 
 ## What it does
-- 🔍 Auto-discovers MCP services in your workspace
-- 🫀 Health checks with circuit breaker (CLOSED/OPEN/HALF_OPEN)
-- 🚀 Pipeline orchestration (sequential/parallel/streaming)
-- 📡 Event bus with publish/subscribe
-- 🛒 MCP Tool Marketplace (20+ built-in services)
-- 📊 Web Dashboard + Prometheus metrics
+- 🔍 Auto-discovers MCP services in your workspace (4 strategies)
+- 🫀 Health checks with circuit breaker (CLOSED/OPEN/HALF_OPEN) + webhook alerts
+- 🚀 Pipeline orchestration (sequential/parallel/streaming) + DAG visualization
+- 🔌 Multi-protocol routing (MCP, REST, gRPC, WebSocket, stdio)
+- 📡 Event bus with publish/subscribe/log
+- 🛒 MCP Tool Marketplace (18 built-in services + GitHub install)
+- 📊 Web Dashboard (glassmorphism + WebSocket real-time + topology SVG)
+- 📈 Prometheus /metrics + P50/P90/P99 latency
+- 🔗 Service topology visualization (Hub-Spoke with protocol coloring)
 
 ## Quick Install
 ```bash
@@ -17,8 +20,11 @@ agora discover
 agora web
 ```
 
-## MCP Tools (9)
-`register_service` · `list_services` · `check_health` · `add_route` · `list_routes` · `route_call` · `publish_event` · `subscribe_event` · `get_event_log`
+## MCP Tools (14)
+**Registry:** `register_service` · `list_services` · `check_health`
+**Router:** `add_route` · `list_routes` · `route_call`
+**Proxy:** `proxy_connect` · `proxy_call` · `proxy_status` · `proxy_add_service` · `proxy_remove_service`
+**Event Bus:** `publish_event` · `subscribe_event` · `get_event_log`
 
 ## Links
 - GitHub: https://github.com/starlink-awaken/agora

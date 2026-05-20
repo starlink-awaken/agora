@@ -35,8 +35,10 @@
 | `pipeline.py` | 256 | `Pipeline`, `run/run_stream/run_parallel` |
 | `discovery.py` | 367 | `DiscoveryEngine`, `DiscoveredService` |
 | `market.py` | 241 | `Market` |
-| `cli.py` | 595 | `main`, 20 顶级命令 + 12 子命令 (含 --proto/--rest-method) |
-| `server/mcp.py` | 338 | 14 MCP 工具 (5 proxy + 3 registry + 3 route + 3 event) |
+| `cli.py` | 451 | `main`, 21 顶级命令 + 14 子命令 (含 proto compile) |
+| `server/mcp.py` | 168 | 14 MCP 工具 (5 proxy + 3 registry + 3 route + 3 event) |
+| `_protocols.py` | 148 | 5 协议 handler (MCP/REST/gRPC/WS) + 连接池 + SSRF |
+| `persistence_db.py` | 43 | SQLite 持久化 (WAL, auto-migrate from JSON) |
 | `web/app.py` | 293 | 16 REST 端点 + WebSocket /ws 推送 + 拓扑图 SVG |
 | `wizard.py` | 67 | `run_wizard` |
 
@@ -69,7 +71,7 @@ agora discover     # 服务发现
 
 ## 当前状态
 
-- **测试**: 222 passed, 0 failed
+- **测试**: 222 passed, 0 failed (1 skipped, module-level singleton interaction)
 - **ruff**: 0 errors
-- **覆盖率**: 61%
+- **覆盖率**: ~61%
 - **文档**: README + QUICKSTART + INSTALL + PRODUCT_PLAN + INFRA_PLAN + API_REFERENCE + USER_GUIDE
