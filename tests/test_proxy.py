@@ -71,3 +71,21 @@ class TestProxyManager:
         ]))
         status = self.manager.status()
         assert "status" in status
+
+    def test_remove_nonexistent(self):
+        import asyncio
+        result = asyncio.run(self.manager.remove_service("ghost"))
+        assert result == "not_found"
+
+
+class TestProxyRegistryBasics:
+    def test_empty_entries(self):
+        from agora.mcp_proxy.registry import ProxyRegistry
+        reg = ProxyRegistry()
+        assert reg.entries == {}
+        assert reg.connected_services == []
+
+    def test_get_entry_nonexistent(self):
+        from agora.mcp_proxy.registry import ProxyRegistry
+        reg = ProxyRegistry()
+        assert reg.get_entry("nonexistent.tool") is None

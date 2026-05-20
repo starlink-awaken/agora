@@ -543,3 +543,93 @@
 {"time": 1779265944.635554, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
 {"time": 1779265944.6365418, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0001, "detail": "400"}
 {"time": 1779265944.637354, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}
+{"time": 1779266266.1726122, "tool": "nonexistent", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779266306.232186, "tool": "grpc-svc", "service": "grpc-svc", "status": "error", "elapsed_s": 0.009, "detail": "gRPC requires compiled proto stub. Set protocol_config.stub_module and .request_class, or use REST/M"}
+{"time": 1779266306.239271, "tool": "ws-svc", "service": "ws-svc", "status": "error", "elapsed_s": 0.0059, "detail": "WebSocket call failed: BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_h"}
+{"time": 1779266306.24083, "tool": "stdio-svc", "service": "stdio-svc", "status": "error", "elapsed_s": 0.0, "detail": "stdio protocol uses proxy, not router"}
+{"time": 1779266366.245999, "tool": "retry-api", "service": "retry-api", "status": "error", "elapsed_s": 60.0038, "detail": "REST call failed: "}
+{"time": 1779266366.248725, "tool": "bad-proto", "service": "bad-proto", "status": "error", "elapsed_s": 0.0, "detail": "Unknown protocol: unknown_proto"}
+{"time": 1779266366.249574, "tool": "bad-ws", "service": "bad-ws", "status": "error", "elapsed_s": 0.0, "detail": "Invalid WebSocket URL"}
+{"time": 1779266366.250505, "tool": "nonexistent.tool", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779266366.2512078, "tool": "down-svc", "service": "down-svc", "status": "error", "elapsed_s": 0.0, "detail": "no_instance"}
+{"time": 1779266366.2519958, "tool": "mcp-svc.tool", "service": "mcp-svc", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779266366.25306, "tool": "ssrf.tool", "service": "ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779266366.254118, "tool": "err.tool", "service": "err", "status": "error", "elapsed_s": 0.0, "detail": "connection refused"}
+{"time": 1779266366.254854, "tool": "rest-api.create", "service": "rest-api", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779266366.2554939, "tool": "rest-ssrf", "service": "rest-ssrf", "status": "error", "elapsed_s": 0.0, "detail": "Service unavailable"}
+{"time": 1779266366.256213, "tool": "retry-api.get", "service": "retry-api", "status": "ok", "elapsed_s": 0.0001, "detail": ""}
+{"time": 1779266366.256913, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
+{"time": 1779266366.257629, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0, "detail": "400"}
+{"time": 1779266366.2583401, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}
+{"time": 1779266376.006894, "tool": "nonexistent", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779266416.065768, "tool": "grpc-svc", "service": "grpc-svc", "status": "error", "elapsed_s": 0.0086, "detail": "gRPC requires compiled proto stub. Set protocol_config.stub_module and .request_class, or use REST/M"}
+{"time": 1779266416.07324, "tool": "ws-svc", "service": "ws-svc", "status": "error", "elapsed_s": 0.0065, "detail": "WebSocket call failed: BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_h"}
+{"time": 1779266416.07425, "tool": "stdio-svc", "service": "stdio-svc", "status": "error", "elapsed_s": 0.0, "detail": "stdio protocol uses proxy, not router"}
+{"time": 1779266476.079123, "tool": "retry-api", "service": "retry-api", "status": "error", "elapsed_s": 60.0035, "detail": "REST call failed: "}
+{"time": 1779266476.080429, "tool": "bad-proto", "service": "bad-proto", "status": "error", "elapsed_s": 0.0, "detail": "Unknown protocol: unknown_proto"}
+{"time": 1779266476.081455, "tool": "bad-ws", "service": "bad-ws", "status": "error", "elapsed_s": 0.0, "detail": "Invalid WebSocket URL"}
+{"time": 1779266476.082557, "tool": "nonexistent.tool", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779266476.083582, "tool": "down-svc", "service": "down-svc", "status": "error", "elapsed_s": 0.0, "detail": "no_instance"}
+{"time": 1779266476.084414, "tool": "mcp-svc.tool", "service": "mcp-svc", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779266476.085118, "tool": "ssrf.tool", "service": "ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779266476.085807, "tool": "err.tool", "service": "err", "status": "error", "elapsed_s": 0.0, "detail": "connection refused"}
+{"time": 1779266476.086621, "tool": "rest-api.create", "service": "rest-api", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779266476.0875452, "tool": "rest-ssrf", "service": "rest-ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779266476.088321, "tool": "retry-api.get", "service": "retry-api", "status": "ok", "elapsed_s": 0.0001, "detail": ""}
+{"time": 1779266476.089025, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
+{"time": 1779266476.0897229, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0, "detail": "400"}
+{"time": 1779266476.090438, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}
+{"time": 1779267620.021183, "tool": "nonexistent", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779267660.12324, "tool": "grpc-svc", "service": "grpc-svc", "status": "error", "elapsed_s": 0.0108, "detail": "gRPC requires compiled proto stub. Set protocol_config.stub_module and .request_class, or use REST/M"}
+{"time": 1779267660.133471, "tool": "ws-svc", "service": "ws-svc", "status": "error", "elapsed_s": 0.009, "detail": "WebSocket call failed: BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_h"}
+{"time": 1779267660.134655, "tool": "stdio-svc", "service": "stdio-svc", "status": "error", "elapsed_s": 0.0, "detail": "stdio protocol uses proxy, not router"}
+{"time": 1779267720.139702, "tool": "retry-api", "service": "retry-api", "status": "error", "elapsed_s": 60.0037, "detail": "REST call failed: "}
+{"time": 1779267720.144713, "tool": "bad-proto", "service": "bad-proto", "status": "error", "elapsed_s": 0.0, "detail": "Unknown protocol: unknown_proto"}
+{"time": 1779267720.1457448, "tool": "bad-ws", "service": "bad-ws", "status": "error", "elapsed_s": 0.0, "detail": "Invalid WebSocket URL"}
+{"time": 1779267720.1468768, "tool": "nonexistent.tool", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779267720.147721, "tool": "down-svc", "service": "down-svc", "status": "error", "elapsed_s": 0.0, "detail": "no_instance"}
+{"time": 1779267720.148615, "tool": "mcp-svc.tool", "service": "mcp-svc", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779267720.149795, "tool": "ssrf.tool", "service": "ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779267720.150909, "tool": "err.tool", "service": "err", "status": "error", "elapsed_s": 0.0, "detail": "connection refused"}
+{"time": 1779267720.151886, "tool": "rest-api.create", "service": "rest-api", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779267720.152836, "tool": "rest-ssrf", "service": "rest-ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779267720.153874, "tool": "retry-api.get", "service": "retry-api", "status": "ok", "elapsed_s": 0.0001, "detail": ""}
+{"time": 1779267720.154919, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
+{"time": 1779267720.155804, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0, "detail": "400"}
+{"time": 1779267720.1566348, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}
+{"time": 1779267869.1984372, "tool": "nonexistent", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779267909.310442, "tool": "grpc-svc", "service": "grpc-svc", "status": "error", "elapsed_s": 0.0137, "detail": "gRPC requires compiled proto stub. Set protocol_config.stub_module and .request_class, or use REST/M"}
+{"time": 1779267909.320823, "tool": "ws-svc", "service": "ws-svc", "status": "error", "elapsed_s": 0.009, "detail": "WebSocket call failed: BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_h"}
+{"time": 1779267909.3222132, "tool": "stdio-svc", "service": "stdio-svc", "status": "error", "elapsed_s": 0.0, "detail": "stdio protocol uses proxy, not router"}
+{"time": 1779267969.3273442, "tool": "retry-api", "service": "retry-api", "status": "error", "elapsed_s": 60.0037, "detail": "REST call failed: "}
+{"time": 1779267969.328931, "tool": "bad-proto", "service": "bad-proto", "status": "error", "elapsed_s": 0.0, "detail": "Unknown protocol: unknown_proto"}
+{"time": 1779267969.330105, "tool": "bad-ws", "service": "bad-ws", "status": "error", "elapsed_s": 0.0, "detail": "Invalid WebSocket URL"}
+{"time": 1779267969.331418, "tool": "nonexistent.tool", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779267969.3327382, "tool": "down-svc", "service": "down-svc", "status": "error", "elapsed_s": 0.0, "detail": "no_instance"}
+{"time": 1779267969.333903, "tool": "mcp-svc.tool", "service": "mcp-svc", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779267969.335871, "tool": "ssrf.tool", "service": "ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779267969.3369658, "tool": "err.tool", "service": "err", "status": "error", "elapsed_s": 0.0, "detail": "connection refused"}
+{"time": 1779267969.337955, "tool": "rest-api.create", "service": "rest-api", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779267969.3389099, "tool": "rest-ssrf", "service": "rest-ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779267969.3402822, "tool": "retry-api.get", "service": "retry-api", "status": "ok", "elapsed_s": 0.0001, "detail": ""}
+{"time": 1779267969.341277, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
+{"time": 1779267969.342347, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0001, "detail": "400"}
+{"time": 1779267969.343756, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}
+{"time": 1779267994.480182, "tool": "nonexistent", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779268034.562784, "tool": "grpc-svc", "service": "grpc-svc", "status": "error", "elapsed_s": 0.0097, "detail": "gRPC requires compiled proto stub. Set protocol_config.stub_module and .request_class, or use REST/M"}
+{"time": 1779268034.571131, "tool": "ws-svc", "service": "ws-svc", "status": "error", "elapsed_s": 0.0065, "detail": "WebSocket call failed: BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_h"}
+{"time": 1779268034.572802, "tool": "stdio-svc", "service": "stdio-svc", "status": "error", "elapsed_s": 0.0, "detail": "stdio protocol uses proxy, not router"}
+{"time": 1779268094.5735738, "tool": "retry-api", "service": "retry-api", "status": "error", "elapsed_s": 60.0035, "detail": "REST call failed: "}
+{"time": 1779268094.5754821, "tool": "bad-proto", "service": "bad-proto", "status": "error", "elapsed_s": 0.0, "detail": "Unknown protocol: unknown_proto"}
+{"time": 1779268094.57675, "tool": "bad-ws", "service": "bad-ws", "status": "error", "elapsed_s": 0.0, "detail": "Invalid WebSocket URL"}
+{"time": 1779268094.577918, "tool": "nonexistent.tool", "service": "unknown", "status": "error", "elapsed_s": 0.0, "detail": "not_found"}
+{"time": 1779268094.579108, "tool": "down-svc", "service": "down-svc", "status": "error", "elapsed_s": 0.0, "detail": "no_instance"}
+{"time": 1779268094.580033, "tool": "mcp-svc.tool", "service": "mcp-svc", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779268094.580876, "tool": "ssrf.tool", "service": "ssrf", "status": "error", "elapsed_s": 0.0001, "detail": "Service unavailable"}
+{"time": 1779268094.5819688, "tool": "err.tool", "service": "err", "status": "error", "elapsed_s": 0.0, "detail": "connection refused"}
+{"time": 1779268094.5832288, "tool": "rest-api.create", "service": "rest-api", "status": "ok", "elapsed_s": 0.0, "detail": ""}
+{"time": 1779268094.584095, "tool": "rest-ssrf", "service": "rest-ssrf", "status": "error", "elapsed_s": 0.0, "detail": "Service unavailable"}
+{"time": 1779268094.585143, "tool": "retry-api.get", "service": "retry-api", "status": "ok", "elapsed_s": 0.0001, "detail": ""}
+{"time": 1779268094.5862489, "tool": "exhaust.get", "service": "exhaust", "status": "error", "elapsed_s": 0.0001, "detail": "502"}
+{"time": 1779268094.587282, "tool": "bad-req.get", "service": "bad-req", "status": "error", "elapsed_s": 0.0001, "detail": "400"}
+{"time": 1779268094.588272, "tool": "crash.tool", "service": "crash", "status": "error", "elapsed_s": 0.0, "detail": "boom"}

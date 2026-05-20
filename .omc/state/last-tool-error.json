@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
   "tool_input_preview": "{\"command\":\"ruff check src/agora/ tests/ --select F,E,I,N,W,UP,B,C4,SIM 2>&1\",\"description\":\"Ruff check\"}",
-  "error": "Exit code 1\nI001 [*] Import block is un-sorted or un-formatted\n --> tests/test_protocols.py:2:1\n  |\n1 |   \"\"\"Tests for _protocols.py — handlers and dispatch.\"\"\"\n2 | / import pytest\n3 | |\n4 | | from agora._protocols import dispatch, _get_client, close_client\n5 | | from agora.registry import Service, ServiceRegistry\n  | |___________________________________________________^\n  |\nhelp: Organize imports\n\nF401 [*] `agora.registry.Service` imported but unused\n --> tests/test_protocols.py:5:28\n  |\n4 | fr...",
-  "timestamp": "2026-05-20T08:30:26.583Z",
+  "error": "Exit code 1\nI001 [*] Import block is un-sorted or un-formatted\n  --> src/agora/web/app.py:14:1\n   |\n12 |   \"\"\"\n13 |\n14 | / from __future__ import annotations\n15 | |\n16 | | import asyncio\n17 | | import os\n18 | | import time\n19 | | from pathlib import Path\n20 | |\n21 | | from contextlib import asynccontextmanager\n22 | |\n23 | | from fastapi import FastAPI, Form, Request, WebSocket\n24 | | from fastapi.middleware.cors import CORSMiddleware\n25 | | from fastapi.responses import HTMLResponse, JSONRespons...",
+  "timestamp": "2026-05-20T09:06:26.011Z",
   "retry_count": 1
 }

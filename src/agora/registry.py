@@ -161,17 +161,20 @@ class ServiceRegistry:
                 asyncio.run(_send())
 
     def _load(self):
-        """Load persisted services from JSON file."""
-        from agora.persistence import json_load
-        data = json_load(Path(self._storage_path))
+        """Load persisted services from storage (SQLite with JSON fallback)."""
+        from agora.persistence_db import json_load as _db_load
+        data = _db_load(Path(self._storage_path))
+        if not data:
+            from agora.persistence import json_load
+            data = json_load(Path(self._storage_path))
         for s in data.get("services", []):
             svc = Service(**{k: v for k, v in s.items() if k in Service.__dataclass_fields__})
             self._services[svc.name] = svc
 
     def _save(self):
-        """Persist services to JSON file. Only stores static config, not runtime state."""
-        from agora.persistence import json_save
-        json_save(Path(self._storage_path), {"services": [
+        """Persist services to storage (SQLite). Only stores static config."""
+        from agora.persistence_db import json_save as _db_save
+        _db_save(Path(self._storage_path), {"services": [
             {"name": s.name, "description": s.description,
              "protocol": s.protocol, "protocol_config": s.protocol_config,
              "mcp_endpoint": s.mcp_endpoint, "health_endpoint": s.health_endpoint,

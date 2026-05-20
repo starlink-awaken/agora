@@ -16,6 +16,7 @@ from __future__ import annotations
 import asyncio
 import os
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Form, Request, WebSocket
@@ -42,7 +43,13 @@ async def _auth_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-app = FastAPI(title="Agora Dashboard", version="1.4.0")
+@asynccontextmanager
+async def _lifespan(_app: FastAPI):
+    yield
+    await router.close()
+
+
+app = FastAPI(title="Agora Dashboard", version="1.4.0", lifespan=_lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"],
@@ -85,11 +92,6 @@ router = Router(registry, event_bus=_bus)
 discovery = DiscoveryEngine()
 pipeline = Pipeline(registry, router)
 
-
-@app.on_event("shutdown")
-async def _shutdown():
-    """Clean up connection pool on server shutdown."""
-    await router.close()
 
 
 def _get_dashboard_html() -> str:
