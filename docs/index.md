@@ -1,6 +1,6 @@
 # Agora Documentation
 
-> API Gateway for AI Agents · v1.4.0
+> API Gateway for AI Agents · v1.5.0
 
 ## Quick Links
 

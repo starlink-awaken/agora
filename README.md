@@ -67,8 +67,9 @@ agora mcp             # start MCP server
 |-------|---------|-------|----------|
 | Phase 1 | v1.2 | Core convergence: registry + router + health + MCP (14 tools) | ✅ Done |
 | Phase 2 | v1.3 | Multi-protocol + proxy + REST handler + event bus + dashboard v3 | ✅ Done |
-| Phase 3 | v1.4 | gRPC/WS/stdio handlers + connection pool + WebSocket push + topology SVG | ✅ Current |
-| Phase 4 | v2.0 | REST full impl + gRPC + Governance: rate limiting + quotas + dependency graph | 1-2 months |
+| Phase 3 | v1.4 | gRPC/WS/stdio handlers + connection pool + WebSocket push + topology SVG | ✅ Done |
+| Phase 4 | v1.5 | SQLite persistence + SSRF dedup + trace rotation + FastAPI lifespan + debt cleanup | ✅ Current |
+| Phase 5 | v2.0 | Governance: API key mgmt + audit log + quotas + dependency graph | 1-2 months |
 
 ### Installation
 
@@ -159,8 +160,9 @@ agora mcp             # 启动 MCP server
 |------|------|------|------|
 | Phase 1 | v1.2 | 核心收敛：注册表 + 路由 + 健康检查 + MCP (14 tools) | ✅ 完成 |
 | Phase 2 | v1.3 | 多协议 + Proxy + REST 处理 + 事件总线 + Dashboard v3 | ✅ 完成 |
-| Phase 3 | v1.4 | gRPC/WS/stdio handlers + 连接池 + WebSocket 推送 + 拓扑图 | ✅ 当前 |
-| Phase 4 | v2.0 | REST/gRPC 完善 + 治理：速率限制 + 配额 + 依赖图 | 1-2 月 |
+| Phase 3 | v1.4 | gRPC/WS/stdio handlers + 连接池 + WebSocket 推送 + 拓扑图 | ✅ 完成 |
+| Phase 4 | v1.5 | SQLite 持久化 + SSRF 去重 + trace 轮转 + lifespan + 债务清理 | ✅ 当前 |
+| Phase 5 | v2.0 | 治理：API Key 管理 + 审计日志 + 配额 + 依赖图 | 1-2 月 |
 
 ### 许可证
 

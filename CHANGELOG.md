@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.5.0] — 2026-05-20
+
+### Added
+- **SQLite persistence** (persistence_db.py) — WAL mode, auto-migration from JSON
+- **gRPC proto CLI**: `agora proto compile` — grpc_tools.protoc wrapper
+- **ServiceConfig dataclass** — grouped register_service params
+
+### Changed
+- **SSRF dedup**: `_check_ssrf()` shared function in _protocols.py
+- **Trace log rotation**: auto-rotate at 1MB (→ .jsonl.1)
+- **FastAPI lifespan**: replaces deprecated `@app.on_event("shutdown")`
+- **REST response**: `_http_status` → `http_status` (clean public API)
+- **_protocols.py**: 0% → 74% test coverage
+
+### Fixed
+- 7/8 skipped tests → now passing (mock path: `agora.router` → `agora._protocols`)
+
 ## [1.4.0] — 2026-05-20
 
 ### Added

@@ -26,7 +26,7 @@ _proxy_manager: ProxyManager | None = None
 
 # Path to enriched service config (with command/args for stdio services)
 # Resolved relative to project root (same convention as registry.py's agora-services.json)
-_PROXY_CONFIG_PATH = Path(__file__).resolve().parents[3] / "agora-proxy-services.json"
+_PROXY_CONFIG_PATH = Path(__file__).resolve().parents[3] / "agora-proxy-services.json"  # 等价于 config 目录
 
 
 def _load_proxy_services() -> list[dict]:

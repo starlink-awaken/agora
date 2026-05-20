@@ -49,7 +49,7 @@ async def _lifespan(_app: FastAPI):
     await router.close()
 
 
-app = FastAPI(title="Agora Dashboard", version="1.4.0", lifespan=_lifespan)
+app = FastAPI(title="Agora Dashboard", version="1.5.0", lifespan=_lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:7430", "http://127.0.0.1:7430"],

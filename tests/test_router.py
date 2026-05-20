@@ -381,7 +381,7 @@ class TestRouterAdvanced:
         monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("bad-req.get", {})
         assert result["status"] == "error"
-        assert result.get("_http_status") == 400
+        assert result.get("http_status") == 400
 
     @pytest.mark.asyncio
     async def test_route_exception_path(self, monkeypatch):

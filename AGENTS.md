@@ -7,7 +7,7 @@
 ## 项目身份
 
 - **名称**: Agora — MCP Service Convergence Hub
-- **版本**: 1.4.0 (Beta)
+- **版本**: 1.5.0 (Beta)
 - **定位**: API Gateway for AI Agents · Hub-Spoke 拓扑
 - **Python**: >= 3.11
 - **安装**: `pip install -e "."`
@@ -69,7 +69,7 @@ agora discover     # 服务发现
 
 ## 当前状态
 
-- **测试**: 203 passed, 0 failed
+- **测试**: 222 passed, 0 failed
 - **ruff**: 0 errors
 - **覆盖率**: 61%
 - **文档**: README + QUICKSTART + INSTALL + PRODUCT_PLAN + INFRA_PLAN + API_REFERENCE + USER_GUIDE

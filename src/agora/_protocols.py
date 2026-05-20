@@ -125,7 +125,7 @@ async def _call_rest(tool_name: str, arguments: dict, instance: dict) -> dict:
                 body = resp.json()
             except Exception:
                 body = {"_body": resp.text[:2000]}
-            body["_http_status"] = resp.status_code
+            body["http_status"] = resp.status_code
             resp.raise_for_status()
             return body
         except httpx.HTTPStatusError as e:
@@ -133,7 +133,7 @@ async def _call_rest(tool_name: str, arguments: dict, instance: dict) -> dict:
             if attempt < max_retries and status in (408, 429, 500, 502, 503, 504):
                 last_error = e
                 continue
-            return {"status": "error", "_http_status": status,
+            return {"status": "error", "http_status": status,
                     "error": str(e)[:200]}
         except Exception as e:
             if attempt < max_retries:
