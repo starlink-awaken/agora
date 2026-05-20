@@ -6,34 +6,24 @@ with round-robin routing strategy.
 
 from __future__ import annotations
 
-import asyncio
 import atexit
 import json as _json
 import time as _time
 from collections import deque
 from pathlib import Path as _Path
 
-import httpx
 import structlog
-from httpx import Limits
 
+from agora._protocols import close_client
+from agora._protocols import dispatch as _dispatch
 from agora.event_bus import EventBus
-from agora.registry import ServiceRegistry, _is_safe_url
+from agora.registry import ServiceRegistry
 
 logger = structlog.get_logger(__name__)
 
-# 连接池单例 — 复用 HTTP 连接，减少开销
-_client: httpx.AsyncClient | None = None
 # atexit 去重：跟踪所有 Router 实例，确保只注册一次
 _routers: list[Router] = []
 _atexit_registered = False
-
-def _get_client() -> httpx.AsyncClient:
-    """Return the shared httpx AsyncClient singleton."""
-    global _client
-    if _client is None:
-        _client = httpx.AsyncClient(timeout=30, limits=Limits(max_keepalive_connections=20))
-    return _client
 
 
 def _flush_all_routers():
@@ -155,202 +145,6 @@ class Router:
             "protocol_config": svc.protocol_config,
         })
 
-    async def _dispatch(self, tool_name: str, arguments: dict,
-                         instance: dict) -> dict:
-        """Dispatch a tool call via the service's protocol.
-
-        Extension point: add new protocol handlers here.
-        Currently only MCP is fully implemented; rest/grpc/websocket are reserved.
-        """
-        protocol = instance.get("protocol", "mcp")
-
-        if protocol == "mcp":
-            return await self._call_mcp(tool_name, arguments, instance["mcp_endpoint"])
-        elif protocol == "rest":
-            return await self._call_rest(tool_name, arguments, instance)
-        elif protocol == "grpc":
-            return await self._call_grpc(tool_name, arguments, instance)
-        elif protocol == "websocket":
-            return await self._call_ws(tool_name, arguments, instance)
-        elif protocol == "stdio":
-            return {"status": "error", "error": "stdio protocol uses proxy, not router"}
-        else:
-            return {"status": "error", "error": f"Unknown protocol: {protocol}"}
-
-    async def _call_mcp(self, tool_name: str, arguments: dict, mcp_endpoint: str) -> dict:
-        """Execute an MCP tools/call request against the target endpoint."""
-        if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
-            logger.warning("ssrf_blocked", tool=tool_name, url=mcp_endpoint)
-            return {"status": "error", "error": "Service unavailable"}
-
-        client = _get_client()
-        resp = await client.post(
-            mcp_endpoint,
-            json={"method": "tools/call", "params": {"name": tool_name, "arguments": arguments}},
-        )
-        resp.raise_for_status()
-        return resp.json()
-
-    async def _call_rest(self, tool_name: str, arguments: dict, instance: dict) -> dict:
-        """Execute a REST API call against the target endpoint.
-
-        Uses protocol_config for method, path, headers. Defaults to GET with
-        tool_name-derived path suffix and query params from arguments.
-        Supports automatic retry for GET/HEAD methods (max 2 retries by default).
-        """
-        base_url = instance["mcp_endpoint"].rstrip("/")
-        cfg = instance.get("protocol_config", {})
-
-        if base_url.startswith("http") and not _is_safe_url(base_url):
-            logger.warning("ssrf_blocked", tool=tool_name, url=base_url)
-            return {"status": "error", "error": "Service unavailable"}
-
-        # Resolve path: cfg path > tool_name-derived path
-        path = cfg.get("path", "")
-        if not path:
-            parts = tool_name.split(".", 1)
-            path = "/" + (parts[1] if len(parts) > 1 else parts[0])
-
-        method = cfg.get("method", "GET").upper()
-        headers = cfg.get("headers", {})
-        url = f"{base_url}{path}"
-
-        # 重试配置：仅 GET/HEAD 支持重试，protocol_config 可覆盖 retries
-        max_retries = cfg.get("retries", 2) if method in ("GET", "HEAD") else 0
-
-        last_error: Exception | None = None
-        for attempt in range(max_retries + 1):
-            try:
-                client = _get_client()
-                if method in ("POST", "PUT", "PATCH"):
-                    resp = await client.request(method, url, json=arguments, headers=headers)
-                else:  # GET, DELETE, HEAD, etc.
-                    resp = await client.request(method, url, params=arguments, headers=headers)
-
-                # Try JSON first, fall back to text
-                try:
-                    body = resp.json()
-                except Exception:
-                    body = {"_body": resp.text[:2000]}
-                body["_http_status"] = resp.status_code
-                resp.raise_for_status()
-                return body
-            except httpx.HTTPStatusError as e:
-                status = e.response.status_code
-                # 仅对可重试状态码重试
-                if attempt < max_retries and status in (408, 429, 500, 502, 503, 504):
-                    last_error = e
-                    continue
-                return {"status": "error", "_http_status": status, "error": str(e)[:200]}
-            except Exception as e:
-                if attempt < max_retries:
-                    last_error = e
-                    continue
-                return {"status": "error", "error": f"REST call failed: {str(e)[:200]}"}
-
-        return {"status": "error",
-                "error": f"REST call failed after {max_retries + 1} attempts: {str(last_error)[:200]}"}
-
-    async def _call_grpc(self, tool_name: str, arguments: dict, instance: dict) -> dict:
-        """Execute a gRPC call. Requires grpcio + compiled proto stub.
-
-        protocol_config keys:
-          - proto_file: path to .proto file
-          - grpc_method: fully qualified method (e.g. /package.Service/Method)
-          - host: gRPC server host:port (overrides mcp_endpoint)
-
-        For compiled-proto mode: add a 'stub_module' key pointing to the generated
-        pb2_grpc module, and 'request_class' for the request message class.
-        """
-        try:
-            import grpc
-            from grpc import aio
-        except ImportError:
-            return {"status": "error",
-                    "error": "grpcio not installed. Run: pip install grpcio grpcio-tools"}
-
-        cfg = instance.get("protocol_config", {})
-        endpoint = instance["mcp_endpoint"]
-        host = cfg.get("host", endpoint.replace("grpc://", "").rstrip("/"))
-        if ":" not in host:
-            return {"status": "error", "error": f"gRPC host:port required, got: {host}"}
-
-        stub_module = cfg.get("stub_module", "")
-        request_class = cfg.get("request_class", "")
-        if not stub_module or not request_class:
-            return {"status": "error",
-                    "error": "gRPC requires compiled proto stub. "
-                             "Set protocol_config.stub_module and .request_class, "
-                             "or use REST/MCP protocol instead."}
-
-        try:
-            # Dynamic import of compiled stub
-            import importlib
-            mod = importlib.import_module(stub_module)
-            stub_cls = getattr(mod, stub_module.split(".")[-1] + "Stub", None)
-            req_cls = getattr(mod, request_class, None)
-            if not stub_cls or not req_cls:
-                return {"status": "error", "error": f"Stub class not found in {stub_module}"}
-
-            async with aio.insecure_channel(host) as channel:
-                stub = stub_cls(channel)
-                method_name = cfg.get("grpc_method", tool_name).split("/")[-1]
-                handler = getattr(stub, method_name, None)
-                if not handler:
-                    return {"status": "error", "error": f"Method {method_name} not found on stub"}
-                req = req_cls(**arguments) if isinstance(arguments, dict) else req_cls()
-                resp = await handler(req)
-                return {"status": "ok", "result": str(resp)[:2000]}
-        except grpc.aio.AioRpcError as e:
-            return {"status": "error", "error": f"gRPC: {e.code()} - {e.details()}"}
-        except Exception as e:
-            return {"status": "error", "error": f"gRPC call failed: {str(e)[:200]}"}
-
-    async def _call_ws(self, tool_name: str, arguments: dict, instance: dict) -> dict:
-        """Execute a WebSocket call for request-response pattern.
-
-        protocol_config keys:
-          - path: WebSocket path (appended to ws:// endpoint)
-          - send_json: JSON payload to send on connect
-          - timeout: receive timeout in seconds (default: 10)
-        """
-        try:
-            import websockets
-        except ImportError:
-            return {"status": "error",
-                    "error": "websockets not installed. Run: pip install websockets"}
-
-        ws_url = instance["mcp_endpoint"]
-        if not ws_url.startswith(("ws://", "wss://")):
-            return {"status": "error", "error": "Invalid WebSocket URL"}
-
-        cfg = instance.get("protocol_config", {})
-        path = cfg.get("path", "")
-        if path:
-            ws_url = ws_url.rstrip("/") + "/" + path.lstrip("/")
-
-        timeout = cfg.get("timeout", 10)
-        send_payload = cfg.get("send_json") or arguments
-        headers = cfg.get("headers", {})
-
-        try:
-            async with websockets.connect(ws_url, extra_headers=headers,
-                                          open_timeout=timeout) as ws:
-                if send_payload:
-                    import json as _json
-                    await ws.send(_json.dumps(send_payload) if not isinstance(send_payload, str) else send_payload)
-                resp = await asyncio.wait_for(ws.recv(), timeout=timeout)
-                try:
-                    return _json.loads(resp)
-                except Exception:
-                    return {"status": "ok", "result": resp}
-        except TimeoutError:
-            return {"status": "error", "error": f"WebSocket timeout after {timeout}s"}
-        except websockets.exceptions.InvalidURI as e:
-            return {"status": "error", "error": f"Invalid WebSocket URI: {str(e)}"}
-        except Exception as e:
-            return {"status": "error", "error": f"WebSocket call failed: {str(e)[:200]}"}
-
     async def route(self, tool_name: str, arguments: dict) -> dict:
         """Route a tool call to the target service via protocol dispatch."""
         _start = _time.monotonic()
@@ -367,7 +161,7 @@ class Router:
             return {"status": "error", "error": "Service temporarily unavailable"}
 
         try:
-            result = await self._dispatch(tool_name, arguments, instance)
+            result = await _dispatch(instance, tool_name, arguments)
             if result.get("status") == "error":
                 self._trace(tool_name, service_name, _start, "error", result.get("error", "")[:100])
                 logger.warning("route_dispatch_failed", tool=tool_name, service=service_name,
@@ -446,7 +240,4 @@ class Router:
 
     async def close(self):
         """Clean up the shared HTTP client connection pool."""
-        global _client
-        if _client:
-            await _client.aclose()
-            _client = None
+        await close_client()
