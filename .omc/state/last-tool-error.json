@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\".venv/bin/ruff check \\\"src/agora/\\\" \\\"tests/\\\" --select F,E,I,N,W,UP,B,C4,SIM 2>&1\",\"timeout\":30000,\"description\":\"Run ruff check on all source and test files\"}",
-  "error": "Exit code 127\n(eval):1: no such file or directory: .venv/bin/ruff",
-  "timestamp": "2026-05-20T06:56:31.812Z",
-  "retry_count": 2
+  "tool_input_preview": "{\"command\":\"ruff check src/agora/ tests/ --select F,E,I,N,W,UP,B,C4,SIM 2>&1\",\"description\":\"Ruff check\"}",
+  "error": "Exit code 1\nI001 [*] Import block is un-sorted or un-formatted\n --> tests/test_protocols.py:2:1\n  |\n1 |   \"\"\"Tests for _protocols.py — handlers and dispatch.\"\"\"\n2 | / import pytest\n3 | |\n4 | | from agora._protocols import dispatch, _get_client, close_client\n5 | | from agora.registry import Service, ServiceRegistry\n  | |___________________________________________________^\n  |\nhelp: Organize imports\n\nF401 [*] `agora.registry.Service` imported but unused\n --> tests/test_protocols.py:5:28\n  |\n4 | fr...",
+  "timestamp": "2026-05-20T08:30:26.583Z",
+  "retry_count": 1
 }

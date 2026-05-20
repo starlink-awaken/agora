@@ -60,7 +60,7 @@ class TestAgoraE2E:
 
     def test_agora_event_publish_and_log(self):
         _run([AGORA, "event", "publish", "test:e2e", '--payload', '{"ok":true}', "--source", "e2e-test"])
-        rc, out = _run([AGORA, "event", "log", "--limit", "50"])
+        rc, out = _run([AGORA, "event", "log", "--limit", "200"])
         assert rc == 0
         assert "test:e2e" in out
 

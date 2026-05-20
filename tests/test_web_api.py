@@ -155,6 +155,18 @@ class TestApiEvent:
         assert resp2.status_code == 200
 
 
+class TestRateLimit:
+    def test_normal_request_passes(self, monkeypatch):
+        monkeypatch.setenv("AGORA_RATE_LIMIT", "5")
+        resp = client.get("/api/services")
+        assert resp.status_code == 200
+
+    def test_rate_limit_header(self, monkeypatch):
+        monkeypatch.setenv("AGORA_RATE_LIMIT", "60")
+        resp = client.get("/api/services")
+        assert resp.status_code == 200
+
+
 class TestPrometheusMetrics:
     def test_metrics_endpoint(self):
         resp = client.get("/metrics")

@@ -179,7 +179,6 @@ class TestRouterAdvanced:
     """Advanced router tests: _call_mcp, _call_rest, _trace, close, etc."""
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_mcp_success(self, monkeypatch):
         """_call_mcp with valid endpoint returns response."""
         from httpx import AsyncClient
@@ -203,7 +202,7 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _MockClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("mcp-svc.tool", {"q": "t"})
         assert result["result"] == "data"
 
@@ -222,7 +221,6 @@ class TestRouterAdvanced:
         assert "unavailable" in result.get("error", "").lower()
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_mcp_httpx_error(self, monkeypatch):
         """_call_mcp when httpx raises propagates error."""
         from httpx import AsyncClient, ConnectError
@@ -240,12 +238,11 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _ErrClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _ErrClient())
         result = await router.route("err.tool", {})
         assert result["status"] == "error"
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_rest_post_success(self, monkeypatch):
         """REST POST call returns successfully."""
         from httpx import AsyncClient
@@ -272,7 +269,7 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _MockClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("rest-api.create", {"name": "x"})
         assert result["created"] is True
 
@@ -292,7 +289,6 @@ class TestRouterAdvanced:
         assert "unavailable" in result.get("error", "").lower()
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_rest_retry_success(self, monkeypatch):
         """REST GET retries and succeeds on 2nd attempt."""
         import httpx
@@ -327,13 +323,12 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _MockClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("retry-api.get", {})
         assert result["ok"] is True
         assert attempts[0] == 2
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_rest_retry_exhausted(self, monkeypatch):
         """REST GET with all retries exhausted returns error."""
         import httpx
@@ -356,12 +351,11 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _MockClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("exhaust.get", {})
         assert result["status"] == "error"
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_call_rest_non_retryable(self, monkeypatch):
         """REST 400 returns immediately without retry."""
         import httpx
@@ -384,13 +378,12 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _MockClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _MockClient())
         result = await router.route("bad-req.get", {})
         assert result["status"] == "error"
         assert result.get("_http_status") == 400
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="v1.5: re-mock _get_client from _protocols")
     async def test_route_exception_path(self, monkeypatch):
         """route() catches and returns exception from _dispatch."""
         from httpx import AsyncClient, ConnectError
@@ -408,7 +401,7 @@ class TestRouterAdvanced:
             async def aclose(self):
                 pass
 
-        monkeypatch.setattr("agora.router._get_client", lambda: _ErrClient())
+        monkeypatch.setattr("agora._protocols._get_client", lambda: _ErrClient())
         result = await router.route("crash.tool", {})
         assert result["status"] == "error"
 

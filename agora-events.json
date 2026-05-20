@@ -748,15 +748,51 @@
       "payload": {
         "msg": "hello"
       }
+    },
+    {
+      "id": "evt_1779264457_e64286",
+      "time": "2026-05-20T08:07:37Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779265028_b4db03",
+      "time": "2026-05-20T08:17:08Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779265719_4aaa47",
+      "time": "2026-05-20T08:28:39Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779265844_dcd2c8",
+      "time": "2026-05-20T08:30:44Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
     }
   ],
   "subscriptions": [
     {
-      "id": "sub_b648c5c6",
+      "id": "sub_d2564a65",
       "service": "mcp-caller",
       "pattern": "test:*",
       "callback_url": "",
-      "created": "2026-05-20T07:54:04Z"
+      "created": "2026-05-20T08:30:44Z"
     }
   ],
   "max_events": 1000

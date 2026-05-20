@@ -128,6 +128,13 @@ def build_parser() -> argparse.ArgumentParser:
     pl.add_argument("--stream", action="store_true", help="Stream each step as it completes")
     pl.add_argument("--parallel", action="store_true", help="Execute independent steps concurrently")
 
+    # proto
+    proto = sub.add_parser("proto", help="gRPC proto compilation tools")
+    proto_sub = proto.add_subparsers(dest="proto_cmd")
+    proto_compile = proto_sub.add_parser("compile", help="Compile .proto to pb2_grpc.py")
+    proto_compile.add_argument("proto_file", help="Path to .proto file")
+    proto_compile.add_argument("--out", default=".", help="Output directory (default: current dir)")
+
     # pipelines
     sub.add_parser("pipelines", help="List available pipelines")
 
@@ -536,6 +543,32 @@ def main():
                     print(f"  {status_icon} Step {r['step']}: {r['tool']} — {r['status']}")
                     if "error" in r:
                         print(f"     Error: {r['error']}")
+
+    elif args.command == "proto":
+        if args.proto_cmd == "compile":
+            try:
+                from grpc_tools import protoc
+            except ImportError:
+                print("Error: grpcio-tools not installed. Run: pip install grpcio-tools")
+                return
+            import os
+            from pathlib import Path
+            proto_file = args.proto_file
+            out_dir = args.out
+            os.makedirs(out_dir, exist_ok=True)
+            proto_dir = str(Path(proto_file).resolve().parent)
+            ret = protoc.main([
+                "protoc",
+                f"-I{proto_dir}",
+                f"--python_out={out_dir}",
+                f"--grpc_python_out={out_dir}",
+                proto_file,
+            ])
+            if ret == 0:
+                base = Path(proto_file).stem
+                print(f"Compiled: {base}_pb2.py, {base}_pb2_grpc.py → {out_dir}")
+            else:
+                print(f"protoc failed with exit code {ret}")
 
     elif args.command == "pipelines":
         from agora.pipeline import Pipeline

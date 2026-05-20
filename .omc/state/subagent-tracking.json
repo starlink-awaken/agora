@@ -221,7 +221,9 @@
       "agent_type": "worker-quality-2",
       "started_at": "2026-05-20T06:39:56.557Z",
       "parent_mode": "none",
-      "status": "running"
+      "status": "completed",
+      "completed_at": "2026-05-20T07:04:11.264Z",
+      "duration_ms": 1454707
     },
     {
       "agent_id": "a13b96ada33af632f",
@@ -240,10 +242,64 @@
       "status": "completed",
       "completed_at": "2026-05-20T06:43:00.218Z",
       "duration_ms": 183602
+    },
+    {
+      "agent_id": "a0f1aad078a7326be",
+      "agent_type": "worker-dashboard",
+      "started_at": "2026-05-20T06:59:11.038Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T06:59:13.781Z",
+      "duration_ms": 2743
+    },
+    {
+      "agent_id": "acd61d3881d62ea0c",
+      "agent_type": "worker-backend",
+      "started_at": "2026-05-20T06:59:11.536Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T06:59:14.682Z",
+      "duration_ms": 3146
+    },
+    {
+      "agent_id": "a4102a9b0dcc4f7e6",
+      "agent_type": "worker-topo",
+      "started_at": "2026-05-20T06:59:11.588Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T06:59:19.910Z",
+      "duration_ms": 8322
+    },
+    {
+      "agent_id": "a18dca36c0f7daa37",
+      "agent_type": "worker-router",
+      "started_at": "2026-05-20T06:59:11.643Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T06:59:14.582Z",
+      "duration_ms": 2939
+    },
+    {
+      "agent_id": "a6287647b3f059a21",
+      "agent_type": "worker-fix",
+      "started_at": "2026-05-20T06:59:12.032Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T06:59:15.208Z",
+      "duration_ms": 3176
+    },
+    {
+      "agent_id": "acdc7a682fd4d09fc",
+      "agent_type": "worker-quality-2",
+      "started_at": "2026-05-20T07:04:11.489Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-05-20T07:04:18.279Z",
+      "duration_ms": 6790
     }
   ],
-  "total_spawned": 15,
-  "total_completed": 26,
+  "total_spawned": 20,
+  "total_completed": 32,
   "total_failed": 0,
-  "last_updated": "2026-05-20T06:57:22.907Z"
+  "last_updated": "2026-05-20T07:04:18.382Z"
 }
