@@ -7,10 +7,12 @@ from agora.router import Router
 
 class TestRouter:
     def setup_method(self):
+        import tempfile
         self.registry = ServiceRegistry()
         self.registry.register(Service("minerva", mcp_endpoint="http://192.0.2.1:8765"))
         self.registry.register(Service("sophia", mcp_endpoint="http://192.0.2.2:9001"))
-        self.router = Router(self.registry)
+        self.router = Router(self.registry, routes_path=str(
+            __import__("pathlib").Path(tempfile.mkdtemp()) / "test-routes.json"))
 
     def test_exact_match(self):
         self.router.add_route("minerva.research_now", "minerva")

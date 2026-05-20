@@ -14,7 +14,8 @@ class TestAgoraIntegration:
         self.registry = ServiceRegistry(
             storage_path=str(Path(tempfile.mkdtemp()) / "test-services.json")
         )
-        self.router = Router(self.registry)
+        self.router = Router(self.registry, routes_path=str(
+            Path(tempfile.mkdtemp()) / "test-routes.json"))
 
     def test_register_all_services(self):
         self.registry.register(Service(

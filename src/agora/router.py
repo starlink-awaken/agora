@@ -55,7 +55,8 @@ class Router:
     """
 
     def __init__(self, registry: ServiceRegistry, strategy: str = "round-robin",
-                 event_bus: EventBus | None = None):
+                 event_bus: EventBus | None = None,
+                 routes_path: str | None = None):
         self.registry = registry
         self._event_bus = event_bus
         self._routes: dict[str, str] = {}  # tool_name → service_name
@@ -64,15 +65,32 @@ class Router:
         self._latencies: deque[float] = deque(maxlen=1000)  # auto-FIFO truncation
         self._trace_buffer: list[str] = []  # batched disk writes
         self._trace_path = _Path(__file__).parent.parent.parent / "trace_log.jsonl"
+        if routes_path:
+            self._routes_path = _Path(routes_path)
+        else:
+            self._routes_path = _Path(registry._storage_path).parent / "agora-routes.json"
+        self._load_routes()
         global _routers, _atexit_registered
         _routers.append(self)
         if not _atexit_registered:
             atexit.register(_flush_all_routers)
             _atexit_registered = True
 
+    def _load_routes(self):
+        """Load persisted route mappings from JSON file."""
+        from agora.persistence import json_load
+        data = json_load(self._routes_path, default={})
+        self._routes = data.get("routes", {})
+
+    def _save_routes(self):
+        """Persist route mappings to JSON file."""
+        from agora.persistence import json_save
+        json_save(self._routes_path, {"routes": self._routes})
+
     def add_route(self, tool_name: str, service_name: str):
-        """Register a tool → service mapping."""
+        """Register a tool → service mapping and persist it."""
         self._routes[tool_name] = service_name
+        self._save_routes()
 
     def resolve(self, tool_name: str) -> str | None:
         """Find which service handles a tool. Supports prefix matching."""
