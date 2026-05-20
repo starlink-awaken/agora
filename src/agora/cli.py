@@ -553,19 +553,18 @@ def main():
                 return
             import os
             from pathlib import Path
-            proto_file = args.proto_file
-            out_dir = args.out
+            proto_file = Path(args.proto_file).resolve()
+            out_dir = Path(args.out).resolve()
             os.makedirs(out_dir, exist_ok=True)
-            proto_dir = str(Path(proto_file).resolve().parent)
             ret = protoc.main([
                 "protoc",
-                f"-I{proto_dir}",
+                f"-I{proto_file.parent}",
                 f"--python_out={out_dir}",
                 f"--grpc_python_out={out_dir}",
-                proto_file,
+                str(proto_file.name),
             ])
             if ret == 0:
-                base = Path(proto_file).stem
+                base = proto_file.stem
                 print(f"Compiled: {base}_pb2.py, {base}_pb2_grpc.py → {out_dir}")
             else:
                 print(f"protoc failed with exit code {ret}")
