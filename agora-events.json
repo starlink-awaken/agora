@@ -308,15 +308,331 @@
       "payload": {
         "ok": true
       }
+    },
+    {
+      "id": "evt_1779248657_e2855b",
+      "time": "2026-05-20T03:44:17Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779248746_ca77ec",
+      "time": "2026-05-20T03:45:46Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779248781_0863c1",
+      "time": "2026-05-20T03:46:21Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779249058_6def3a",
+      "time": "2026-05-20T03:50:58Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779249158_409239",
+      "time": "2026-05-20T03:52:38Z",
+      "source": "test",
+      "type": "test:unit",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779249158_4758d6",
+      "time": "2026-05-20T03:52:38Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "payload": {}
+    },
+    {
+      "id": "evt_1779249296_b66b6f",
+      "time": "2026-05-20T03:54:56Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779257295_5854dd",
+      "time": "2026-05-20T06:08:15Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779257680_6707a2",
+      "time": "2026-05-20T06:14:40Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779257787_47d089",
+      "time": "2026-05-20T06:16:27Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779257846_fd2024",
+      "time": "2026-05-20T06:17:26Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258046_5283c4",
+      "time": "2026-05-20T06:20:46Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258110_220b70",
+      "time": "2026-05-20T06:21:50Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258300_189762",
+      "time": "2026-05-20T06:25:00Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258607_fd11cd",
+      "time": "2026-05-20T06:30:07Z",
+      "source": "test",
+      "type": "test:unit",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258607_a61a26",
+      "time": "2026-05-20T06:30:07Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "payload": {}
+    },
+    {
+      "id": "evt_1779258616_af6f9b",
+      "time": "2026-05-20T06:30:16Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779258978_a0ce04",
+      "time": "2026-05-20T06:36:18Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259143_10a340",
+      "time": "2026-05-20T06:39:03Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259222_624951",
+      "time": "2026-05-20T06:40:22Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259254_6439a5",
+      "time": "2026-05-20T06:40:54Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259258_16bc30",
+      "time": "2026-05-20T06:40:58Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259299_d11218",
+      "time": "2026-05-20T06:41:39Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259426_5e56c7",
+      "time": "2026-05-20T06:43:46Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259664_4bf266",
+      "time": "2026-05-20T06:47:44Z",
+      "source": "test",
+      "type": "test:unit",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259664_e0cc3b",
+      "time": "2026-05-20T06:47:44Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "payload": {}
+    },
+    {
+      "id": "evt_1779259682_667dd3",
+      "time": "2026-05-20T06:48:02Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259701_df580c",
+      "time": "2026-05-20T06:48:21Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259841_6b4b57",
+      "time": "2026-05-20T06:50:41Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259869_8f3dc8",
+      "time": "2026-05-20T06:51:09Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259932_94e589",
+      "time": "2026-05-20T06:52:12Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779259978_059bac",
+      "time": "2026-05-20T06:52:58Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260052_f5603a",
+      "time": "2026-05-20T06:54:12Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260121_85264f",
+      "time": "2026-05-20T06:55:21Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260271_6fbdcf",
+      "time": "2026-05-20T06:57:51Z",
+      "source": "test",
+      "type": "test:unit",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260271_20fc2f",
+      "time": "2026-05-20T06:57:51Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "payload": {}
     }
   ],
   "subscriptions": [
     {
-      "id": "sub_aaad76a8",
-      "service": "cli",
-      "pattern": "index:*",
+      "id": "sub_1b77e982",
+      "service": "mcp-caller",
+      "pattern": "test:*",
       "callback_url": "",
-      "created": "2026-05-18T10:03:24Z"
+      "created": "2026-05-20T06:55:21Z"
     }
   ],
   "max_events": 1000

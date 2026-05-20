@@ -2,51 +2,61 @@
   "services": [
     {
       "name": "minerva",
-      "description": "",
+      "description": "Local-first deep research system — 5 Super Tools (Dropbox Dash pattern)",
       "protocol": "mcp",
       "protocol_config": {},
-      "mcp_endpoint": "http://192.0.2.1:8765",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [],
-      "instances": []
-    },
-    {
-      "name": "sophia",
-      "description": "",
-      "protocol": "mcp",
-      "protocol_config": {},
-      "mcp_endpoint": "http://192.0.2.2:9001",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [],
+      "mcp_endpoint": "stdio://minerva",
+      "health_endpoint": "http://localhost:8765/health",
+      "port": 8765,
+      "tags": [
+        "research",
+        "knowledge",
+        "llm"
+      ],
       "instances": []
     },
     {
       "name": "ontoderive",
-      "description": "",
+      "description": "Fact-driven knowledge engineering — ToolForge + derive + check",
       "protocol": "mcp",
       "protocol_config": {},
-      "mcp_endpoint": "stdio",
+      "mcp_endpoint": "stdio://ontoderive",
       "health_endpoint": "",
       "port": 0,
       "tags": [
-        "//ontoderive:knowledge-engineering",
-        "derivation"
+        "knowledge-engineering",
+        "derivation",
+        "ontology"
+      ],
+      "instances": []
+    },
+    {
+      "name": "sophia",
+      "description": "Symbolic research paradigm compiler — state machine formalism",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://sophia",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "paradigm",
+        "compiler",
+        "state-machine"
       ],
       "instances": []
     },
     {
       "name": "agora",
-      "description": "",
+      "description": "MCP service convergence hub — registry, routing, pipeline",
       "protocol": "mcp",
       "protocol_config": {},
-      "mcp_endpoint": "stdio",
+      "mcp_endpoint": "stdio://agora",
       "health_endpoint": "",
       "port": 0,
       "tags": [
-        "//agora:gateway",
-        "registry"
+        "gateway",
+        "registry",
+        "pipeline"
       ],
       "instances": []
     },
@@ -66,99 +76,31 @@
       "instances": []
     },
     {
-      "name": "kos",
-      "description": "",
-      "protocol": "mcp",
-      "protocol_config": {},
-      "mcp_endpoint": "stdio",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [
-        "//kos-mcp:knowledge",
-        "search"
-      ],
-      "instances": []
-    },
-    {
       "name": "bos-daemon",
-      "description": "SharedBrain B-OS daemon MCP service (via agora proxy)",
+      "description": "Docker MCP service: sharedbrain-bos:dev",
       "protocol": "mcp",
       "protocol_config": {},
-      "mcp_endpoint": "http://localhost:7421/mcp",
+      "mcp_endpoint": "http://localhost:7420/mcp",
       "health_endpoint": "http://localhost:7420/health",
-      "port": 7421,
+      "port": 7420,
       "tags": [
-        "bos",
-        "mcp",
-        "daemon",
-        "proxy"
+        "docker",
+        "mcp"
       ],
       "instances": []
     },
     {
       "name": "bos",
-      "description": "SharedBrain B-OS MCP (alias via agora proxy)",
+      "description": "Docker MCP service: bos",
       "protocol": "mcp",
       "protocol_config": {},
-      "mcp_endpoint": "http://localhost:7421/mcp",
-      "health_endpoint": "",
-      "port": 7421,
-      "tags": [
-        "bos",
-        "mcp",
-        "proxy"
-      ],
-      "instances": []
-    },
-    {
-      "name": "sharedbrain",
-      "description": "SharedBrain B-OS daemon (via agora proxy)",
-      "protocol": "mcp",
-      "protocol_config": {},
-      "mcp_endpoint": "http://localhost:7421/mcp",
+      "mcp_endpoint": "http://localhost:7420/mcp",
       "health_endpoint": "http://localhost:7420/health",
-      "port": 7421,
+      "port": 7420,
       "tags": [
-        "bos",
-        "mcp",
-        "sharedbrain",
-        "proxy"
+        "docker",
+        "mcp"
       ],
-      "instances": []
-    },
-    {
-      "name": "api",
-      "description": "",
-      "protocol": "rest",
-      "protocol_config": {
-        "method": "GET"
-      },
-      "mcp_endpoint": "http://192.0.2.99:3000",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [],
-      "instances": []
-    },
-    {
-      "name": "grpc-svc",
-      "description": "",
-      "protocol": "grpc",
-      "protocol_config": {},
-      "mcp_endpoint": "http://192.0.2.99:50051",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [],
-      "instances": []
-    },
-    {
-      "name": "ws-svc",
-      "description": "",
-      "protocol": "websocket",
-      "protocol_config": {},
-      "mcp_endpoint": "http://192.0.2.99:8080",
-      "health_endpoint": "",
-      "port": 0,
-      "tags": [],
       "instances": []
     }
   ]

@@ -3,5 +3,12 @@
     "name": "bos-daemon",
     "description": "SharedBrain B-OS daemon MCP service",
     "mcp_endpoint": "http://localhost:7421/mcp"
+  },
+  {
+    "name": "kos",
+    "description": "Knowledge Operating System MCP — 13 tools: search, entity, research, ontology",
+    "mcp_endpoint": "stdio",
+    "command": "python3",
+    "args": ["/Users/xiamingxing/Workspace/kos/kos-mcp-server.py"]
   }
 ]
