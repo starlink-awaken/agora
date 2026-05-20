@@ -23,7 +23,7 @@ logger = structlog.get_logger(__name__)
 
 
 def _make_request(method: str, params: dict | None = None, req_id: str | None = None) -> str:
-    """Build a JSON-RPC 2.0 request."""
+    """Build a JSON-RPC 2.0 request as JSON string (for stdio transport)."""
     return json.dumps({
         "jsonrpc": "2.0",
         "id": req_id or str(uuid.uuid4()),
@@ -32,13 +32,22 @@ def _make_request(method: str, params: dict | None = None, req_id: str | None = 
     }, ensure_ascii=False)
 
 
+def _make_request_dict(method: str, params: dict | None = None, req_id: str | None = None) -> dict:
+    """Build a JSON-RPC 2.0 request as dict (for HTTP transport via httpx json=)."""
+    return {
+        "jsonrpc": "2.0",
+        "id": req_id or str(uuid.uuid4()),
+        "method": method,
+        "params": params or {},
+    }
+
+
 def _make_tool_call(tool_name: str, arguments: dict, req_id: str | None = None) -> str:
     return _make_request("tools/call", {"name": tool_name, "arguments": arguments}, req_id)
 
 
-def _parse_request(request_str: str) -> dict:
-    """Parse a JSON-RPC request string back to a dict for direct use with httpx json=."""
-    return json.loads(request_str)
+def _make_tool_call_dict(tool_name: str, arguments: dict, req_id: str | None = None) -> dict:
+    return _make_request_dict("tools/call", {"name": tool_name, "arguments": arguments}, req_id)
 
 
 # ── Abstract base ────────────────────────────────────────────────
@@ -357,7 +366,7 @@ class HttpMCPClient(MCPClient):
         try:
             resp = await self._client.post(
                 self._endpoint,
-                json=_parse_request(_make_request("tools/list")),
+                json=_make_request_dict("tools/list"),
                 timeout=30,
                 headers={"Connection": "close"},
             )
@@ -375,7 +384,7 @@ class HttpMCPClient(MCPClient):
         try:
             resp = await self._client.post(
                 self._endpoint,
-                json=_parse_request(_make_tool_call(name, arguments)),
+                json=_make_tool_call_dict(name, arguments),
                 timeout=120,
                 headers={"Connection": "close"},
             )

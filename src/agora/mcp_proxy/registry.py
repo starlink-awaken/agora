@@ -37,7 +37,7 @@ class ProxyRegistry:
 
     @property
     def entries(self) -> dict[str, ProxyEntry]:
-        return dict(self._entries)
+        return self._entries
 
     @property
     def connected_services(self) -> list[str]:

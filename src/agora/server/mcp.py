@@ -25,7 +25,8 @@ router = Router(registry, event_bus=_bus)
 _proxy_manager: ProxyManager | None = None
 
 # Path to enriched service config (with command/args for stdio services)
-_PROXY_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent.parent / "agora-proxy-services.json"
+# Resolved relative to project root (same convention as registry.py's agora-services.json)
+_PROXY_CONFIG_PATH = Path(__file__).resolve().parents[3] / "agora-proxy-services.json"
 
 
 def _load_proxy_services() -> list[dict]:
@@ -47,15 +48,9 @@ async def _init_proxy():
     if not services:
         return
 
-    results = await _proxy_manager.start(services)
-    ok = sum(1 for r in results.values() if r.startswith("ok"))
-    total = len(results)
-    if ok < total:
-        failed = [(n, r) for n, r in results.items() if not r.startswith("ok")]
-        for _name, _reason in failed:
-            pass  # logging handled in manager
+    await _proxy_manager.start(services)
     # Re-register: for each connected proxy service, add to the existing registry
-    for name, client in _proxy_manager.registry.list_clients().items():
+    for name, client in _proxy_manager.registry._clients.items():
         svc = registry.get(name)
         if svc:
             svc.healthy = client.connected
@@ -203,9 +198,6 @@ def register_service(name: str, description: str = "", protocol: str = "mcp",
     if err:
         return json.dumps({"status": "error", "error": f"protocol_config is not valid JSON: {err}"})
 
-    # Group proxy info — only used if command is provided
-    proxy_info = {"command": command, "args": mcp_args.split() if mcp_args else []}
-
     # Build and register service
     svc = Service(name=name, description=description, protocol=protocol,
                   protocol_config=proto_cfg, mcp_endpoint=mcp_endpoint,
@@ -219,8 +211,9 @@ def register_service(name: str, description: str = "", protocol: str = "mcp",
 
     if command:
         _save_proxy_service({
-            "name": name, "command": proxy_info["command"],
-            "args": proxy_info["args"], "mcp_endpoint": mcp_endpoint,
+            "name": name, "command": command,
+            "args": mcp_args.split() if mcp_args else [],
+            "mcp_endpoint": mcp_endpoint,
         })
 
     return json.dumps({"status": "registered", "name": name})

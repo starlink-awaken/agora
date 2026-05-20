@@ -99,11 +99,15 @@ class Router:
                 "mcp_endpoint": svc.mcp_endpoint,
                 "health_endpoint": svc.health_endpoint,
                 "port": svc.port,
+                "protocol": svc.protocol,
+                "protocol_config": svc.protocol_config,
             })
         svc.instances.append({
             "mcp_endpoint": mcp_endpoint,
             "health_endpoint": health_endpoint or "",
             "port": port or 0,
+            "protocol": svc.protocol,
+            "protocol_config": svc.protocol_config,
         })
 
     async def _dispatch(self, tool_name: str, arguments: dict,
@@ -128,6 +132,7 @@ class Router:
     async def _call_mcp(self, tool_name: str, arguments: dict, mcp_endpoint: str) -> dict:
         """Execute an MCP tools/call request against the target endpoint."""
         if mcp_endpoint.startswith("http") and not _is_safe_url(mcp_endpoint):
+            logger.warning("ssrf_blocked", tool=tool_name, url=mcp_endpoint)
             return {"status": "error", "error": "Service unavailable"}
 
         async with httpx.AsyncClient(timeout=30) as client:
@@ -148,6 +153,7 @@ class Router:
         cfg = instance.get("protocol_config", {})
 
         if base_url.startswith("http") and not _is_safe_url(base_url):
+            logger.warning("ssrf_blocked", tool=tool_name, url=base_url)
             return {"status": "error", "error": "Service unavailable"}
 
         # Resolve path: cfg path > tool_name-derived path
