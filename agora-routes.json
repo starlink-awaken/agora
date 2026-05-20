@@ -1,5 +1,24 @@
 {
   "routes": {
-    "minerva.research_now": "minerva"
+    "minerva.research_now": "minerva",
+    "bos-daemon.health": "bos-daemon",
+    "test.tool": "test-svc",
+    "api": "api",
+    "grpc-svc": "grpc-svc",
+    "ws-svc": "ws-svc",
+    "stdio-svc": "stdio-svc",
+    "retry-api": "retry-api",
+    "bad-proto": "bad-proto",
+    "bad-ws": "bad-ws",
+    "down-svc": "down-svc",
+    "mcp-svc.tool": "mcp-svc",
+    "ssrf.tool": "ssrf",
+    "err.tool": "err",
+    "rest-api.create": "rest-api",
+    "rest-ssrf": "rest-ssrf",
+    "retry-api.get": "retry-api",
+    "exhaust.get": "exhaust",
+    "bad-req.get": "bad-req",
+    "crash.tool": "crash"
   }
 }

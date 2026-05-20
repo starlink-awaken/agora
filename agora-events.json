@@ -624,15 +624,139 @@
       "source": "dashboard",
       "type": "test:persist",
       "payload": {}
+    },
+    {
+      "id": "evt_1779260407_c8081c",
+      "time": "2026-05-20T07:00:07Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260524_7c0761",
+      "time": "2026-05-20T07:02:04Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779260840_ca3164",
+      "time": "2026-05-20T07:07:20Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779261122_59a7f1",
+      "time": "2026-05-20T07:12:02Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779261310_7d1eb8",
+      "time": "2026-05-20T07:15:10Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779261886_c74326",
+      "time": "2026-05-20T07:24:46Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779262099_5ddaab",
+      "time": "2026-05-20T07:28:19Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779262616_c98ccb",
+      "time": "2026-05-20T07:36:56Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779262852_e4372e",
+      "time": "2026-05-20T07:40:52Z",
+      "source": "test",
+      "type": "test:unit",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779262852_154232",
+      "time": "2026-05-20T07:40:52Z",
+      "source": "dashboard",
+      "type": "test:persist",
+      "payload": {}
+    },
+    {
+      "id": "evt_1779262927_e12314",
+      "time": "2026-05-20T07:42:07Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779263066_f8bb4c",
+      "time": "2026-05-20T07:44:26Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779263336_4607c9",
+      "time": "2026-05-20T07:48:56Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
+    },
+    {
+      "id": "evt_1779263644_153b99",
+      "time": "2026-05-20T07:54:04Z",
+      "source": "mcp-test",
+      "type": "test:mcp",
+      "payload": {
+        "msg": "hello"
+      }
     }
   ],
   "subscriptions": [
     {
-      "id": "sub_1b77e982",
+      "id": "sub_b648c5c6",
       "service": "mcp-caller",
       "pattern": "test:*",
       "callback_url": "",
-      "created": "2026-05-20T06:55:21Z"
+      "created": "2026-05-20T07:54:04Z"
     }
   ],
   "max_events": 1000
