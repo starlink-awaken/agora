@@ -6,6 +6,7 @@ with round-robin routing strategy.
 
 from __future__ import annotations
 
+import asyncio
 import atexit
 import json as _json
 import time as _time
@@ -251,21 +252,104 @@ class Router:
                 "error": f"REST call failed after {max_retries + 1} attempts: {str(last_error)[:200]}"}
 
     async def _call_grpc(self, tool_name: str, arguments: dict, instance: dict) -> dict:
-        """Execute a gRPC call. Uses protocol_config for proto file and method."""
-        proto_file = instance.get("protocol_config", {}).get("proto_file", "")
-        grpc_method = instance.get("protocol_config", {}).get("grpc_method", tool_name)
-        return {"status": "error",
-                "error": f"gRPC call not yet supported (proto={proto_file}, method={grpc_method}). "
-                         "Install grpcio and compile proto to enable."}
+        """Execute a gRPC call. Requires grpcio + compiled proto stub.
+
+        protocol_config keys:
+          - proto_file: path to .proto file
+          - grpc_method: fully qualified method (e.g. /package.Service/Method)
+          - host: gRPC server host:port (overrides mcp_endpoint)
+
+        For compiled-proto mode: add a 'stub_module' key pointing to the generated
+        pb2_grpc module, and 'request_class' for the request message class.
+        """
+        try:
+            import grpc
+            from grpc import aio
+        except ImportError:
+            return {"status": "error",
+                    "error": "grpcio not installed. Run: pip install grpcio grpcio-tools"}
+
+        cfg = instance.get("protocol_config", {})
+        endpoint = instance["mcp_endpoint"]
+        host = cfg.get("host", endpoint.replace("grpc://", "").rstrip("/"))
+        if ":" not in host:
+            return {"status": "error", "error": f"gRPC host:port required, got: {host}"}
+
+        stub_module = cfg.get("stub_module", "")
+        request_class = cfg.get("request_class", "")
+        if not stub_module or not request_class:
+            return {"status": "error",
+                    "error": "gRPC requires compiled proto stub. "
+                             "Set protocol_config.stub_module and .request_class, "
+                             "or use REST/MCP protocol instead."}
+
+        try:
+            # Dynamic import of compiled stub
+            import importlib
+            mod = importlib.import_module(stub_module)
+            stub_cls = getattr(mod, stub_module.split(".")[-1] + "Stub", None)
+            req_cls = getattr(mod, request_class, None)
+            if not stub_cls or not req_cls:
+                return {"status": "error", "error": f"Stub class not found in {stub_module}"}
+
+            async with aio.insecure_channel(host) as channel:
+                stub = stub_cls(channel)
+                method_name = cfg.get("grpc_method", tool_name).split("/")[-1]
+                handler = getattr(stub, method_name, None)
+                if not handler:
+                    return {"status": "error", "error": f"Method {method_name} not found on stub"}
+                req = req_cls(**arguments) if isinstance(arguments, dict) else req_cls()
+                resp = await handler(req)
+                return {"status": "ok", "result": str(resp)[:2000]}
+        except grpc.aio.AioRpcError as e:
+            return {"status": "error", "error": f"gRPC: {e.code()} - {e.details()}"}
+        except Exception as e:
+            return {"status": "error", "error": f"gRPC call failed: {str(e)[:200]}"}
 
     async def _call_ws(self, tool_name: str, arguments: dict, instance: dict) -> dict:
-        """Execute a WebSocket call. Uses protocol_config for ws:// endpoint."""
+        """Execute a WebSocket call for request-response pattern.
+
+        protocol_config keys:
+          - path: WebSocket path (appended to ws:// endpoint)
+          - send_json: JSON payload to send on connect
+          - timeout: receive timeout in seconds (default: 10)
+        """
+        try:
+            import websockets
+        except ImportError:
+            return {"status": "error",
+                    "error": "websockets not installed. Run: pip install websockets"}
+
         ws_url = instance["mcp_endpoint"]
         if not ws_url.startswith(("ws://", "wss://")):
             return {"status": "error", "error": "Invalid WebSocket URL"}
-        return {"status": "error",
-                "error": "WebSocket bidirectional streaming not yet supported. "
-                         "Use REST or MCP for request-response patterns."}
+
+        cfg = instance.get("protocol_config", {})
+        path = cfg.get("path", "")
+        if path:
+            ws_url = ws_url.rstrip("/") + "/" + path.lstrip("/")
+
+        timeout = cfg.get("timeout", 10)
+        send_payload = cfg.get("send_json") or arguments
+        headers = cfg.get("headers", {})
+
+        try:
+            async with websockets.connect(ws_url, extra_headers=headers,
+                                          open_timeout=timeout) as ws:
+                if send_payload:
+                    import json as _json
+                    await ws.send(_json.dumps(send_payload) if not isinstance(send_payload, str) else send_payload)
+                resp = await asyncio.wait_for(ws.recv(), timeout=timeout)
+                try:
+                    return _json.loads(resp)
+                except Exception:
+                    return {"status": "ok", "result": resp}
+        except TimeoutError:
+            return {"status": "error", "error": f"WebSocket timeout after {timeout}s"}
+        except websockets.exceptions.InvalidURI as e:
+            return {"status": "error", "error": f"Invalid WebSocket URI: {str(e)}"}
+        except Exception as e:
+            return {"status": "error", "error": f"WebSocket call failed: {str(e)[:200]}"}
 
     async def route(self, tool_name: str, arguments: dict) -> dict:
         """Route a tool call to the target service via protocol dispatch."""

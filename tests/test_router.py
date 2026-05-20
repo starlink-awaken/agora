@@ -80,25 +80,27 @@ class TestProtocolDispatch:
 
     @pytest.mark.asyncio
     async def test_grpc_dispatch_returns_stub_error(self):
-        """gRPC dispatch returns stub error with guidance to install grpcio."""
+        """gRPC dispatch returns error without compiled stub."""
         svc = Service("grpc-svc", protocol="grpc",
-                      mcp_endpoint="http://192.0.2.99:50051")
+                      mcp_endpoint="grpc://192.0.2.99:50051",
+                      protocol_config={"host": "192.0.2.99:50051"})
         self.registry.register(svc)
         self.router.add_route("grpc-svc", "grpc-svc")
         result = await self.router.route("grpc-svc", {})
         assert result["status"] == "error"
-        assert "gRPC call not yet supported" in result["error"]
+        assert "stub" in result["error"].lower() or "grpc" in result["error"].lower()
 
     @pytest.mark.asyncio
     async def test_ws_dispatch_returns_stub_error(self):
-        """WebSocket dispatch returns stub error about streaming."""
+        """WebSocket dispatch returns error on connect failure."""
         svc = Service("ws-svc", protocol="websocket",
-                      mcp_endpoint="ws://192.0.2.99:8080")
+                      mcp_endpoint="ws://192.0.2.99:8080",
+                      protocol_config={"timeout": 1})
         self.registry.register(svc)
         self.router.add_route("ws-svc", "ws-svc")
         result = await self.router.route("ws-svc", {})
         assert result["status"] == "error"
-        assert "WebSocket bidirectional streaming not yet supported" in result["error"]
+        assert "WebSocket" in result["error"] or "timeout" in result["error"].lower()
 
     @pytest.mark.asyncio
     async def test_stdio_dispatch_returns_error(self):

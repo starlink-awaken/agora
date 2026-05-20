@@ -51,6 +51,34 @@ app.add_middleware(
 )
 app.middleware("http")(_auth_middleware)
 
+# Rate limiting — simple sliding window per IP (max 60 req/min)
+_rate_limits: dict[str, list[float]] = {}
+_RATE_LIMIT_MAX = int(os.environ.get("AGORA_RATE_LIMIT", "60"))
+_RATE_LIMIT_WINDOW = 60.0  # seconds
+_RATE_LIMIT_CLEANUP_AT = 500  # entries before cleanup
+
+
+async def _rate_limit_middleware(request: Request, call_next):
+    if _RATE_LIMIT_MAX <= 0:
+        return await call_next(request)
+    client = request.client.host if request.client else "unknown"
+    now = time.monotonic()
+    window = _rate_limits.setdefault(client, [])
+    window[:] = [t for t in window if now - t < _RATE_LIMIT_WINDOW]
+    if len(window) >= _RATE_LIMIT_MAX:
+        return JSONResponse({"error": "Rate limit exceeded"}, status_code=429)
+    window.append(now)
+    # Periodic cleanup
+    if len(_rate_limits) > _RATE_LIMIT_CLEANUP_AT:
+        for k in list(_rate_limits):
+            _rate_limits[k] = [t for t in _rate_limits.get(k, []) if now - t < _RATE_LIMIT_WINDOW]
+            if not _rate_limits[k]:
+                del _rate_limits[k]
+    return await call_next(request)
+
+
+app.middleware("http")(_rate_limit_middleware)
+
 registry = ServiceRegistry()
 _bus = EventBus(registry=registry)
 router = Router(registry, event_bus=_bus)
