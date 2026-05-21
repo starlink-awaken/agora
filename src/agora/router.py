@@ -172,6 +172,13 @@ class Router:
                     "tool": tool_name, "service": service_name,
                     "error": result.get("error", "")[:100],
                 })
+                # Audit
+                try:
+                    from agora.audit import AuditLogger
+                    AuditLogger().log("route.call", "system", service_name, "error",
+                                      result.get("error", "")[:100])
+                except Exception:
+                    pass
             else:
                 self.registry.mark_success(service_name)
                 self._trace(tool_name, service_name, _start, "ok")
@@ -179,6 +186,12 @@ class Router:
                     "tool": tool_name, "service": service_name,
                     "duration_s": round(_time.monotonic() - _start, 4),
                 })
+                # Audit
+                try:
+                    from agora.audit import AuditLogger
+                    AuditLogger().log("route.call", "system", service_name)
+                except Exception:
+                    pass
             return result
         except Exception as e:
             self._trace(tool_name, service_name, _start, "error", str(e)[:100])

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import secrets
 import time
 from dataclasses import dataclass
@@ -177,12 +178,10 @@ class QuotaManager:
 # ── Helpers ─────────────────────────────────────────────────────────
 
 def _json_dumps(obj) -> str:
-    import json
     return json.dumps(obj, ensure_ascii=False)
 
 
 def _json_loads(s: str) -> list | dict:
-    import json
     return json.loads(s) if s else []
 
 
