@@ -1,0 +1,199 @@
+{
+  "services": [
+    {
+      "name": "minerva",
+      "description": "Local-first deep research system \u2014 5 Super Tools (Dropbox Dash pattern)",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://minerva",
+      "health_endpoint": "http://localhost:8765/health",
+      "port": 8765,
+      "tags": [
+        "research",
+        "knowledge",
+        "llm"
+      ],
+      "instances": []
+    },
+    {
+      "name": "ontoderive",
+      "description": "Fact-driven knowledge engineering \u2014 ToolForge + derive + check",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://ontoderive",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "knowledge-engineering",
+        "derivation",
+        "ontology"
+      ],
+      "instances": []
+    },
+    {
+      "name": "sophia",
+      "description": "Symbolic research paradigm compiler \u2014 state machine formalism",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://sophia",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "paradigm",
+        "compiler",
+        "state-machine"
+      ],
+      "instances": []
+    },
+    {
+      "name": "agora",
+      "description": "MCP service convergence hub \u2014 registry, routing, pipeline",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "stdio://agora",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "gateway",
+        "registry",
+        "pipeline"
+      ],
+      "instances": []
+    },
+    {
+      "name": "bos-skill-cli",
+      "description": "Skill discovery and staged activation CLI",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "skill",
+        "discovery",
+        "cli"
+      ],
+      "instances": []
+    },
+    {
+      "name": "bos-daemon",
+      "description": "SharedBrain B-OS daemon \u2014 native MCP SSE on port 7421",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "http://localhost:7421/mcp",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "bos",
+        "daemon",
+        "mcp"
+      ],
+      "instances": []
+    },
+    {
+      "name": "aggreresearch",
+      "description": "AggreResearch MCP Server \u2014 \u805a\u5408\u641c\u7d22\u8c03\u7814\u80fd\u529b",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "research",
+        "search",
+        "aggregation"
+      ],
+      "instances": []
+    },
+    {
+      "name": "agentmesh",
+      "description": "Agent Mesh Gateway - \u591a\u667a\u80fd\u4f53\u8c03\u5ea6 + \u6a21\u578b\u7f51\u5173/\u8def\u7531\u3002\u652f\u6301 Claude Code\u3001OpenClaw \u7b49 Agent \u7684\u667a\u80fd\u8def\u7531(\u5173\u952e\u8bcd\u5339\u914d/broadcast)\uff0c\u4ee5\u53ca LLM Provider \u7edf\u4e00\u7f51\u5173(deepseek/openai/openrouter/ollama \u56de\u9000\u94fe)\u3002REST API on :3000, WS on :3001",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "http://localhost:3000/v1/health",
+      "port": 3000,
+      "tags": [
+        "agent",
+        "gateway",
+        "routing",
+        "model-gateway",
+        "llm"
+      ],
+      "instances": []
+    },
+    {
+      "name": "wps-office",
+      "description": "WPS Office MCP Server - AI\u64cd\u63a7WPS Office(Word/Excel/PPT)\uff0c\u901a\u8fc7Node.js stdio MCP\u534f\u8bae\u8fd0\u884c\u3002\u652f\u6301\u6587\u6863\u8bfb\u5199\u3001\u8868\u683c\u7f16\u8f91\u3001\u6f14\u793a\u5236\u4f5c\u7b49\u5168\u5957\u529e\u516c\u81ea\u52a8\u5316\u80fd\u529b",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "wps",
+        "office",
+        "mcp",
+        "document",
+        "excel",
+        "ppt",
+        "automation"
+      ],
+      "instances": []
+    },
+    {
+      "name": "honeycomb",
+      "description": "Honeycomb v2 Multi-Agent Collaboration Engine \u2014 4\u5c42Agent\u67b6\u6784(\u8c03\u7814\u2192\u51b3\u7b56\u2192\u6267\u884c\u2192\u53cd\u9988)\uff0c\u52a8\u6001\u51b3\u7b56\u8def\u5f84(EXPRESS/QUICK/STANDARD/DEEP/FULL)\u30029\u4e2aMCP\u5de5\u5177\uff1ainit/start/status/list/checkpoint/rollback/pause/resume/decompose\u3002\u53ef\u7528\u4e8eeCOS\u5de5\u4f5c\u6d41\u7ea7\u8054\u8c03\u5ea6\u591aAgent\u534f\u4f5c",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "agent",
+        "orchestration",
+        "collaboration",
+        "mcp",
+        "multi-agent",
+        "workflow"
+      ],
+      "instances": []
+    },
+    {
+      "name": "forge",
+      "description": "Forge \u2014 \u4e2a\u4eba AI \u6570\u5b57\u8d44\u4ea7\u7ba1\u7406\u4e2d\u5fc3 MCP Server\u300212\u4e2a\u5de5\u5177\uff1a\u5de5\u5177\u6ce8\u518c\u8868\u641c\u7d22(28 tools)\u3001\u80fd\u529b\u7d22\u5f15\u67e5\u8be2(6\u7c7b25+\u6807\u7b7e)\u3001\u77e5\u8bc6\u56fe\u8c31(423\u8282\u70b9/634\u8fb9)\u3001\u5de5\u5177\u63a8\u8350\u3001\u6c89\u6dc0\u6355\u83b7\u3001\u6d1e\u5bdf\u5206\u6790\u3001\u5065\u5eb7\u68c0\u67e5\u3002\u901a\u8fc7iCloud\u540c\u6b65",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "forge",
+        "toolbox",
+        "registry",
+        "tools",
+        "catalog",
+        "capability",
+        "graph",
+        "iclod"
+      ],
+      "instances": []
+    },
+    {
+      "name": "gateway",
+      "description": "Workspace MCP Gateway \u2014 unified PATH entry point for kos/minerva/agora/ontoderive MCP servers",
+      "protocol": "mcp",
+      "protocol_config": {},
+      "mcp_endpoint": "",
+      "health_endpoint": "",
+      "port": 0,
+      "tags": [
+        "gateway",
+        "discovery",
+        "shim",
+        "workspace"
+      ],
+      "instances": []
+    }
+  ]
+}

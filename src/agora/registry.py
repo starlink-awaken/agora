@@ -210,6 +210,12 @@ class ServiceRegistry:
             raise ValueError(f"Unknown protocol: {service.protocol}. Known: {sorted(KNOWN_PROTOCOLS)}")
         self._services[service.name] = service
         self._save()
+        # Audit
+        try:
+            from agora.audit import AuditLogger
+            AuditLogger().log("service.register", "system", service.name)
+        except Exception:
+            pass
 
     def unregister(self, name: str):
         self._services.pop(name, None)

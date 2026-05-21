@@ -19,6 +19,8 @@
     "retry-api.get": "retry-api",
     "exhaust.get": "exhaust",
     "bad-req.get": "bad-req",
-    "crash.tool": "crash"
+    "crash.tool": "crash",
+    "demo-api.users": "demo-api",
+    "demo-grpc.call": "demo-grpc"
   }
 }

@@ -128,6 +128,26 @@ def build_parser() -> argparse.ArgumentParser:
     pl.add_argument("--stream", action="store_true", help="Stream each step as it completes")
     pl.add_argument("--parallel", action="store_true", help="Execute independent steps concurrently")
 
+    # key
+    key = sub.add_parser("key", help="API Key management (v2.0)")
+    key_sub = key.add_subparsers(dest="key_cmd")
+    key_create = key_sub.add_parser("create", help="Create a new API key")
+    key_create.add_argument("name", help="Key name")
+    key_create.add_argument("--scopes", default="read", help="Comma-separated scopes (read,write,admin)")
+    key_create.add_argument("--tenant", default="", help="Tenant name")
+    key_create.add_argument("--expires", type=int, default=0, help="Expiry in days (0=never)")
+    key_sub.add_parser("list", help="List all API keys")
+    key_revoke = key_sub.add_parser("revoke", help="Revoke an API key")
+    key_revoke.add_argument("key_id", help="Key ID to revoke")
+
+    # audit
+    audit = sub.add_parser("audit", help="Audit log query (v2.0)")
+    audit.add_argument("--action", default="", help="Filter by action")
+    audit.add_argument("--actor", default="", help="Filter by actor")
+    audit.add_argument("--since", default="", help="ISO timestamp lower bound")
+    audit.add_argument("--limit", type=int, default=50, help="Max entries")
+    audit.add_argument("--stats", action="store_true", help="Show statistics")
+
     # proto
     proto = sub.add_parser("proto", help="gRPC proto compilation tools")
     proto_sub = proto.add_subparsers(dest="proto_cmd")
@@ -568,6 +588,37 @@ def main():
                 print(f"Compiled: {base}_pb2.py, {base}_pb2_grpc.py → {out_dir}")
             else:
                 print(f"protoc failed with exit code {ret}")
+
+    elif args.command == "key":
+        from agora.governance import KeyManager
+        km = KeyManager()
+        if args.key_cmd == "create":
+            scopes = [s.strip() for s in args.scopes.split(",") if s.strip()]
+            kid, secret = km.create_key(args.name, scopes, args.tenant, args.expires)
+            print(f"Created: {kid}")
+            print(f"Secret: {secret}")
+            print("⚠️  Save this secret — it won't be shown again.")
+        elif args.key_cmd == "list":
+            keys = km.list_keys(args.tenant if hasattr(args, 'tenant') else "")
+            for k in keys:
+                status = "REVOKED" if k["revoked"] else "active"
+                print(f"  {k['key_id']:20s} {k['name']:20s} {status:8s} {', '.join(k['scopes'])}")
+        elif args.key_cmd == "revoke":
+            km.revoke(args.key_id)
+            print(f"Revoked: {args.key_id}")
+
+    elif args.command == "audit":
+        from agora.audit import AuditLogger
+        al = AuditLogger()
+        if args.stats:
+            s = al.stats(args.since)
+            print(f"Total: {s['total']} | Error rate: {s['error_rate']}")
+            for act, cnt in sorted(s['actions'].items()):
+                print(f"  {act}: {cnt}")
+        else:
+            entries = al.query(args.actor, args.action, "", args.since, args.limit)
+            for e in entries:
+                print(f"  [{e['timestamp']}] {e['actor']:20s} → {e['action']:25s} | {e['result']}")
 
     elif args.command == "pipelines":
         from agora.pipeline import Pipeline

@@ -415,7 +415,8 @@ def create_client(service_name: str, endpoint: str,
     """
     if endpoint.startswith("http"):
         return HttpMCPClient(service_name, endpoint)
-    elif endpoint == "stdio" and command:
+    elif endpoint == "stdio" or (not endpoint and command):
+        # Treat empty endpoint + command as stdio transport
         return StdioMCPClient(service_name, command, args or [], cwd=cwd)
     else:
         logger.warning("proxy_unknown_transport",

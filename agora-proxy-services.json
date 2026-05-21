@@ -9,6 +9,34 @@
     "description": "Knowledge Operating System MCP — 13 tools: search, entity, research, ontology",
     "mcp_endpoint": "stdio",
     "command": "python3",
-    "args": ["/Users/xiamingxing/Workspace/kos/kos-mcp-server.py"]
+    "args": [
+      "/Users/xiamingxing/Workspace/kos/kos-mcp-server.py"
+    ]
+  },
+  {
+    "name": "aggreresearch",
+    "command": "/Users/xiamingxing/Workspace/aggreresearch-mcp/.venv/bin/python",
+    "args": [
+      "-m",
+      "aggreresearch_mcp.server"
+    ],
+    "mcp_endpoint": "stdio"
+  },
+  {
+    "name": "honeycomb",
+    "command": "/Users/xiamingxing/Workspace/honeycomb-mcp/.venv/bin/python",
+    "args": [
+      "-m",
+      "honeycomb_mcp.server"
+    ],
+    "mcp_endpoint": "stdio"
+  },
+  {
+    "name": "forge",
+    "command": "/Users/xiamingxing/Library/Mobile Documents/com~apple~CloudDocs/AIToolBox/Forge/.venv/bin/python",
+    "args": [
+      "src/mcp_server.py"
+    ],
+    "mcp_endpoint": ""
   }
 ]

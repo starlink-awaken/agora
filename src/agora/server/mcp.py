@@ -357,5 +357,51 @@ def http_main():
     asyncio.run(_start())
 
 
+# ── Governance tools (v2.0) ─────────────────────────────────────
+
+
+@mcp.tool()
+def audit_query(action: str = "", actor: str = "", resource: str = "",
+                since: str = "", limit: int = 50) -> str:
+    """Query the audit log with optional filters."""
+    from agora.audit import AuditLogger
+    entries = AuditLogger().query(actor, action, resource, since, limit)
+    return json.dumps(entries, ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+def audit_stats(since: str = "") -> str:
+    """Get audit log statistics."""
+    from agora.audit import AuditLogger
+    return json.dumps(AuditLogger().stats(since), ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+def create_api_key(name: str, scopes: str = "read", tenant: str = "",
+                   expires_days: int = 0) -> str:
+    """Create a new API key. The raw secret is shown only once."""
+    from agora.governance import KeyManager
+    scope_list = [s.strip() for s in scopes.split(",") if s.strip()]
+    kid, secret = KeyManager().create_key(name, scope_list, tenant, expires_days)
+    return json.dumps({"key_id": kid, "secret": secret,
+                       "warning": "Save this secret — it won't be shown again."},
+                      ensure_ascii=False)
+
+
+@mcp.tool()
+def list_api_keys(tenant: str = "") -> str:
+    """List API keys, optionally filtered by tenant."""
+    from agora.governance import KeyManager
+    return json.dumps(KeyManager().list_keys(tenant), ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+def revoke_api_key(key_id: str) -> str:
+    """Revoke an API key by its ID."""
+    from agora.governance import KeyManager
+    KeyManager().revoke(key_id)
+    return json.dumps({"status": "revoked", "key_id": key_id})
+
+
 if __name__ == "__main__":
     http_main()
